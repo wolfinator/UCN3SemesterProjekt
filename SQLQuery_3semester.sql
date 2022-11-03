@@ -53,4 +53,3 @@ total_price decimal,
 reservation_id int not null foreign key references reservation(id),
 primary key(id)
 )
-
