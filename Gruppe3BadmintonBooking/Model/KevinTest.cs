@@ -5,6 +5,7 @@ namespace Model
     {
         public KevinTest()
         {
+            Console.WriteLine("Hello Scrub");
         }
     }
 }
