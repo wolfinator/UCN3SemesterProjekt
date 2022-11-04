@@ -15,6 +15,6 @@ namespace Model
         public int courtNo { get; set; }
         public String phoneNo { get; set; }
         public Employee employee { get; set; }
-        public Court court { get; set; }
+        public Reservation reservation { get; set; }
     }
 }
