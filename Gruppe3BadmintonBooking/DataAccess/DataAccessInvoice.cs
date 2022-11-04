@@ -48,7 +48,6 @@ namespace DataAccess
 
         public void DeleteById(int id)
         {
-           bool isSuccesfull = false;
 
             SqlConnection con = new(conStr.ConnectionString);
 
@@ -57,39 +56,17 @@ namespace DataAccess
                 con.Open();
                 SqlCommand cmd = con.CreateCommand();
                 cmd.CommandText = "DELETE FROM Invoice WHERE Id = @id";
-                string sql = "DELETE FROM invoice WHERE id = @id";
-
-                SqlCommand cmd = new SqlCommand(sql, con);
-                //Passing the value using cmd
                 cmd.Parameters.AddWithValue("@id", id);
 
-                //Open sql Connection
-                con.Open();
+                int rows = cmd.ExecuteNonQuery();
 
-               int rows = cmd.ExecuteNonQuery();
-
-                //If the query is executed successfully then the value of rows will be greater than zero
-                //else it will be less than 0
-                if(rows > 0)
-                {
-                    //Query Executed Successfully
-                    isSuccesfull = true;
-                } 
-                else
-                {
-                    //Faied to Execute Query
-                    isSuccesfull = false;
-                }
             }
             catch (SqlException)
             {
-
                 throw;
             }
 
             con.Close();
-
-         
 
         }
 
