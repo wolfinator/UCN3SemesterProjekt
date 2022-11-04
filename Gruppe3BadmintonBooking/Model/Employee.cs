@@ -8,6 +8,6 @@ namespace Model
 {
     public class Employee : Person
     {
-        public int employeeID { get; set; }
+
     }
 }
