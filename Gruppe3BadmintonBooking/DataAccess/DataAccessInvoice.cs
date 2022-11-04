@@ -48,7 +48,6 @@ namespace DataAccess
 
         public void DeleteById(int id)
         {
-           bool isSuccesfull = false;
 
             SqlConnection con = new(conStr.ConnectionString);
 
