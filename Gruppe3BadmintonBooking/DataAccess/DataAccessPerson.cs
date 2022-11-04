@@ -54,8 +54,10 @@ namespace DataAccess
             {
                 try
                 {
+                    cmdPerson.Transaction = trans;
+                    cmdAddress.Transaction = trans;
                     int addressId = (int)cmdAddress.ExecuteScalar();
-                    cmdPerson.Parameters.AddWithValue("@AddresId", addressId);
+                    cmdPerson.Parameters.AddWithValue("@AddressId", addressId);
                     cmdPerson.ExecuteNonQuery();
                 }
                 catch (SqlException)
