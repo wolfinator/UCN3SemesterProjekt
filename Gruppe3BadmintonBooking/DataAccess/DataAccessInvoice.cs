@@ -49,7 +49,7 @@ namespace DataAccess
 
 
         public IEnumerable<Invoice> GetAll()
-        {
+            {
             throw new NotImplementedException();
 
                       SqlConnection con = new(conStr.ConnectionString);
@@ -61,7 +61,7 @@ namespace DataAccess
                               "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
 
                         SqlDataReader reader = cmd.ExecuteReader();
-
+         
                         List<Invoice> list = new List<Invoice>();
 
             while (reader.Read())
