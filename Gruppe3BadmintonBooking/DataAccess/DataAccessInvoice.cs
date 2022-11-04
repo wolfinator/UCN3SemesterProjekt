@@ -61,7 +61,7 @@ namespace DataAccess
                int rows = cmd.ExecuteNonQuery();
 
             }
-            catch (SqlException)
+            catch (SqlException) 
             {
                 throw;
             }
