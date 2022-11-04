@@ -48,7 +48,7 @@ namespace DataAccess
 
         public void DeleteById(int id)
         {
-
+           
             SqlConnection con = new(conStr.ConnectionString);
 
             try
@@ -58,7 +58,7 @@ namespace DataAccess
                 cmd.CommandText = "DELETE FROM Invoice WHERE Id = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
-                int rows = cmd.ExecuteNonQuery();
+               int rows = cmd.ExecuteNonQuery();
 
             }
             catch (SqlException)
@@ -69,7 +69,7 @@ namespace DataAccess
             con.Close();
 
         }
-
+         
 
         public IEnumerable<Invoice> GetAll()
         {
@@ -98,10 +98,10 @@ namespace DataAccess
                                 {
                                     id = reader.GetInt32(3),
                                     firstName = reader.GetString(5)
-                                }
+        }
 
                                 reservation = new Reservation()
-                                {
+        {
                                     id = reader.GetInt32(2),
                                     dateTime = reader.GetDateTime(12),
 
