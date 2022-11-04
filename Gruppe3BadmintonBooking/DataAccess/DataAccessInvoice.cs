@@ -26,7 +26,7 @@ namespace DataAccess
             cmd.CommandText = "INSERT INTO Invoice VALUES (@totalPrice, @reservationId)";
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
             cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
-            
+
            int rowsAffected = cmd.ExecuteNonQuery();
 
             return rowsAffected == 1 ;
@@ -53,7 +53,7 @@ namespace DataAccess
             throw new NotImplementedException();
 
                       SqlConnection con = new(conStr.ConnectionString);
-                        con.Open();
+            con.Open();
 
                         SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
@@ -89,7 +89,7 @@ namespace DataAccess
                         customer = new Person()
                         {
                             firstName = reader.GetString(6),
-                        }
+            }
                     }
                 };
 
@@ -97,19 +97,20 @@ namespace DataAccess
                 list.Add(invoice);
             }
 
-                con.Close();
+            con.Close();
 
                 return list;
-            }
-                        
-           
+        }
 
+           
+           
+            SqlConnection con = new(conStr.ConnectionString);
 
         public Invoice? GetById(int id)
-        {
+            {
             SqlConnection con = new(conStr.ConnectionString);
-            con.Open();
-            SqlCommand cmd = con.CreateCommand();
+                con.Open();
+                SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.id = @id";
             cmd.Parameters.AddWithValue("id", id);
@@ -118,9 +119,10 @@ namespace DataAccess
             if (reader.Read())
             {
                 Invoice invoice = new()
-                {
+            {
                     totalPrice = reader.GetDecimal(0),
 
+            con.Close();
 
                     reservation = new Reservation()
                     {
@@ -128,17 +130,18 @@ namespace DataAccess
                         isEquipment = reader.GetBoolean(2),
                         //Todo get fromtime Fra reservation
                         // fromTime = reader.GetTimeSpan(3).
+         
 
-
+        }
 
                         court = new Court()
-                        {
+        {
                             id = reader.GetInt32(4),
                             hallNo = reader.GetInt32(5),
                         },
 
                         customer = new Person()
-                        {
+        {
                             firstName = reader.GetString(6),
                         }
                     }
