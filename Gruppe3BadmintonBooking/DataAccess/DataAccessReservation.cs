@@ -125,7 +125,7 @@ namespace DataAccess
             return reservation;
         }
 
-        public void Update(int id, Reservation entity)
+        public void Update(Reservation entity)
         {
             string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipemnt " +
                 "where id = @Id";
@@ -135,7 +135,7 @@ namespace DataAccess
                 cmdUpdate.Parameters.AddWithValue("@DateTime", entity.dateTime);
                 cmdUpdate.Parameters.AddWithValue("@IsEquipment", entity.isEquipment);
                 cmdUpdate.Parameters.AddWithValue("@CourtId", entity.courtNo);
-                cmdUpdate.Parameters.AddWithValue("@Id", id);
+                cmdUpdate.Parameters.AddWithValue("@Id", id); // TODO fix ID input i query
 
                 con.Open();
 
