@@ -43,11 +43,21 @@ namespace Tests
         {
             //Arrange
             DataAccessPerson dataAccessPerson = new();
-            Person member = new Member() {firstName = "test", lastName = "Wazowski", email = "wazowski@mail.dk", phoneNo = "12345678", street = "Mike Wazowskis Vej", houseNo = "45", zipcode = "9220"};
+            Person member = new Member() 
+            {
+                firstName = "test", 
+                lastName = "Wazowski", 
+                email = "wazowski@mail.dk", 
+                phoneNo = "12345678", 
+                street = "Mike Wazowskis Vej", 
+                houseNo = "45", 
+                zipcode = "9220"
+            };
 
             SqlConnection con = new(Connection.conStr.ConnectionString);
             SqlCommand cmd = new("select * from Person where f_name = 'test' and email = 'wazowski@mail.dk'", con);
-            SqlCommand cleanup = new("delete from Person where f_name = 'test' and email = 'wazowski@mail.dk'", con);
+            SqlCommand cleanupPerson = new("delete from Person where f_name = 'test' and email = 'wazowski@mail.dk'", con);
+            SqlCommand cleanupAddress = new("delete from _Address where street = 'Mike Wazowskis Vej' and house_no = '45'", con);
             //Act
             dataAccessPerson.Create(member);
             con.Open();
@@ -58,7 +68,8 @@ namespace Tests
 
             //Cleanup
             reader.Close();
-            cleanup.ExecuteNonQuery();
+            cleanupPerson.ExecuteNonQuery();
+            cleanupAddress.ExecuteNonQuery();
             con.Close();
         }
     }
