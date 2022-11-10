@@ -1,3 +1,10 @@
+drop table if exists invoice;
+drop table if exists reservation;
+drop table if exists court;
+drop table if exists person;
+drop table if exists _address;
+drop table if exists cityzip;
+
 create table CityZip(
 zipcode char(4),
 city nvarchar(30),
@@ -25,17 +32,17 @@ primary key (id)
 
 create table Court(
 id int identity(1,1) not null,
-is_available bit,
-from_time time,
-to_time time,
-primary key(id)
+hall_no int CHECK (hall_no <= 3 AND hall_no > 0),
+primary key(id),
 )
 
 create table Reservation(
 id int identity(1,1) not null,
 date_time datetime,
 is_equipment bit,
+from_time time,
 court_id int not null foreign key references court(id),
+person_id int not null foreign key references person(id),
 primary key(id)
 )
 
@@ -43,6 +50,5 @@ create table Invoice(
 id int identity(1,1) not null,
 total_price decimal,
 reservation_id int not null foreign key references reservation(id),
-person_id int not null foreign key references person(id),
 primary key(id)
 )
