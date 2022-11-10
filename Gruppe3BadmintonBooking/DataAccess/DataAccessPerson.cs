@@ -71,17 +71,29 @@ namespace DataAccess
             con.Close();
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
+            bool isDeleted = false;
+
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextDelete = "delete from person where id = @Id";
+            string cmdTextDelete = "delete from person output deleted.address_id where id = @Id";
+            string cmdTextDeleteAddress = "delete from _address where id = @AddressId";
             SqlCommand cmdDelete = new(cmdTextDelete, con);
             cmdDelete.Parameters.AddWithValue("@Id", id);
 
             con.Open();
             try
             {
-                cmdDelete.ExecuteNonQuery();
+                // Skal nok ændres hvis vi laver cascade på person og _address, er lidt kringlet
+                var addressId = cmdDelete.ExecuteScalar();
+                //int addressId = (int) cmdDelete.ExecuteScalar();
+                if(addressId != null)
+                {
+                    isDeleted = true;
+                    cmdDelete.CommandText = cmdTextDeleteAddress;
+                    cmdDelete.Parameters.AddWithValue("@AddressId", addressId);
+                    isDeleted = isDeleted && cmdDelete.ExecuteNonQuery() == 1;
+                }    
             }
             catch (SqlException)
             {
@@ -89,6 +101,7 @@ namespace DataAccess
                 throw;
             }
             con.Close();
+            return isDeleted;
         }
         public IEnumerable<Person> GetAll()
         {
@@ -136,13 +149,15 @@ namespace DataAccess
             return person;
         }
 
-        public void Update(Person entity)
+        public bool Update(Person entity)
         {
+            bool isUpdated = false;
+
             int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
             string cmdTextUpdatePerson = "update person set f_name = @Fname, l_name = @Lname, email = @Email, phone_no = @PhoneNo, person_type = @PersonType where id = @Id";
             string cmdTextUpdateAddress = "update _address set street = @Street, house_no = @HouseNo, city_zipcode = @CityZipcode " +
-                "from Person p, _Address a where a.id = p.address_id";
+                "from Person p, _Address a where a.id = p.address_id and a.id = @Id";
             SqlCommand cmdUpdatePerson = new(cmdTextUpdatePerson, con);
             SqlCommand cmdUpdateAddress = new(cmdTextUpdateAddress, con);
 
@@ -156,6 +171,7 @@ namespace DataAccess
             cmdUpdateAddress.Parameters.AddWithValue("@Street", entity.street);
             cmdUpdateAddress.Parameters.AddWithValue("@HouseNo", entity.houseNo);
             cmdUpdateAddress.Parameters.AddWithValue("@CityZipcode", entity.zipcode);
+            cmdUpdateAddress.Parameters.AddWithValue("@Id", entity.id);
 
             con.Open();
             using (var trans = con.BeginTransaction())
@@ -165,8 +181,11 @@ namespace DataAccess
                     cmdUpdatePerson.Transaction = trans;
                     cmdUpdateAddress.Transaction = trans;
 
-                    cmdUpdatePerson.ExecuteNonQuery();
-                    cmdUpdateAddress.ExecuteNonQuery();
+                    int updatedPerson = cmdUpdatePerson.ExecuteNonQuery();
+                    int updatedAddress = cmdUpdateAddress.ExecuteNonQuery();
+
+                    // Checks if both the person and address tables are updated
+                    isUpdated = updatedAddress + updatedAddress == 2;
                 }
                 catch (SqlException)
                 {
@@ -177,6 +196,8 @@ namespace DataAccess
                 trans.Commit();
             }
             con.Close();
+
+            return isUpdated;
         }
 
         private List<Person>? BuildObjects(SqlDataReader reader)
@@ -203,7 +224,7 @@ namespace DataAccess
             Person person = null;
             try
             {
-                int personType = reader.GetInt32(5);
+                int personType = int.Parse(reader.GetString(5));
                 switch (personType)
                 {
                     case 0: person = new Employee();
@@ -212,7 +233,7 @@ namespace DataAccess
                         break;
                     case 2: person = new Member();
                         break;
-                    default: throw new NotImplementedException();
+                    default: throw new NotImplementedException(); // Todo handle exception
                         break;
                 }
 
