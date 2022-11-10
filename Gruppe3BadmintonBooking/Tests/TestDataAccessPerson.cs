@@ -354,5 +354,31 @@ namespace Tests
             cleanupPerson.ExecuteNonQuery();
             cleanupAddress.ExecuteNonQuery();
         }
+        [Fact]
+        public void TestDeleteByIdPerson()
+        {
+            //Arrange
+            SqlConnection con = new(Connection.conStr.ConnectionString);
+            SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '-1', 'test')", con);
+            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'delete', 'test@mail.dk', 'testtest', '-1', @Id)", con);
+            SqlCommand cmdCheckDeletedPerson = new("select * from Person p where p.f_name = 'test' and p.l_name = 'delete", con);
+            SqlCommand cmdCheckDeletedAddress = new("select * from _Address where street = 'test' and house_no = '-1'", con);
+
+            //Act
+            con.Open();
+            int addressId = (int) cmdInsertAddress.ExecuteScalar();
+            cmdInsertPerson.Parameters.AddWithValue("@Id", addressId);
+            int personId = (int) cmdInsertPerson.ExecuteScalar();
+            dataAccess.DeleteById(personId);
+
+            SqlDataReader reader = cmdCheckDeletedPerson.ExecuteReader();
+            bool personDeleted = !reader.Read();
+            reader.Close();
+            reader = cmdCheckDeletedAddress.ExecuteReader();
+            bool addressDeleted = !reader.Read();
+
+            //Assert
+            Assert.True(personDeleted && addressDeleted); //Asserts if the person has been deleted
+        }
     }
 }
