@@ -31,24 +31,28 @@
             this.lblBekraeftet = new System.Windows.Forms.Label();
             this.btnAfslut = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.txtEmail = new System.Windows.Forms.TextBox();
             this.lblEmail = new System.Windows.Forms.Label();
+            this.txtMobil = new System.Windows.Forms.TextBox();
+            this.txtEfternavn = new System.Windows.Forms.TextBox();
             this.lblMobil = new System.Windows.Forms.Label();
+            this.txtFornavn = new System.Windows.Forms.TextBox();
             this.lblEfternavn = new System.Windows.Forms.Label();
             this.lblFornavn = new System.Windows.Forms.Label();
             this.lblKundeInfo = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lblKetsjer = new System.Windows.Forms.Label();
+            this.txtKetsjer = new System.Windows.Forms.TextBox();
+            this.txtPris = new System.Windows.Forms.TextBox();
+            this.txtSted = new System.Windows.Forms.TextBox();
+            this.txtKlok = new System.Windows.Forms.TextBox();
+            this.txtDato = new System.Windows.Forms.TextBox();
             this.lblPris = new System.Windows.Forms.Label();
             this.lblBaneInfo = new System.Windows.Forms.Label();
             this.lblSted = new System.Windows.Forms.Label();
             this.lblKlok = new System.Windows.Forms.Label();
             this.lblDato = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.txtBold = new System.Windows.Forms.TextBox();
+            this.lblBold = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -83,22 +87,26 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.textBox5);
+            this.splitContainer1.Panel1.Controls.Add(this.txtEmail);
             this.splitContainer1.Panel1.Controls.Add(this.lblEmail);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox6);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox7);
+            this.splitContainer1.Panel1.Controls.Add(this.txtMobil);
+            this.splitContainer1.Panel1.Controls.Add(this.txtEfternavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblMobil);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox8);
+            this.splitContainer1.Panel1.Controls.Add(this.txtFornavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblEfternavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblFornavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblKundeInfo);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.textBox4);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox3);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox2);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel2.Controls.Add(this.lblBold);
+            this.splitContainer1.Panel2.Controls.Add(this.txtBold);
+            this.splitContainer1.Panel2.Controls.Add(this.lblKetsjer);
+            this.splitContainer1.Panel2.Controls.Add(this.txtKetsjer);
+            this.splitContainer1.Panel2.Controls.Add(this.txtPris);
+            this.splitContainer1.Panel2.Controls.Add(this.txtSted);
+            this.splitContainer1.Panel2.Controls.Add(this.txtKlok);
+            this.splitContainer1.Panel2.Controls.Add(this.txtDato);
             this.splitContainer1.Panel2.Controls.Add(this.lblPris);
             this.splitContainer1.Panel2.Controls.Add(this.lblBaneInfo);
             this.splitContainer1.Panel2.Controls.Add(this.lblSted);
@@ -107,6 +115,14 @@
             this.splitContainer1.Size = new System.Drawing.Size(776, 353);
             this.splitContainer1.SplitterDistance = 388;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // txtEmail
+            // 
+            this.txtEmail.Location = new System.Drawing.Point(115, 229);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.ReadOnly = true;
+            this.txtEmail.Size = new System.Drawing.Size(149, 23);
+            this.txtEmail.TabIndex = 16;
             // 
             // lblEmail
             // 
@@ -118,6 +134,22 @@
             this.lblEmail.TabIndex = 4;
             this.lblEmail.Text = "Email:";
             // 
+            // txtMobil
+            // 
+            this.txtMobil.Location = new System.Drawing.Point(115, 177);
+            this.txtMobil.Name = "txtMobil";
+            this.txtMobil.ReadOnly = true;
+            this.txtMobil.Size = new System.Drawing.Size(149, 23);
+            this.txtMobil.TabIndex = 15;
+            // 
+            // txtEfternavn
+            // 
+            this.txtEfternavn.Location = new System.Drawing.Point(115, 124);
+            this.txtEfternavn.Name = "txtEfternavn";
+            this.txtEfternavn.ReadOnly = true;
+            this.txtEfternavn.Size = new System.Drawing.Size(149, 23);
+            this.txtEfternavn.TabIndex = 14;
+            // 
             // lblMobil
             // 
             this.lblMobil.AutoSize = true;
@@ -127,6 +159,14 @@
             this.lblMobil.Size = new System.Drawing.Size(59, 17);
             this.lblMobil.TabIndex = 3;
             this.lblMobil.Text = "Mobilnr.:";
+            // 
+            // txtFornavn
+            // 
+            this.txtFornavn.Location = new System.Drawing.Point(115, 70);
+            this.txtFornavn.Name = "txtFornavn";
+            this.txtFornavn.ReadOnly = true;
+            this.txtFornavn.Size = new System.Drawing.Size(149, 23);
+            this.txtFornavn.TabIndex = 13;
             // 
             // lblEfternavn
             // 
@@ -158,29 +198,61 @@
             this.lblKundeInfo.TabIndex = 0;
             this.lblKundeInfo.Text = "Kunde information";
             // 
-            // textBox2
+            // lblKetsjer
             // 
-            this.textBox2.Location = new System.Drawing.Point(109, 122);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(152, 23);
-            this.textBox2.TabIndex = 10;
-            this.textBox2.Text = "12.00 - 13.00";
+            this.lblKetsjer.AutoSize = true;
+            this.lblKetsjer.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblKetsjer.Location = new System.Drawing.Point(33, 280);
+            this.lblKetsjer.Name = "lblKetsjer";
+            this.lblKetsjer.Size = new System.Drawing.Size(54, 17);
+            this.lblKetsjer.TabIndex = 14;
+            this.lblKetsjer.Text = "Ketsjer:";
             // 
-            // textBox1
+            // txtKetsjer
             // 
-            this.textBox1.Location = new System.Drawing.Point(109, 68);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(152, 23);
-            this.textBox1.TabIndex = 9;
-            this.textBox1.Text = "10/10/2020";
+            this.txtKetsjer.Location = new System.Drawing.Point(109, 274);
+            this.txtKetsjer.Name = "txtKetsjer";
+            this.txtKetsjer.ReadOnly = true;
+            this.txtKetsjer.Size = new System.Drawing.Size(152, 23);
+            this.txtKetsjer.TabIndex = 13;
+            // 
+            // txtPris
+            // 
+            this.txtPris.Location = new System.Drawing.Point(109, 227);
+            this.txtPris.Name = "txtPris";
+            this.txtPris.ReadOnly = true;
+            this.txtPris.Size = new System.Drawing.Size(152, 23);
+            this.txtPris.TabIndex = 12;
+            // 
+            // txtSted
+            // 
+            this.txtSted.Location = new System.Drawing.Point(109, 175);
+            this.txtSted.Name = "txtSted";
+            this.txtSted.ReadOnly = true;
+            this.txtSted.Size = new System.Drawing.Size(152, 23);
+            this.txtSted.TabIndex = 11;
+            // 
+            // txtKlok
+            // 
+            this.txtKlok.Location = new System.Drawing.Point(109, 122);
+            this.txtKlok.Name = "txtKlok";
+            this.txtKlok.ReadOnly = true;
+            this.txtKlok.Size = new System.Drawing.Size(152, 23);
+            this.txtKlok.TabIndex = 10;
+            // 
+            // txtDato
+            // 
+            this.txtDato.Location = new System.Drawing.Point(109, 68);
+            this.txtDato.Name = "txtDato";
+            this.txtDato.ReadOnly = true;
+            this.txtDato.Size = new System.Drawing.Size(152, 23);
+            this.txtDato.TabIndex = 9;
             // 
             // lblPris
             // 
             this.lblPris.AutoSize = true;
             this.lblPris.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblPris.Location = new System.Drawing.Point(36, 233);
+            this.lblPris.Location = new System.Drawing.Point(33, 233);
             this.lblPris.Name = "lblPris";
             this.lblPris.Size = new System.Drawing.Size(34, 17);
             this.lblPris.TabIndex = 8;
@@ -226,59 +298,23 @@
             this.lblDato.TabIndex = 5;
             this.lblDato.Text = "Dato:";
             // 
-            // textBox3
+            // txtBold
             // 
-            this.textBox3.Location = new System.Drawing.Point(109, 175);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(152, 23);
-            this.textBox3.TabIndex = 11;
-            this.textBox3.Text = "Hal 1";
+            this.txtBold.Location = new System.Drawing.Point(109, 323);
+            this.txtBold.Name = "txtBold";
+            this.txtBold.ReadOnly = true;
+            this.txtBold.Size = new System.Drawing.Size(152, 23);
+            this.txtBold.TabIndex = 15;
             // 
-            // textBox4
+            // lblBold
             // 
-            this.textBox4.Location = new System.Drawing.Point(109, 227);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(152, 23);
-            this.textBox4.TabIndex = 12;
-            this.textBox4.Text = "kr. 120.00,-";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(115, 229);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(149, 23);
-            this.textBox5.TabIndex = 16;
-            this.textBox5.Text = "Analgren@rice.dk";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(115, 177);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(149, 23);
-            this.textBox6.TabIndex = 15;
-            this.textBox6.Text = "32323232";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(115, 124);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(149, 23);
-            this.textBox7.TabIndex = 14;
-            this.textBox7.Text = "Gren";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(115, 70);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(149, 23);
-            this.textBox8.TabIndex = 13;
-            this.textBox8.Text = "Anal";
+            this.lblBold.AutoSize = true;
+            this.lblBold.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBold.Location = new System.Drawing.Point(33, 329);
+            this.lblBold.Name = "lblBold";
+            this.lblBold.Size = new System.Drawing.Size(45, 17);
+            this.lblBold.TabIndex = 16;
+            this.lblBold.Text = "Bolde:";
             // 
             // BookingBekræftelse
             // 
@@ -316,13 +352,17 @@
         private Label lblSted;
         private Label lblKlok;
         private Label lblDato;
-        private TextBox textBox2;
-        private TextBox textBox1;
-        private TextBox textBox5;
-        private TextBox textBox6;
-        private TextBox textBox7;
-        private TextBox textBox8;
-        private TextBox textBox4;
-        private TextBox textBox3;
+        private TextBox txtKlok;
+        private TextBox txtDato;
+        private TextBox txtEmail;
+        private TextBox txtMobil;
+        private TextBox txtEfternavn;
+        private TextBox txtFornavn;
+        private TextBox txtPris;
+        private TextBox txtSted;
+        private Label lblKetsjer;
+        private TextBox txtKetsjer;
+        private Label lblBold;
+        private TextBox txtBold;
     }
 }

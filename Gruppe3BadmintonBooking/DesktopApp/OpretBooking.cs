@@ -13,10 +13,7 @@ namespace DesktopApp
 {
     public partial class OpretBooking : Form
     {
-        SqlCommand cmd;
-        DataTable dt;
-        SqlDataAdapter da;
-        DataSet ds;
+        DateTime dt;
 
         public OpretBooking()
         {
@@ -25,9 +22,14 @@ namespace DesktopApp
         
         private void btnBookBane_Click_1(object sender, EventArgs e)
         {
+            TimeSpan ts;
+            dt = monthCalendar1.SelectionStart;
+            ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
+            dt = dt.Date + ts;
             this.Hide();
-            BookingInfo bookingInfo = new BookingInfo();
+            BookingInfo bookingInfo = new BookingInfo(dt);
             bookingInfo.ShowDialog();
+
         }
 
         private void btnTilbage_Click(object sender, EventArgs e)

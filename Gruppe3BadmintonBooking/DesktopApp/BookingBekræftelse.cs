@@ -12,9 +12,20 @@ namespace DesktopApp
 {
     public partial class BookingBekræftelse : Form
     {
-        public BookingBekræftelse()
+        private List<string> customerInformation;
+
+        public BookingBekræftelse(List<string> customerInformation)
         {
             InitializeComponent();
+            this.customerInformation = customerInformation;
+            txtFornavn.Text = customerInformation[0];
+            txtEfternavn.Text = customerInformation[1];
+            txtMobil.Text = customerInformation[2];
+            txtEmail.Text = customerInformation[3];
+            txtDato.Text = customerInformation[4];
+            txtKlok.Text = customerInformation[5];
+            txtSted.Text = customerInformation[6];
+            txtPris.Text = customerInformation[7];
         }
 
         private void btnAfslut_Click(object sender, EventArgs e)
