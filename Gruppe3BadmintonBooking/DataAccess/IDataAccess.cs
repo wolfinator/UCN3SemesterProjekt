@@ -13,7 +13,7 @@ namespace DataAccess
         T GetById(int id);
         bool Update(T entity);
         bool DeleteById(int id);
-        void Create(T entity);
+        bool Create(T entity);
       
     }
 }
