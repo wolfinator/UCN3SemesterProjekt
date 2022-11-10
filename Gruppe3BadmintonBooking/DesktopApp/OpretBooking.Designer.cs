@@ -33,9 +33,12 @@
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.btnBookBane = new System.Windows.Forms.Button();
             this.btnTilbage = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listCourts = new System.Windows.Forms.ListView();
+            this.Bane = new System.Windows.Forms.ColumnHeader();
+            this.Hal = new System.Windows.Forms.ColumnHeader();
             this.lblKlok = new System.Windows.Forms.Label();
             this.comboKlok = new System.Windows.Forms.ComboBox();
+            this.btnGetCourts = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -86,13 +89,16 @@
             this.btnTilbage.UseVisualStyleBackColor = true;
             this.btnTilbage.Click += new System.EventHandler(this.btnTilbage_Click);
             // 
-            // listView1
+            // listCourts
             // 
-            this.listView1.Location = new System.Drawing.Point(310, 41);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(432, 218);
-            this.listView1.TabIndex = 6;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listCourts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Bane,
+            this.Hal});
+            this.listCourts.Location = new System.Drawing.Point(310, 41);
+            this.listCourts.Name = "listCourts";
+            this.listCourts.Size = new System.Drawing.Size(432, 218);
+            this.listCourts.TabIndex = 6;
+            this.listCourts.UseCompatibleStateImageBehavior = false;
             // 
             // lblKlok
             // 
@@ -122,14 +128,24 @@
             this.comboKlok.Size = new System.Drawing.Size(171, 23);
             this.comboKlok.TabIndex = 8;
             // 
+            // btnGetCourts
+            // 
+            this.btnGetCourts.Location = new System.Drawing.Point(314, 280);
+            this.btnGetCourts.Name = "btnGetCourts";
+            this.btnGetCourts.Size = new System.Drawing.Size(75, 23);
+            this.btnGetCourts.TabIndex = 9;
+            this.btnGetCourts.Text = "SEARCH";
+            this.btnGetCourts.UseVisualStyleBackColor = true;
+            // 
             // OpretBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnGetCourts);
             this.Controls.Add(this.comboKlok);
             this.Controls.Add(this.lblKlok);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listCourts);
             this.Controls.Add(this.btnTilbage);
             this.Controls.Add(this.btnBookBane);
             this.Controls.Add(this.monthCalendar1);
@@ -152,8 +168,11 @@
         private MonthCalendar Calender;
         private Button btnBookBane;
         private Button btnTilbage;
-        private ListView listView1;
+        private ListView listCourts;
         private Label lblKlok;
         private ComboBox comboKlok;
+        private Button btnGetCourts;
+        private ColumnHeader Bane;
+        private ColumnHeader Hal;
     }
 }

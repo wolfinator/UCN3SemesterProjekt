@@ -29,24 +29,24 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtEmail = new System.Windows.Forms.TextBox();
+            this.txtMobil = new System.Windows.Forms.TextBox();
+            this.txtEfternavn = new System.Windows.Forms.TextBox();
+            this.txtFornavn = new System.Windows.Forms.TextBox();
             this.lblEmail = new System.Windows.Forms.Label();
             this.lblMobil = new System.Windows.Forms.Label();
             this.lblEfternavn = new System.Windows.Forms.Label();
             this.lblFornavn = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.lblKundeInfo = new System.Windows.Forms.Label();
+            this.txtPris = new System.Windows.Forms.TextBox();
+            this.txtSted = new System.Windows.Forms.TextBox();
+            this.txtKlok = new System.Windows.Forms.TextBox();
+            this.txtDato = new System.Windows.Forms.TextBox();
             this.lblPris = new System.Windows.Forms.Label();
             this.lblSted = new System.Windows.Forms.Label();
             this.lblKlok = new System.Windows.Forms.Label();
             this.lblDato = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblBookingInfo = new System.Windows.Forms.Label();
             this.btnTilbage = new System.Windows.Forms.Button();
             this.btnBekraeft = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -64,60 +64,60 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.textBox4);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox3);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox2);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.txtEmail);
+            this.splitContainer1.Panel1.Controls.Add(this.txtMobil);
+            this.splitContainer1.Panel1.Controls.Add(this.txtEfternavn);
+            this.splitContainer1.Panel1.Controls.Add(this.txtFornavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblEmail);
             this.splitContainer1.Panel1.Controls.Add(this.lblMobil);
             this.splitContainer1.Panel1.Controls.Add(this.lblEfternavn);
             this.splitContainer1.Panel1.Controls.Add(this.lblFornavn);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.lblKundeInfo);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.textBox5);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox6);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox7);
-            this.splitContainer1.Panel2.Controls.Add(this.textBox8);
+            this.splitContainer1.Panel2.Controls.Add(this.txtPris);
+            this.splitContainer1.Panel2.Controls.Add(this.txtSted);
+            this.splitContainer1.Panel2.Controls.Add(this.txtKlok);
+            this.splitContainer1.Panel2.Controls.Add(this.txtDato);
             this.splitContainer1.Panel2.Controls.Add(this.lblPris);
             this.splitContainer1.Panel2.Controls.Add(this.lblSted);
             this.splitContainer1.Panel2.Controls.Add(this.lblKlok);
             this.splitContainer1.Panel2.Controls.Add(this.lblDato);
-            this.splitContainer1.Panel2.Controls.Add(this.label2);
+            this.splitContainer1.Panel2.Controls.Add(this.lblBookingInfo);
             this.splitContainer1.Panel2.Controls.Add(this.btnTilbage);
             this.splitContainer1.Panel2.Controls.Add(this.btnBekraeft);
             this.splitContainer1.Size = new System.Drawing.Size(800, 450);
             this.splitContainer1.SplitterDistance = 400;
             this.splitContainer1.TabIndex = 0;
             // 
-            // textBox4
+            // txtEmail
             // 
-            this.textBox4.Location = new System.Drawing.Point(103, 269);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(188, 23);
-            this.textBox4.TabIndex = 9;
+            this.txtEmail.Location = new System.Drawing.Point(103, 269);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(188, 23);
+            this.txtEmail.TabIndex = 9;
             // 
-            // textBox3
+            // txtMobil
             // 
-            this.textBox3.Location = new System.Drawing.Point(103, 207);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(188, 23);
-            this.textBox3.TabIndex = 8;
+            this.txtMobil.Location = new System.Drawing.Point(103, 207);
+            this.txtMobil.Name = "txtMobil";
+            this.txtMobil.Size = new System.Drawing.Size(188, 23);
+            this.txtMobil.TabIndex = 8;
             // 
-            // textBox2
+            // txtEfternavn
             // 
-            this.textBox2.Location = new System.Drawing.Point(103, 145);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(188, 23);
-            this.textBox2.TabIndex = 7;
+            this.txtEfternavn.Location = new System.Drawing.Point(103, 145);
+            this.txtEfternavn.Name = "txtEfternavn";
+            this.txtEfternavn.Size = new System.Drawing.Size(188, 23);
+            this.txtEfternavn.TabIndex = 7;
             // 
-            // textBox1
+            // txtFornavn
             // 
-            this.textBox1.Location = new System.Drawing.Point(103, 77);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(188, 23);
-            this.textBox1.TabIndex = 6;
+            this.txtFornavn.Location = new System.Drawing.Point(103, 77);
+            this.txtFornavn.Name = "txtFornavn";
+            this.txtFornavn.Size = new System.Drawing.Size(188, 23);
+            this.txtFornavn.TabIndex = 6;
             // 
             // lblEmail
             // 
@@ -159,48 +159,47 @@
             this.lblFornavn.TabIndex = 2;
             this.lblFornavn.Text = "Fornavn:";
             // 
-            // label1
+            // lblKundeInfo
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(103, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(194, 27);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Kunde information";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.lblKundeInfo.AutoSize = true;
+            this.lblKundeInfo.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.lblKundeInfo.Location = new System.Drawing.Point(103, 9);
+            this.lblKundeInfo.Name = "lblKundeInfo";
+            this.lblKundeInfo.Size = new System.Drawing.Size(194, 27);
+            this.lblKundeInfo.TabIndex = 0;
+            this.lblKundeInfo.Text = "Kunde information";
             // 
-            // textBox5
+            // txtPris
             // 
-            this.textBox5.Location = new System.Drawing.Point(97, 266);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(188, 23);
-            this.textBox5.TabIndex = 13;
+            this.txtPris.Location = new System.Drawing.Point(97, 266);
+            this.txtPris.Name = "txtPris";
+            this.txtPris.ReadOnly = true;
+            this.txtPris.Size = new System.Drawing.Size(188, 23);
+            this.txtPris.TabIndex = 13;
             // 
-            // textBox6
+            // txtSted
             // 
-            this.textBox6.Location = new System.Drawing.Point(97, 204);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(188, 23);
-            this.textBox6.TabIndex = 12;
+            this.txtSted.Location = new System.Drawing.Point(97, 204);
+            this.txtSted.Name = "txtSted";
+            this.txtSted.ReadOnly = true;
+            this.txtSted.Size = new System.Drawing.Size(188, 23);
+            this.txtSted.TabIndex = 12;
             // 
-            // textBox7
+            // txtKlok
             // 
-            this.textBox7.Location = new System.Drawing.Point(97, 142);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(188, 23);
-            this.textBox7.TabIndex = 11;
+            this.txtKlok.Location = new System.Drawing.Point(97, 142);
+            this.txtKlok.Name = "txtKlok";
+            this.txtKlok.ReadOnly = true;
+            this.txtKlok.Size = new System.Drawing.Size(188, 23);
+            this.txtKlok.TabIndex = 11;
             // 
-            // textBox8
+            // txtDato
             // 
-            this.textBox8.Location = new System.Drawing.Point(97, 74);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(188, 23);
-            this.textBox8.TabIndex = 10;
+            this.txtDato.Location = new System.Drawing.Point(97, 74);
+            this.txtDato.Name = "txtDato";
+            this.txtDato.ReadOnly = true;
+            this.txtDato.Size = new System.Drawing.Size(188, 23);
+            this.txtDato.TabIndex = 10;
             // 
             // lblPris
             // 
@@ -242,15 +241,15 @@
             this.lblDato.TabIndex = 3;
             this.lblDato.Text = "Dato:";
             // 
-            // label2
+            // lblBookingInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(97, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(211, 27);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Booking information";
+            this.lblBookingInfo.AutoSize = true;
+            this.lblBookingInfo.Font = new System.Drawing.Font("Times New Roman", 18F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.lblBookingInfo.Location = new System.Drawing.Point(97, 9);
+            this.lblBookingInfo.Name = "lblBookingInfo";
+            this.lblBookingInfo.Size = new System.Drawing.Size(211, 27);
+            this.lblBookingInfo.TabIndex = 1;
+            this.lblBookingInfo.Text = "Booking information";
             // 
             // btnTilbage
             // 
@@ -306,25 +305,25 @@
 
         private SplitContainer splitContainer1;
         private Button btnBekraeft;
-        private Label label1;
+        private Label lblKundeInfo;
         private Button btnTilbage;
-        private TextBox textBox4;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox1;
+        private TextBox txtEmail;
+        private TextBox txtMobil;
+        private TextBox txtEfternavn;
+        private TextBox txtFornavn;
         private Label lblEmail;
         private Label lblMobil;
         private Label lblEfternavn;
         private Label lblFornavn;
-        private TextBox textBox5;
-        private TextBox textBox6;
-        private TextBox textBox7;
-        private TextBox textBox8;
+        private TextBox txtPris;
+        private TextBox txtSted;
+        private TextBox txtKlok;
+        private TextBox txtDato;
         private Label lblPris;
         private Label lblSted;
         private Label lblKlok;
         private Label lblDato;
-        private Label label2;
+        private Label lblBookingInfo;
         private Label label3;
     }
 }

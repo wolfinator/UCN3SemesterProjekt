@@ -24,11 +24,6 @@ namespace DesktopApp
             bookingBekræftelse.ShowDialog();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnTilbage_Click(object sender, EventArgs e)
         {
             this.Hide();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,11 @@ namespace DesktopApp
 {
     public partial class OpretBooking : Form
     {
+        SqlCommand cmd;
+        DataTable dt;
+        SqlDataAdapter da;
+        DataSet ds;
+
         public OpretBooking()
         {
             InitializeComponent();
@@ -30,6 +36,5 @@ namespace DesktopApp
             Startside startside = new();
             startside.ShowDialog();
         }
-        
     }
 }
