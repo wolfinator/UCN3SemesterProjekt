@@ -11,8 +11,8 @@ namespace DataAccess
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
-        void Update(T entity);
-        void DeleteById(int id);
+        bool Update(T entity);
+        bool DeleteById(int id);
         void Create(T entity);
       
     }
