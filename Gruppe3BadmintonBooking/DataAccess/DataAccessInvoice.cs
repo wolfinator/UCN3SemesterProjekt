@@ -46,8 +46,9 @@ namespace DataAccess
 
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
+            bool isSuccess = false;
 
             SqlConnection con = new(conStr.ConnectionString);
 
@@ -58,32 +59,39 @@ namespace DataAccess
                 cmd.CommandText = "DELETE FROM Invoice WHERE Id = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
-                //Open sql Connection
-                con.Open();
+                int rows = cmd.ExecuteNonQuery();
+                //If the query is executd successfully then the value of rows will be greater than zero else it will be less than 0
 
-               int rows = cmd.ExecuteNonQuery();
-
-                } 
-            catch (SqlException)
+                if (rows > 0)
                 {
-                throw;
+                    //Query Executed Successfully
+                    isSuccess = true;
                 }
+
+            }
+            catch (SqlException)
+            {
+                //Faied to Execute Query
+                isSuccess = false;
+
+            }
 
             con.Close();
 
-            }
-         
+            return isSuccess;
+        }
+
 
         public IEnumerable<Invoice> GetAll()
             {
             throw new NotImplementedException();
 
-            /*            SqlConnection con = new(conStr.ConnectionString);
+                      SqlConnection con = new(conStr.ConnectionString);
                         con.Open();
 
                         SqlCommand cmd = con.CreateCommand();
-                        cmd.CommandText = "SELECT * FROM Invoice I, Person P, Reservation R WHERE I.person_id = " +
-                                            "p.id AND I.reservation_id = R.id\n";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
+                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id AND Reservation.court_id = Court.id AND Reservation.person_id = Person.id";
 
                         SqlDataReader reader = cmd.ExecuteReader();
          
@@ -92,38 +100,25 @@ namespace DataAccess
                         while (reader.Read())
                         {
                             Invoice invoice = new()
-
-                            {
-                                id = reader.GetInt32(0),
-                                totalPrice = reader.GetDecimal(1),
-
-                                employee = new Employee()
-                                {
-                                    id = reader.GetInt32(3),
-                                    firstName = reader.GetString(5)
-        }
-
-                                reservation = new Reservation()
-        {
-                                    id = reader.GetInt32(2),
-                                    dateTime = reader.GetDateTime(12),
-
+                            {   
+                             
                             }
-                        } */
+
+                          
 
         }
 
 
         public Invoice GetById(int id)
         {
-          
+
 
 
             throw new NotImplementedException();
         }
 
 
-        public void Update(Invoice entity)
+        public bool Update(Invoice entity)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
@@ -132,6 +127,8 @@ namespace DataAccess
 
 
             throw new NotImplementedException();
+
+                return true;
         }
     }
 }
