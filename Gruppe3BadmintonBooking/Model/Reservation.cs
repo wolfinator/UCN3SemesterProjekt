@@ -14,5 +14,13 @@ namespace Model
         public Person customer { get; set; }
         public Employee employee { get; set; }
         public Court court { get; set; }
+
+        public Reservation(DateTime dateTime, int courtNo, bool isEquipment, Person customer)
+        {
+            this.dateTime = dateTime;
+            this.courtNo = courtNo;
+            this.isEquipment = isEquipment;
+            this.customer = customer;
+        }
     }
 }

@@ -16,11 +16,6 @@ namespace DesktopApp
         {
             InitializeComponent();
         }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
         
         private void btnBookBane_Click_1(object sender, EventArgs e)
         {
@@ -35,5 +30,6 @@ namespace DesktopApp
             Startside startside = new();
             startside.ShowDialog();
         }
+        
     }
 }

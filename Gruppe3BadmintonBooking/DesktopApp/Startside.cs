@@ -1,3 +1,5 @@
+using Model;
+
 namespace DesktopApp
 {
     public partial class Startside : Form
@@ -5,6 +7,8 @@ namespace DesktopApp
         public Startside()
         {
             InitializeComponent();
+
+            //Reservation reservation = new(reservation.dateTime, 1, true, );
         }
 
         private void btnOpretBooking_Click(object sender, EventArgs e)
@@ -12,6 +16,7 @@ namespace DesktopApp
             this.Hide();
             OpretBooking opretBooking = new OpretBooking();
             opretBooking.ShowDialog();
+            
 
         }
 

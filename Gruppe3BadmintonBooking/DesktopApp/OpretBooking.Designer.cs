@@ -31,16 +31,18 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.btnBookBane = new System.Windows.Forms.Button();
             this.btnTilbage = new System.Windows.Forms.Button();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.lblKlok = new System.Windows.Forms.Label();
+            this.comboKlok = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(105, 17);
+            this.label1.Location = new System.Drawing.Point(48, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 21);
             this.label1.TabIndex = 0;
@@ -50,26 +52,17 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(105, 206);
+            this.label2.Location = new System.Drawing.Point(310, 17);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 21);
+            this.label2.Size = new System.Drawing.Size(110, 21);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Kalender:";
+            this.label2.Text = "Ledige baner:";
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(196, 17);
+            this.monthCalendar1.Location = new System.Drawing.Point(48, 41);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 2;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(196, 206);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(456, 199);
-            this.listBox1.TabIndex = 3;
             // 
             // btnBookBane
             // 
@@ -93,14 +86,52 @@
             this.btnTilbage.UseVisualStyleBackColor = true;
             this.btnTilbage.Click += new System.EventHandler(this.btnTilbage_Click);
             // 
+            // listView1
+            // 
+            this.listView1.Location = new System.Drawing.Point(310, 41);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(432, 218);
+            this.listView1.TabIndex = 6;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // lblKlok
+            // 
+            this.lblKlok.AutoSize = true;
+            this.lblKlok.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblKlok.Location = new System.Drawing.Point(48, 218);
+            this.lblKlok.Name = "lblKlok";
+            this.lblKlok.Size = new System.Drawing.Size(97, 21);
+            this.lblKlok.TabIndex = 7;
+            this.lblKlok.Text = "Klokkeslæt:";
+            // 
+            // comboKlok
+            // 
+            this.comboKlok.FormattingEnabled = true;
+            this.comboKlok.Items.AddRange(new object[] {
+            "10:00",
+            "11:00",
+            "12:00",
+            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00"});
+            this.comboKlok.Location = new System.Drawing.Point(48, 242);
+            this.comboKlok.Name = "comboKlok";
+            this.comboKlok.Size = new System.Drawing.Size(171, 23);
+            this.comboKlok.TabIndex = 8;
+            // 
             // OpretBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboKlok);
+            this.Controls.Add(this.lblKlok);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.btnTilbage);
             this.Controls.Add(this.btnBookBane);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -119,8 +150,10 @@
         private Label lblDato;
         private Label lblKalender;
         private MonthCalendar Calender;
-        private ListBox listBox1;
         private Button btnBookBane;
         private Button btnTilbage;
+        private ListView listView1;
+        private Label lblKlok;
+        private ComboBox comboKlok;
     }
 }
