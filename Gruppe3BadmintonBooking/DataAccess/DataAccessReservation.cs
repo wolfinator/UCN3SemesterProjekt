@@ -135,7 +135,7 @@ namespace DataAccess
                 cmdUpdate.Parameters.AddWithValue("@DateTime", entity.dateTime);
                 cmdUpdate.Parameters.AddWithValue("@IsEquipment", entity.isEquipment);
                 cmdUpdate.Parameters.AddWithValue("@CourtId", entity.courtNo);
-                cmdUpdate.Parameters.AddWithValue("@Id", id); // TODO fix ID input i query
+                cmdUpdate.Parameters.AddWithValue("@Id", entity); // TODO fix ID input i query
 
                 con.Open();
 
