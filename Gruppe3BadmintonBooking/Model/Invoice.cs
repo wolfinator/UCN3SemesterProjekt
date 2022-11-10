@@ -8,6 +8,7 @@ namespace Model
 {
     public class Invoice
     {
+        public int id { get; set; }
         public decimal totalPrice { get; set; }
         public int orderNo { get; set; }
         public String name { get; set; }
