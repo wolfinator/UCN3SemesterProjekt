@@ -542,18 +542,64 @@ namespace DataAccess
 
         }
 
+
         public IEnumerable<Invoice> GetAll()
         {
             throw new NotImplementedException();
+
+            /*            SqlConnection con = new(conStr.ConnectionString);
+                        con.Open();
+
+                        SqlCommand cmd = con.CreateCommand();
+                        cmd.CommandText = "SELECT * FROM Invoice I, Person P, Reservation R WHERE I.person_id = " +
+                                            "p.id AND I.reservation_id = R.id\n";
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        List<Invoice> list = new List<Invoice>();
+
+                        while (reader.Read())
+                        {
+                            Invoice invoice = new()
+
+                            {
+                                id = reader.GetInt32(0),
+                                totalPrice = reader.GetDecimal(1),
+
+                                employee = new Employee()
+                                {
+                                    id = reader.GetInt32(3),
+                                    firstName = reader.GetString(5)
+                                }
+
+                                reservation = new Reservation()
+                                {
+                                    id = reader.GetInt32(2),
+                                    dateTime = reader.GetDateTime(12),
+
+                            }
+                        } */
+
         }
+
 
         public Invoice GetById(int id)
         {
+          
+
+
             throw new NotImplementedException();
         }
 
+
         public void Update(Invoice entity)
         {
+            SqlConnection con = new(conStr.ConnectionString);
+            con.Open();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "UPDATE Invoice SET totalPrice = @TotalPrice WHERE Id = @id";
+
+
             throw new NotImplementedException();
         }
     }

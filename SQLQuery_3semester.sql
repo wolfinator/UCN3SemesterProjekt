@@ -51,7 +51,6 @@ create table Invoice(
 id int identity(1,1) not null,
 total_price decimal,
 reservation_id int not null foreign key references reservation(id),
-person_id int not null foreign key references person(id),
 primary key(id)
 )
 
