@@ -26,8 +26,6 @@ namespace Tests
             dataAccessInvoice.Create(invoice);
             
 
-            
-
             //Assert
 
             //todo
