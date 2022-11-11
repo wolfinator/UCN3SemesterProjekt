@@ -15,7 +15,7 @@ create table _Address(
 id int identity(1,1) not null,
 street nvarchar(30),
 house_no varchar(5),
-city_zipcode char(4) foreign key references cityzip(zipcode),
+city_zipcode char(4) not null foreign key references cityzip(zipcode),
 primary key (id)
 )
 
@@ -31,9 +31,9 @@ primary key (id)
 )
 
 create table Court(
-id int identity(1,1) not null,
+id int not null,
 hall_no int CHECK (hall_no <= 3 AND hall_no > 0),
-primary key(id),
+primary key(id)
 )
 
 create table Reservation(
@@ -42,7 +42,8 @@ date_time datetime,
 is_equipment bit,
 from_time time,
 court_id int not null foreign key references court(id),
-person_id int not null foreign key references person(id),
+customer_id int not null foreign key references person(id),
+employee_id int not null foreign key references person(id),
 primary key(id)
 )
 
@@ -52,3 +53,4 @@ total_price decimal,
 reservation_id int not null foreign key references reservation(id),
 primary key(id)
 )
+
