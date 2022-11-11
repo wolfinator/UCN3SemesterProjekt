@@ -8,6 +8,8 @@ namespace Model
 {
     public class Reservation
     {
+
+        public int Id { get; set; }
         public DateTime dateTime { get; set; }
         public TimeSpan fromTime { get; set; }
         public int courtNo { get; set; }
