@@ -27,8 +27,9 @@ namespace DataAccess
             }
             return persontype;
         }
-        public void Create(Person entity)
+        public bool Create(Person entity)
         {
+            bool created = false;
             int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
@@ -58,7 +59,7 @@ namespace DataAccess
                     cmdAddress.Transaction = trans;
                     int addressId = (int)cmdAddress.ExecuteScalar();
                     cmdPerson.Parameters.AddWithValue("@AddressId", addressId);
-                    cmdPerson.ExecuteNonQuery();
+                    created = cmdPerson.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
                 {
@@ -69,6 +70,7 @@ namespace DataAccess
                 trans.Commit();
             }
             con.Close();
+            return created;
         }
 
         public bool DeleteById(int id)
