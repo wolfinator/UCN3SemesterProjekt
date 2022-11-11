@@ -3,6 +3,7 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,57 +18,33 @@ namespace DataAccess
             conStr = Connection.conStr;
         }
 
-        public void Create(Invoice entity)
+        public bool Create(Invoice entity)
         {
             SqlConnection con = new(conStr.ConnectionString);
-
-            string cmdTextInvoice = "insert into Invoice(total_price, person_id, reservation_id) " +
-                                     "values (@TotalPrice, @PersonId, @ReservationId) ";
-
-            SqlCommand cmdInvoice = new(cmdTextInvoice, con);
-
-            cmdInvoice.Parameters.AddWithValue("@totalPrice", entity.totalPrice);
-            cmdInvoice.Parameters.AddWithValue("@PersonId", entity.employee.id);
-            cmdInvoice.Parameters.AddWithValue("@ReservationId", entity.reservation);
-
-
             con.Open();
-            try
-            {
-                cmdInvoice.ExecuteNonQuery();
-            }
-            catch (SqlException)
-            {
-                throw;
-                //TODO Skriv hvad der skal kastes
-            }
-            con.Close();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "INSERT INTO Invoice VALUES (@totalPrice, @reservationId)";
+            cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
+            cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
 
+            int rowsAffected = cmd.ExecuteNonQuery();
 
+            return rowsAffected == 1;
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
-
             SqlConnection con = new(conStr.ConnectionString);
 
-            try
-            {
-                con.Open();
-                SqlCommand cmd = con.CreateCommand();
-                cmd.CommandText = "DELETE FROM Invoice WHERE Id = @id";
-                cmd.Parameters.AddWithValue("@id", id);
+            con.Open();
 
-                int rows = cmd.ExecuteNonQuery();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "DELETE FROM Invoice WHERE Id = @id";
+            cmd.Parameters.AddWithValue("id", @id);
 
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
+            int rowsAffected = cmd.ExecuteNonQuery();
 
-            con.Close();
-
+            return rowsAffected == 1;
         }
 
 
@@ -75,60 +52,116 @@ namespace DataAccess
         {
             throw new NotImplementedException();
 
-            /*            SqlConnection con = new(conStr.ConnectionString);
-                        con.Open();
+            SqlConnection con = new(conStr.ConnectionString);
+            con.Open();
 
-                        SqlCommand cmd = con.CreateCommand();
-                        cmd.CommandText = "SELECT * FROM Invoice I, Person P, Reservation R WHERE I.person_id = " +
-                                            "p.id AND I.reservation_id = R.id\n";
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
+                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
+                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
 
-                        SqlDataReader reader = cmd.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
 
-                        List<Invoice> list = new List<Invoice>();
+            List<Invoice> list = new List<Invoice>();
 
-                        while (reader.Read())
+            while (reader.Read())
+            {
+                Invoice invoice = new()
+                {
+                    totalPrice = reader.GetDecimal(0),
+
+
+                    reservation = new Reservation()
+                    {
+                        dateTime = reader.GetDateTime(1),
+                        isEquipment = reader.GetBoolean(2),
+                        //Todo get fromtime Fra reservation
+                        // fromTime = reader.GetTimeSpan(3).
+
+
+
+                        court = new Court()
                         {
-                            Invoice invoice = new()
+                            id = reader.GetInt32(4),
+                            hallNo = reader.GetInt32(5),
+                        },
 
-                            {
-                                id = reader.GetInt32(0),
-                                totalPrice = reader.GetDecimal(1),
+                        customer = new Person()
+                        {
+                            firstName = reader.GetString(6),
+                        }
+                    }
+                };
 
-                                employee = new Employee()
-                                {
-                                    id = reader.GetInt32(3),
-                                    firstName = reader.GetString(5)
-                                }
 
-                                reservation = new Reservation()
-                                {
-                                    id = reader.GetInt32(2),
-                                    dateTime = reader.GetDateTime(12),
+                list.Add(invoice);
+            }
 
-                            }
-                        } */
+            con.Close();
 
+            return list;
         }
 
 
-        public Invoice GetById(int id)
-        {
-          
 
 
-            throw new NotImplementedException();
-        }
-
-
-        public void Update(Invoice entity)
+        public Invoice? GetById(int id)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "UPDATE Invoice SET totalPrice = @TotalPrice WHERE Id = @id";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
+                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.id = @id";
+            cmd.Parameters.AddWithValue("id", id);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                Invoice invoice = new()
+                {
+                    totalPrice = reader.GetDecimal(0),
 
 
-            throw new NotImplementedException();
+                    reservation = new Reservation()
+                    {
+                        dateTime = reader.GetDateTime(1),
+                        isEquipment = reader.GetBoolean(2),
+                        //Todo get fromtime Fra reservation
+                        // fromTime = reader.GetTimeSpan(3).
+
+
+
+                        court = new Court()
+                        {
+                            id = reader.GetInt32(4),
+                            hallNo = reader.GetInt32(5),
+                        },
+
+                        customer = new Person()
+                        {
+                            firstName = reader.GetString(6),
+                        }
+                    }
+                };
+                return invoice;
+            }
+            return null;
         }
+
+
+        public bool Update(Invoice entity)
+        {
+            SqlConnection con = new(conStr.ConnectionString);
+            con.Open();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "UPDATE Invoice SET total_price = @totalPrice WHERE Id = @id";
+            cmd.Parameters.AddWithValue("total_price", entity.totalPrice);
+            int rowsAffected = cmd.ExecuteNonQuery();
+
+            return rowsAffected == 1;
+
+
+        }
+
     }
 }
