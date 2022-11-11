@@ -18,8 +18,9 @@ namespace DataAccess
         {
             conStr = Connection.conStr;
         }
-        public void Create(Reservation reservation)
+        public bool Create(Reservation reservation)
         {
+            bool created = false;
             string cmdTextCreate = "insert into Reservation(date_time, is_equipment, from_time, court_id, customer_id, employee_id) " +
                                             "values (@DateTime, @IsEquipment, @FromTime, @CourtId, @CustomerId, @EmployeeId)";
             using (SqlConnection con = new(conStr.ConnectionString))
@@ -35,13 +36,14 @@ namespace DataAccess
                 con.Open();
                 try
                 {
-                    cmdReservation.ExecuteNonQuery();
+                    created = cmdReservation.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
                 {
                     throw new NotImplementedException(); //TODO SKRIV throw ting
                 }
             }
+            return created;
         }
 
         public bool DeleteById(int id)
