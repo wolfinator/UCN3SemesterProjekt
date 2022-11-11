@@ -42,7 +42,8 @@ date_time datetime,
 is_equipment bit,
 from_time time,
 court_id int not null foreign key references court(id),
-person_id int not null foreign key references person(id),
+customer_id int not null foreign key references person(id),
+employee_id int not null foreign key references person(id),
 primary key(id)
 )
 
