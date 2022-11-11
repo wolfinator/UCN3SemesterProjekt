@@ -26,6 +26,8 @@ namespace DesktopApp
             txtKlok.Text = customerInformation[5];
             txtSted.Text = customerInformation[6];
             txtPris.Text = customerInformation[7];
+            txtKetsjer.Text = customerInformation[8];
+            txtBold.Text = customerInformation[9];
         }
 
         private void btnAfslut_Click(object sender, EventArgs e)

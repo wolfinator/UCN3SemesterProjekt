@@ -172,8 +172,8 @@
         private ListView listCourts;
         private Label lblKlok;
         private ComboBox comboKlok;
-        private Button btnGetCourts;
         private ColumnHeader Bane;
         private ColumnHeader Hal;
+        private Button btnGetCourts;
     }
 }

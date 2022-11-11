@@ -23,12 +23,28 @@ namespace DesktopApp
         private void btnBookBane_Click_1(object sender, EventArgs e)
         {
             TimeSpan ts;
-            dt = monthCalendar1.SelectionStart;
-            ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
-            dt = dt.Date + ts;
-            this.Hide();
-            BookingInfo bookingInfo = new BookingInfo(dt);
-            bookingInfo.ShowDialog();
+            //dt = monthCalendar1.SelectionStart;
+            //ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
+            //dt = dt.Date + ts;
+            if (comboKlok.SelectedIndex > -1)
+            {
+                dt = monthCalendar1.SelectionStart;
+                ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
+                dt = dt.Date + ts;
+                this.Hide();
+                BookingInfo bookingInfo = new BookingInfo(dt);
+                bookingInfo.ShowDialog();
+            }
+            else
+            {
+                string message = "Vælg tidspunkt!";
+                string title = "Information";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            }
+            //this.Hide();
+            //BookingInfo bookingInfo = new BookingInfo(dt);
+            //bookingInfo.ShowDialog();
 
         }
 

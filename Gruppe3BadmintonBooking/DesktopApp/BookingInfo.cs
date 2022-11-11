@@ -31,6 +31,17 @@ namespace DesktopApp
             customerInformation.Add(txtKlok.Text);
             customerInformation.Add(txtSted.Text);
             customerInformation.Add(txtPris.Text);
+            customerInformation.Add(comboBoxKetsjer.Text);
+            if (checkBoxBold.Checked)
+            {
+                checkBoxBold.Text = "Ja";
+            }
+            else
+            {
+                checkBoxBold.Text = "Nej";
+            }
+            customerInformation.Add(checkBoxBold.Text);
+            
 
             this.Hide();
             BookingBekræftelse bookingBekræftelse = new(customerInformation);
