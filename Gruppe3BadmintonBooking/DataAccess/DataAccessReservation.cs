@@ -44,8 +44,9 @@ namespace DataAccess
             }
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
+            bool deleted = false;
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 string cmdTextDeleteReservation = "delete from Reservation where id = @Id";
@@ -62,6 +63,7 @@ namespace DataAccess
                     throw new NotImplementedException(); //TODO SKRIV throw ting
                 }
             }
+            return deleted;
         }
 
         public IEnumerable<Reservation> GetAll()
@@ -128,8 +130,9 @@ namespace DataAccess
             return reservation;
         }
 
-        public void Update(Reservation entity)
+        public bool Update(Reservation entity)
         {
+            bool updated = false;
             string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipemnt " +
                 "where id = @Id";
             using (SqlConnection con = new(conStr.ConnectionString))
@@ -151,7 +154,7 @@ namespace DataAccess
                     throw new NotImplementedException(); //TODO SKRIV throw ting
                 }
             }
-            
+            return updated;
         }
     }
 }
