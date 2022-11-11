@@ -144,7 +144,7 @@ namespace DataAccess
             {
                 //TODO handle exception
                 throw;
-            }
+        }
 
             return person;
         }
@@ -175,7 +175,7 @@ namespace DataAccess
 
             con.Open();
             using (var trans = con.BeginTransaction())
-            {
+        {
                 try
                 {
                     cmdUpdatePerson.Transaction = trans;
@@ -186,7 +186,7 @@ namespace DataAccess
 
                     // Checks if both the person and address tables are updated
                     isUpdated = updatedAddress + updatedAddress == 2;
-                }
+        }
                 catch (SqlException)
                 {
                     trans.Rollback();
@@ -212,7 +212,7 @@ namespace DataAccess
                 }
             }
             catch (SqlException)
-            {
+        {
                 //TODO Handle exception
                 throw;
             } 
@@ -226,7 +226,7 @@ namespace DataAccess
             {
                 int personType = int.Parse(reader.GetString(5));
                 switch (personType)
-                {
+        {
                     case 0: person = new Employee();
                         break;
                     case 1: person = new Guest();
@@ -235,7 +235,7 @@ namespace DataAccess
                         break;
                     default: throw new NotImplementedException(); // Todo handle exception
                         break;
-                }
+        }
 
                 person.firstName = reader.GetString(1);
                 person.lastName = reader.GetString(2);
@@ -248,7 +248,7 @@ namespace DataAccess
                 //TODO if member add all reservations to object
             }
             catch (InvalidCastException ex)
-            {
+        {
 
                 throw;
             }
