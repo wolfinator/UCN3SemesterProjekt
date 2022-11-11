@@ -9,6 +9,7 @@ namespace Model
     public class Reservation
     {
         public DateTime dateTime { get; set; }
+        public TimeSpan fromTime { get; set; }
         public int courtNo { get; set; }
         public bool isEquipment { get; set; }
         public Person customer { get; set; }
