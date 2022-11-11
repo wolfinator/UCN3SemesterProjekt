@@ -18,16 +18,19 @@ namespace DataAccess
         {
             conStr = Connection.conStr;
         }
-        public void Create(Reservation entity)
+        public void Create(Reservation reservation)
         {
-            string cmdTextReservation = "insert into Reservation(date_time, is_equipment, court_id) " +
-                                            "values (@DateTime, @IsEquipment, @CourtId)";
+            string cmdTextCreate = "insert into Reservation(date_time, is_equipment, from_time, court_id, customer_id, employee_id) " +
+                                            "values (@DateTime, @IsEquipment, @FromTime, @CourtId, @CustomerId, @EmployeeId)";
             using (SqlConnection con = new(conStr.ConnectionString))
             { 
-                SqlCommand cmdReservation = new(cmdTextReservation, con);
-                cmdReservation.Parameters.AddWithValue("@DateTime", entity.dateTime);
-                cmdReservation.Parameters.AddWithValue("@IsEquipment", entity.isEquipment);
-                cmdReservation.Parameters.AddWithValue("@CourtId", entity.courtNo);
+                SqlCommand cmdReservation = new(cmdTextCreate, con);
+                cmdReservation.Parameters.AddWithValue("@DateTime", reservation.dateTime);
+                cmdReservation.Parameters.AddWithValue("@IsEquipment", reservation.isEquipment);
+                cmdReservation.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+                cmdReservation.Parameters.AddWithValue("@CourtId", reservation.courtNo);
+                cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
+                cmdReservation.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
                 con.Open();
                 try
