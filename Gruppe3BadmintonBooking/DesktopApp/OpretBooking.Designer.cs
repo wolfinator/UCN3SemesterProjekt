@@ -33,12 +33,11 @@
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.btnBookBane = new System.Windows.Forms.Button();
             this.btnTilbage = new System.Windows.Forms.Button();
-            this.listCourts = new System.Windows.Forms.ListView();
-            this.Bane = new System.Windows.Forms.ColumnHeader();
-            this.Hal = new System.Windows.Forms.ColumnHeader();
             this.lblKlok = new System.Windows.Forms.Label();
             this.comboKlok = new System.Windows.Forms.ComboBox();
             this.btnGetCourts = new System.Windows.Forms.Button();
+            this.dataGridViewCourts = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCourts)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -90,17 +89,6 @@
             this.btnTilbage.UseVisualStyleBackColor = true;
             this.btnTilbage.Click += new System.EventHandler(this.btnTilbage_Click);
             // 
-            // listCourts
-            // 
-            this.listCourts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Bane,
-            this.Hal});
-            this.listCourts.Location = new System.Drawing.Point(310, 41);
-            this.listCourts.Name = "listCourts";
-            this.listCourts.Size = new System.Drawing.Size(432, 218);
-            this.listCourts.TabIndex = 6;
-            this.listCourts.UseCompatibleStateImageBehavior = false;
-            // 
             // lblKlok
             // 
             this.lblKlok.AutoSize = true;
@@ -137,16 +125,31 @@
             this.btnGetCourts.TabIndex = 9;
             this.btnGetCourts.Text = "SEARCH";
             this.btnGetCourts.UseVisualStyleBackColor = true;
+            this.btnGetCourts.Click += new System.EventHandler(this.btnGetCourts_Click);
+            // 
+            // dataGridViewCourts
+            // 
+            this.dataGridViewCourts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewCourts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewCourts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCourts.Location = new System.Drawing.Point(314, 41);
+            this.dataGridViewCourts.MultiSelect = false;
+            this.dataGridViewCourts.Name = "dataGridViewCourts";
+            this.dataGridViewCourts.RowTemplate.Height = 25;
+            this.dataGridViewCourts.Size = new System.Drawing.Size(474, 162);
+            this.dataGridViewCourts.TabIndex = 10;
             // 
             // OpretBooking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dataGridViewCourts);
             this.Controls.Add(this.btnGetCourts);
             this.Controls.Add(this.comboKlok);
             this.Controls.Add(this.lblKlok);
-            this.Controls.Add(this.listCourts);
             this.Controls.Add(this.btnTilbage);
             this.Controls.Add(this.btnBookBane);
             this.Controls.Add(this.monthCalendar1);
@@ -154,6 +157,7 @@
             this.Controls.Add(this.label1);
             this.Name = "OpretBooking";
             this.Text = "Opret Booking";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCourts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -169,11 +173,9 @@
         private MonthCalendar Calender;
         private Button btnBookBane;
         private Button btnTilbage;
-        private ListView listCourts;
         private Label lblKlok;
         private ComboBox comboKlok;
-        private ColumnHeader Bane;
-        private ColumnHeader Hal;
         private Button btnGetCourts;
+        private DataGridView dataGridViewCourts;
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Model;
 
 namespace DesktopApp
 {
@@ -53,6 +54,29 @@ namespace DesktopApp
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
+        }
+
+        private void btnGetCourts_Click(object sender, EventArgs e)
+        {
+            dataGridViewCourts.ColumnCount = 2;
+            dataGridViewCourts.Columns[0].Name = "Hal nummer:";
+            dataGridViewCourts.Columns[1].Name = "Ledige baner:";
+            string[] row = new string[] { "1", "3" };
+            dataGridViewCourts.Rows.Add(row);
+            row = new string[] { "2", "1" };
+            dataGridViewCourts.Rows.Add(row);
+            row = new string[] { "3", "2" };
+            dataGridViewCourts.Rows.Add(row);
+        }
+
+        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridViewCourts.SelectedRows)
+            {
+                string value1 = row.Cells[0].Value.ToString();
+                string value2 = row.Cells[1].Value.ToString();
+                
+            }
         }
     }
 }

@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.checkBoxBold = new System.Windows.Forms.CheckBox();
+            this.lblKr = new System.Windows.Forms.Label();
+            this.lvlBold = new System.Windows.Forms.Label();
+            this.lblKetsjer = new System.Windows.Forms.Label();
+            this.comboBoxKetsjer = new System.Windows.Forms.ComboBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.txtMobil = new System.Windows.Forms.TextBox();
             this.txtEfternavn = new System.Windows.Forms.TextBox();
@@ -50,11 +55,6 @@
             this.btnTilbage = new System.Windows.Forms.Button();
             this.btnBekraeft = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBoxKetsjer = new System.Windows.Forms.ComboBox();
-            this.lblKetsjer = new System.Windows.Forms.Label();
-            this.lvlBold = new System.Windows.Forms.Label();
-            this.lblKr = new System.Windows.Forms.Label();
-            this.checkBoxBold = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -100,6 +100,60 @@
             this.splitContainer1.Size = new System.Drawing.Size(800, 450);
             this.splitContainer1.SplitterDistance = 400;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // checkBoxBold
+            // 
+            this.checkBoxBold.AutoSize = true;
+            this.checkBoxBold.Location = new System.Drawing.Point(103, 385);
+            this.checkBoxBold.Name = "checkBoxBold";
+            this.checkBoxBold.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxBold.TabIndex = 15;
+            this.checkBoxBold.UseVisualStyleBackColor = true;
+            // 
+            // lblKr
+            // 
+            this.lblKr.AutoSize = true;
+            this.lblKr.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblKr.Location = new System.Drawing.Point(124, 380);
+            this.lblKr.Name = "lblKr";
+            this.lblKr.Size = new System.Drawing.Size(59, 21);
+            this.lblKr.TabIndex = 14;
+            this.lblKr.Text = "kr 50,-";
+            // 
+            // lvlBold
+            // 
+            this.lvlBold.AutoSize = true;
+            this.lvlBold.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lvlBold.Location = new System.Drawing.Point(12, 380);
+            this.lvlBold.Name = "lvlBold";
+            this.lvlBold.Size = new System.Drawing.Size(85, 21);
+            this.lvlBold.TabIndex = 13;
+            this.lvlBold.Text = "Fjerbolde:";
+            // 
+            // lblKetsjer
+            // 
+            this.lblKetsjer.AutoSize = true;
+            this.lblKetsjer.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblKetsjer.Location = new System.Drawing.Point(12, 327);
+            this.lblKetsjer.Name = "lblKetsjer";
+            this.lblKetsjer.Size = new System.Drawing.Size(106, 21);
+            this.lblKetsjer.TabIndex = 12;
+            this.lblKetsjer.Text = "Antal ketsjer:";
+            // 
+            // comboBoxKetsjer
+            // 
+            this.comboBoxKetsjer.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.comboBoxKetsjer.FormattingEnabled = true;
+            this.comboBoxKetsjer.Items.AddRange(new object[] {
+            "0 ketsjer",
+            "1 ketsjer",
+            "2 ketsjer",
+            "3 ketsjer",
+            "4 ketsjer"});
+            this.comboBoxKetsjer.Location = new System.Drawing.Point(124, 324);
+            this.comboBoxKetsjer.Name = "comboBoxKetsjer";
+            this.comboBoxKetsjer.Size = new System.Drawing.Size(167, 29);
+            this.comboBoxKetsjer.TabIndex = 11;
             // 
             // txtEmail
             // 
@@ -292,60 +346,6 @@
             this.label3.Size = new System.Drawing.Size(76, 21);
             this.label3.TabIndex = 2;
             this.label3.Text = "Fornavn:";
-            // 
-            // comboBoxKetsjer
-            // 
-            this.comboBoxKetsjer.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.comboBoxKetsjer.FormattingEnabled = true;
-            this.comboBoxKetsjer.Items.AddRange(new object[] {
-            "0 ketsjer",
-            "1 ketsjer",
-            "2 ketsjer",
-            "3 ketsjer",
-            "4 ketsjer"});
-            this.comboBoxKetsjer.Location = new System.Drawing.Point(124, 324);
-            this.comboBoxKetsjer.Name = "comboBoxKetsjer";
-            this.comboBoxKetsjer.Size = new System.Drawing.Size(167, 29);
-            this.comboBoxKetsjer.TabIndex = 11;
-            // 
-            // lblKetsjer
-            // 
-            this.lblKetsjer.AutoSize = true;
-            this.lblKetsjer.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblKetsjer.Location = new System.Drawing.Point(12, 327);
-            this.lblKetsjer.Name = "lblKetsjer";
-            this.lblKetsjer.Size = new System.Drawing.Size(106, 21);
-            this.lblKetsjer.TabIndex = 12;
-            this.lblKetsjer.Text = "Antal ketsjer:";
-            // 
-            // lvlBold
-            // 
-            this.lvlBold.AutoSize = true;
-            this.lvlBold.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lvlBold.Location = new System.Drawing.Point(12, 380);
-            this.lvlBold.Name = "lvlBold";
-            this.lvlBold.Size = new System.Drawing.Size(85, 21);
-            this.lvlBold.TabIndex = 13;
-            this.lvlBold.Text = "Fjerbolde:";
-            // 
-            // lblKr
-            // 
-            this.lblKr.AutoSize = true;
-            this.lblKr.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblKr.Location = new System.Drawing.Point(124, 380);
-            this.lblKr.Name = "lblKr";
-            this.lblKr.Size = new System.Drawing.Size(59, 21);
-            this.lblKr.TabIndex = 14;
-            this.lblKr.Text = "kr 50,-";
-            // 
-            // checkBoxBold
-            // 
-            this.checkBoxBold.AutoSize = true;
-            this.checkBoxBold.Location = new System.Drawing.Point(103, 385);
-            this.checkBoxBold.Name = "checkBoxBold";
-            this.checkBoxBold.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxBold.TabIndex = 15;
-            this.checkBoxBold.UseVisualStyleBackColor = true;
             // 
             // BookingInfo
             // 
