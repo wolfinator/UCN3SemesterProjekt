@@ -11,9 +11,9 @@ namespace Model
         public int id { get; set; }
         public decimal totalPrice { get; set; }
         
-        public Employee employee { get; set; }
+      //  public Employee employee { get; set; }
 
-        public Person person { get; set; }
+       // public Person person { get; set; }
         public Reservation reservation { get; set; }
     }
 }
