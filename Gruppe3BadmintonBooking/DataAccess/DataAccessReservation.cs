@@ -58,7 +58,7 @@ namespace DataAccess
                 con.Open();
                 try
                 {
-                    cmdDeleteReservation.ExecuteNonQuery();
+                    deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
                 {
@@ -71,7 +71,7 @@ namespace DataAccess
         public IEnumerable<Reservation> GetAll()
         {
             string cmdTextGetAll = "select * from Reservation";
-            List<Reservation> list = new();
+            IEnumerable<Reservation> list = null;
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdGetAll = new(cmdTextGetAll, con);
@@ -79,18 +79,7 @@ namespace DataAccess
                 {
                     con.Open();
                     SqlDataReader reader = cmdGetAll.ExecuteReader();
-                    {
-                        while (reader.Read())
-                        {
-                            Reservation reservation = new()
-                            {
-                                dateTime = (DateTime)reader["date_time"],
-                                courtNo = (int)reader["court_id"],
-                                isEquipment = (bool)reader["is_equipment"]
-                            };
-                            list.Add(reservation);
-                        }
-                    }
+                    list = BuildObjects(reader);
                 }
                 catch
                 {
@@ -103,7 +92,7 @@ namespace DataAccess
         public Reservation GetById(int id)
         {
             string cmdTextGetById = "select * from Reservation where id = @Id";
-            Reservation reservation = new();
+            Reservation reservation = null;
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdGetById = new(cmdTextGetById, con);
@@ -112,16 +101,9 @@ namespace DataAccess
                 {
                     con.Open();
                     SqlDataReader reader = cmdGetById.ExecuteReader();
+                    if (reader.Read())
                     {
-                        if (reader.Read())
-                        {
-                            reservation = new()
-                            {
-                                dateTime = (DateTime)reader["date_time"],
-                                courtNo = (int)reader["court_id"],
-                                isEquipment = (bool)reader["is_equipment"]
-                            };
-                        }
+                        reservation = BuildObject(reader);
                     }
                 }
                 catch
@@ -157,6 +139,38 @@ namespace DataAccess
                 }
             }
             return updated;
+        }
+
+        private IEnumerable<Reservation> BuildObjects(SqlDataReader reader)
+        {
+            List<Reservation> reservations = null;
+            try
+            {
+                reservations = new();
+                while (reader.Read())
+                {
+                    Reservation reservation = BuildObject(reader);
+                    reservations.Add(reservation);
+                }
+            }
+            catch (SqlException)
+            {
+                // TODO Handle exception
+                throw;
+            }
+            return reservations;
+        }
+
+        private Reservation BuildObject(SqlDataReader reader)
+        {
+            Reservation reservation = new();
+            reservation.dateTime = reader.GetDateTime(1);
+            reservation.isEquipment = reader.GetBoolean(2);
+            reservation.fromTime = reader.GetTimeSpan(3);
+            reservation.court = new Court() { courtNo = reader.GetInt32(4) };
+            reservation.customer = new Person() {id = reader.GetInt32(5) };
+            reservation.employee = new Employee() {id = reader.GetInt32(6) };
+            return reservation;
         }
     }
 }
