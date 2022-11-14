@@ -81,9 +81,10 @@ namespace DataAccess
                     SqlDataReader reader = cmdGetAll.ExecuteReader();
                     list = BuildObjects(reader);
                 }
-                catch
+                catch (SqlException)
                 {
-                    throw new Exception();
+                    // Todo Handle Exception
+                    throw;
                 }
             }
             return list;
@@ -114,24 +115,28 @@ namespace DataAccess
             return reservation;
         }
 
-        public bool Update(Reservation entity)
+        public bool Update(Reservation reservation)
         {
             bool updated = false;
-            string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipemnt " +
+            string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipment, " +
+                "from_time = @FromTime, customer_id = @CustomerId, employee_id = @EmployeeId " +
                 "where id = @Id";
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdUpdate = new(cmdTextUpdate, con);
-                cmdUpdate.Parameters.AddWithValue("@DateTime", entity.dateTime);
-                cmdUpdate.Parameters.AddWithValue("@IsEquipment", entity.isEquipment);
-                cmdUpdate.Parameters.AddWithValue("@CourtId", entity.courtNo);
-                cmdUpdate.Parameters.AddWithValue("@Id", entity); // TODO fix ID input i query
+                cmdUpdate.Parameters.AddWithValue("@DateTime", reservation.dateTime);
+                cmdUpdate.Parameters.AddWithValue("@IsEquipment", reservation.isEquipment ? 1 : 0);
+                cmdUpdate.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+                cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
+                cmdUpdate.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
+                cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
+
+                cmdUpdate.Parameters.AddWithValue("@Id", reservation.Id);
 
                 con.Open();
-
                 try
                 {
-                    cmdUpdate.ExecuteNonQuery();
+                    updated = cmdUpdate.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
                 {
@@ -164,12 +169,21 @@ namespace DataAccess
         private Reservation BuildObject(SqlDataReader reader)
         {
             Reservation reservation = new();
+            reservation.Id = reader.GetInt32(0);
             reservation.dateTime = reader.GetDateTime(1);
             reservation.isEquipment = reader.GetBoolean(2);
             reservation.fromTime = reader.GetTimeSpan(3);
             reservation.court = new Court() { courtNo = reader.GetInt32(4) };
             reservation.customer = new Person() {id = reader.GetInt32(5) };
-            reservation.employee = new Employee() {id = reader.GetInt32(6) };
+            try
+            {
+                reservation.employee = new Employee() { id = reader.GetInt32(6) };
+            }
+            catch (Exception)
+            {
+                reservation.employee = null;
+            }
+            
             return reservation;
         }
     }
