@@ -29,7 +29,7 @@ namespace DesktopApp
             //dt = dt.Date + ts;
             if (comboKlok.SelectedIndex > -1)
             {
-                dt = monthCalendar1.SelectionStart;
+                dt = monthCalendarOverview.SelectionStart;
                 ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
                 dt = dt.Date + ts;
                 this.Hide();
@@ -58,6 +58,7 @@ namespace DesktopApp
 
         private void btnGetCourts_Click(object sender, EventArgs e)
         {
+            dataGridViewCourts.Rows.Clear();
             dataGridViewCourts.ColumnCount = 2;
             dataGridViewCourts.Columns[0].Name = "Hal nummer:";
             dataGridViewCourts.Columns[1].Name = "Ledige baner:";
@@ -77,6 +78,11 @@ namespace DesktopApp
                 string value2 = row.Cells[1].Value.ToString();
                 
             }
+        }
+
+        private void monthCalendarOverview_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            
         }
     }
 }

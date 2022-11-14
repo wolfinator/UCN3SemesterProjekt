@@ -30,7 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
+            this.monthCalendarOverview = new System.Windows.Forms.MonthCalendar();
             this.btnBookBane = new System.Windows.Forms.Button();
             this.btnTilbage = new System.Windows.Forms.Button();
             this.lblKlok = new System.Windows.Forms.Label();
@@ -60,12 +60,13 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Ledige baner:";
             // 
-            // monthCalendar1
+            // monthCalendarOverview
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(48, 41);
-            this.monthCalendar1.MaxSelectionCount = 1;
-            this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.TabIndex = 2;
+            this.monthCalendarOverview.Location = new System.Drawing.Point(48, 41);
+            this.monthCalendarOverview.MaxSelectionCount = 1;
+            this.monthCalendarOverview.Name = "monthCalendarOverview";
+            this.monthCalendarOverview.TabIndex = 2;
+            this.monthCalendarOverview.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendarOverview_DateChanged);
             // 
             // btnBookBane
             // 
@@ -152,7 +153,7 @@
             this.Controls.Add(this.lblKlok);
             this.Controls.Add(this.btnTilbage);
             this.Controls.Add(this.btnBookBane);
-            this.Controls.Add(this.monthCalendar1);
+            this.Controls.Add(this.monthCalendarOverview);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "OpretBooking";
@@ -167,7 +168,7 @@
 
         private Label label1;
         private Label label2;
-        private MonthCalendar monthCalendar1;
+        private MonthCalendar monthCalendarOverview;
         private Label lblDato;
         private Label lblKalender;
         private MonthCalendar Calender;
