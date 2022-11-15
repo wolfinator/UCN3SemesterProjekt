@@ -66,7 +66,7 @@
             this.monthCalendarOverview.MaxSelectionCount = 1;
             this.monthCalendarOverview.Name = "monthCalendarOverview";
             this.monthCalendarOverview.TabIndex = 2;
-            this.monthCalendarOverview.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendarOverview_DateChanged);
+            this.monthCalendarOverview.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendarOverview_DateSelected);
             // 
             // btnBookBane
             // 
@@ -126,10 +126,11 @@
             this.btnGetCourts.TabIndex = 9;
             this.btnGetCourts.Text = "SEARCH";
             this.btnGetCourts.UseVisualStyleBackColor = true;
-            this.btnGetCourts.Click += new System.EventHandler(this.btnGetCourts_Click);
             // 
             // dataGridViewCourts
             // 
+            this.dataGridViewCourts.AllowUserToAddRows = false;
+            this.dataGridViewCourts.AllowUserToDeleteRows = false;
             this.dataGridViewCourts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -138,9 +139,12 @@
             this.dataGridViewCourts.Location = new System.Drawing.Point(314, 41);
             this.dataGridViewCourts.MultiSelect = false;
             this.dataGridViewCourts.Name = "dataGridViewCourts";
+            this.dataGridViewCourts.ReadOnly = true;
             this.dataGridViewCourts.RowTemplate.Height = 25;
+            this.dataGridViewCourts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCourts.Size = new System.Drawing.Size(474, 162);
             this.dataGridViewCourts.TabIndex = 10;
+            this.dataGridViewCourts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCourts_CellClick);
             // 
             // OpretBooking
             // 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Model;
 
 namespace DesktopApp
 {
@@ -14,9 +15,10 @@ namespace DesktopApp
     {
         List<string> customerInformation = new();
 
-        public BookingInfo(DateTime dateCalender)
+        public BookingInfo(DateTime dateCalender, string hal, string bane)
         {
             InitializeComponent();
+            txtSted.Text = "Hal " + hal + ", bane " + bane;
             txtDato.Text = DateOnly.FromDateTime(dateCalender).ToString();
             txtKlok.Text = TimeOnly.FromDateTime(dateCalender).ToString();
         }

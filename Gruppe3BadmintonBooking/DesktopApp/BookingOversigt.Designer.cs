@@ -90,6 +90,8 @@
             // 
             // dataGridViewOverview
             // 
+            this.dataGridViewOverview.AllowUserToAddRows = false;
+            this.dataGridViewOverview.AllowUserToDeleteRows = false;
             this.dataGridViewOverview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -97,7 +99,9 @@
             this.dataGridViewOverview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewOverview.Location = new System.Drawing.Point(9, 227);
             this.dataGridViewOverview.Name = "dataGridViewOverview";
+            this.dataGridViewOverview.ReadOnly = true;
             this.dataGridViewOverview.RowTemplate.Height = 25;
+            this.dataGridViewOverview.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewOverview.Size = new System.Drawing.Size(369, 161);
             this.dataGridViewOverview.TabIndex = 9;
             // 
@@ -141,6 +145,8 @@
             // 
             // dataGridViewNu
             // 
+            this.dataGridViewNu.AllowUserToAddRows = false;
+            this.dataGridViewNu.AllowUserToDeleteRows = false;
             this.dataGridViewNu.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -148,12 +154,16 @@
             this.dataGridViewNu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNu.Location = new System.Drawing.Point(22, 113);
             this.dataGridViewNu.Name = "dataGridViewNu";
+            this.dataGridViewNu.ReadOnly = true;
             this.dataGridViewNu.RowTemplate.Height = 25;
+            this.dataGridViewNu.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewNu.Size = new System.Drawing.Size(369, 135);
             this.dataGridViewNu.TabIndex = 8;
             // 
             // dataGridViewHistorik
             // 
+            this.dataGridViewHistorik.AllowUserToAddRows = false;
+            this.dataGridViewHistorik.AllowUserToDeleteRows = false;
             this.dataGridViewHistorik.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -161,7 +171,9 @@
             this.dataGridViewHistorik.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewHistorik.Location = new System.Drawing.Point(22, 284);
             this.dataGridViewHistorik.Name = "dataGridViewHistorik";
+            this.dataGridViewHistorik.ReadOnly = true;
             this.dataGridViewHistorik.RowTemplate.Height = 25;
+            this.dataGridViewHistorik.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewHistorik.Size = new System.Drawing.Size(369, 135);
             this.dataGridViewHistorik.TabIndex = 7;
             // 
