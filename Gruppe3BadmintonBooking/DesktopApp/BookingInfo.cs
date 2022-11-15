@@ -23,10 +23,54 @@ namespace DesktopApp
 
         private void btnBekraeft_Click(object sender, EventArgs e)
         {
-            customerInformation.Add(txtFornavn.Text);
-            customerInformation.Add(txtEfternavn.Text);
-            customerInformation.Add(txtMobil.Text);
-            customerInformation.Add(txtEmail.Text);
+            customerInformation.Clear();
+            if (!String.IsNullOrEmpty(txtFornavn.Text))
+            {
+                customerInformation.Add(txtFornavn.Text);
+            }
+            else
+            {
+                string message = "Indtast et fornavn!";
+                string title = "Mangler fornavn";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!String.IsNullOrEmpty(txtEfternavn.Text))
+            {
+                customerInformation.Add(txtEfternavn.Text);
+            }
+            else
+            {
+                string message = "Indtast et efternavn!";
+                string title = "Mangler efternavn";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            if (txtMobil.TextLength == 8)
+            {
+                customerInformation.Add(txtMobil.Text);
+            } else
+            {
+                string message = "Indtast et gyldigt telefonnummer!";
+                string title = "Ugyldig telefonnummer";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            if (txtEmail.Text.Contains("@") && txtEmail.Text.Contains("."))
+            {
+                customerInformation.Add(txtEmail.Text);
+            }
+            else
+            {
+                string message = "Indtast en gyldig emailadresse!";
+                string title = "Ugyldig Email!";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
             customerInformation.Add(txtDato.Text);
             customerInformation.Add(txtKlok.Text);
             customerInformation.Add(txtSted.Text);
@@ -35,6 +79,7 @@ namespace DesktopApp
             if (checkBoxBold.Checked)
             {
                 checkBoxBold.Text = "Ja";
+                //TODO tilføj 50 kr til samlet invoice pris
             }
             else
             {
