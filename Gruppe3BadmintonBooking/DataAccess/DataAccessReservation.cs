@@ -173,7 +173,7 @@ namespace DataAccess
             reservation.dateTime = reader.GetDateTime(1);
             reservation.isEquipment = reader.GetBoolean(2);
             reservation.fromTime = reader.GetTimeSpan(3);
-            reservation.court = new Court() { courtNo = reader.GetInt32(4) };
+            reservation.court = new Court() { id = reader.GetInt32(4) };
             reservation.customer = new Person() {id = reader.GetInt32(5) };
             try
             {
