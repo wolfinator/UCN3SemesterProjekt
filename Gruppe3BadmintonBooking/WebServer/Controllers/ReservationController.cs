@@ -1,26 +1,34 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 
 namespace WebServer.Controllers;
+
 public class ReservationController : Controller
 {
     static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, dateTime = DateTime.Now.AddDays(-1),
-                isEquipment="1",
-                CreationDate = DateTime.Now.AddDays(-3) },
+                isEquipment="true" },
+            new Reservation() {Id=2, dateTime = DateTime.Now.AddDays(-2),
+                isEquipment="false" },
+            new Reservation() {Id=3, dateTime = DateTime.Now.AddDays(-3),
+                isEquipment="true" }
 
 
 
         };
-    public ActionResult Index() => View(_blogPosts);
+    public ActionResult Index() => View(_reservations);
+
     public ActionResult Details(int id)
     {
-        return View(_blogPosts.First(blogPost => blogPost.Id == id));
+        return View(_reservations.First(reservation => reservation.Id == id));
     }
+
     public ActionResult Create()
     {
         return View();
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Create(BlogPost blogPost)
