@@ -7,7 +7,11 @@ namespace DesktopApp
     {
 
         public static SqlConnectionStringBuilder conStr = new SqlConnectionStringBuilder()
-        { DataSource = "hildur.ucn.dk", InitialCatalog = "DMA-CSD-S212_10407522", Encrypt = false, UserID = "DMA-CSD-S212_10407522", Password = "Password1!" };
+        { DataSource = "hildur.ucn.dk", 
+            InitialCatalog = "DMA-CSD-S212_10407522", 
+            Encrypt = false, 
+            UserID = "DMA-CSD-S212_10407522", 
+            Password = "Password1!" };
 
         public Startside()
         {

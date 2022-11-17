@@ -3,25 +3,36 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.Sql;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataAccess;
 using Model;
 
 namespace DesktopApp
 {
     public partial class OpretBooking : Form
     {
+        private SqlConnectionStringBuilder conStr;
+
         DateTime dt;
+        string fromTime;
         private string hal = "";
         private string bane = "";
 
         public OpretBooking()
         {
+            conStr = new SqlConnectionStringBuilder();
+            conStr.DataSource = "hildur.ucn.dk";
+            conStr.InitialCatalog = "DMA-CSD-S212_10407522";
+            conStr.Encrypt = false;
+            conStr.UserID = "DMA-CSD-S212_10407522";
+            conStr.Password = "Password1!";
+            Reservation reservation = new Reservation();
             InitializeComponent();
-            
         }
         
         private void btnBookBane_Click_1(object sender, EventArgs e)
@@ -38,6 +49,11 @@ namespace DesktopApp
                 this.Hide();
                 BookingInfo bookingInfo = new BookingInfo(dt, hal, bane);
                 bookingInfo.ShowDialog();
+
+                Reservation reservation = new Reservation();
+                reservation.dateTime = dt;
+                reservation.fromTime = TimeSpan.Parse(fromTime);
+                
             }
             else
             {
@@ -75,10 +91,14 @@ namespace DesktopApp
 
         private void monthCalendarOverview_DateSelected(object sender, DateRangeEventArgs e)
         {
+            
             dataGridViewCourts.Rows.Clear();
             dataGridViewCourts.ColumnCount = 2;
             dataGridViewCourts.Columns[0].Name = "Hal nummer:";
             dataGridViewCourts.Columns[1].Name = "Ledige baner:";
+            //[] row = new string[] { "1", "3" };
+            
+
             string[] row = new string[] { "1", "3" };
             dataGridViewCourts.Rows.Add(row);
             row = new string[] { "2", "1" };
@@ -95,6 +115,12 @@ namespace DesktopApp
                 hal = row.Cells[0].Value.ToString();
                 bane = row.Cells[1].Value.ToString();
             }
+        }
+
+        private void comboKlok_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            fromTime = comboKlok.SelectedText;
         }
     }
 }

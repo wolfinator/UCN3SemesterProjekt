@@ -117,6 +117,7 @@
             this.comboKlok.Name = "comboKlok";
             this.comboKlok.Size = new System.Drawing.Size(171, 23);
             this.comboKlok.TabIndex = 8;
+            this.comboKlok.SelectedIndexChanged += new System.EventHandler(this.comboKlok_SelectedIndexChanged);
             // 
             // btnGetCourts
             // 
