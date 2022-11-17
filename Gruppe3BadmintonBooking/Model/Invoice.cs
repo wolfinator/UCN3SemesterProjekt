@@ -8,13 +8,12 @@ namespace Model
 {
     public class Invoice
     {
+        public int id { get; set; }
         public decimal totalPrice { get; set; }
-        public int orderNo { get; set; }
-        public String name { get; set; }
-        public DateTime dateTime { get; set; }
-        public int courtNo { get; set; }
-        public String phoneNo { get; set; }
-        public Employee employee { get; set; }
-        public Court court { get; set; }
+        
+      //  public Employee employee { get; set; }
+
+       // public Person person { get; set; }
+        public Reservation reservation { get; set; }
     }
 }
