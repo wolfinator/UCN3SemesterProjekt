@@ -89,13 +89,13 @@ namespace DataAccess
                 // Skal nok ændres hvis vi laver cascade på person og _address, er lidt kringlet
                 var addressId = cmdDelete.ExecuteScalar();
                 //int addressId = (int) cmdDelete.ExecuteScalar();
-                if(addressId != null)
+                if (addressId != null)
                 {
                     isDeleted = true;
                     cmdDelete.CommandText = cmdTextDeleteAddress;
                     cmdDelete.Parameters.AddWithValue("@AddressId", addressId);
                     isDeleted = isDeleted && cmdDelete.ExecuteNonQuery() == 1;
-                }    
+                }
             }
             catch (SqlException)
             {
@@ -217,7 +217,7 @@ namespace DataAccess
             {
                 //TODO Handle exception
                 throw;
-            } 
+            }
             return persons;
         }
 
@@ -229,13 +229,17 @@ namespace DataAccess
                 int personType = int.Parse(reader.GetString(5));
                 switch (personType)
                 {
-                    case 0: person = new Employee();
+                    case 0:
+                        person = new Employee();
                         break;
-                    case 1: person = new Guest();
+                    case 1:
+                        person = new Guest();
                         break;
-                    case 2: person = new Member();
+                    case 2:
+                        person = new Member();
                         break;
-                    default: throw new NotImplementedException(); // Todo handle exception
+                    default:
+                        throw new NotImplementedException(); // Todo handle exception
                         break;
                 }
 
@@ -257,5 +261,5 @@ namespace DataAccess
             return person;
         }
     }
-    
+
 }

@@ -49,7 +49,7 @@ namespace Tests
 
             // Add test data nessecary to set up reservations in the database
             cmdAddTestCityZip.ExecuteNonQuery();
-            int addressId = (int) cmdAddTestAddress.ExecuteScalar(); // Getting the id for the address to add on the person
+            int addressId = (int)cmdAddTestAddress.ExecuteScalar(); // Getting the id for the address to add on the person
             cmdAddTestEmployee.Parameters.AddWithValue("@AddressId", addressId);
             cmdAddTestMember.Parameters.AddWithValue("@AddressId", addressId);
             cmdAddTestGuest.Parameters.AddWithValue("@AddressId", addressId);
@@ -91,8 +91,8 @@ namespace Tests
                 isEquipment = true,
                 fromTime = TimeSpan.FromSeconds(3600),
                 courtNo = 1,
-                customer = new() { id = fixture.memberId},
-                employee = new() { id = fixture.employeeId}
+                customer = new() { id = fixture.memberId },
+                employee = new() { id = fixture.employeeId }
             };
 
             SqlConnection con = fixture.con;
@@ -157,12 +157,12 @@ namespace Tests
             {
                 cmdInsertReservation = new("insert into reservation output inserted.id values " +
                 "(@DateTime, 0, @FromTime, 1, @CustomerId, @EmployeeId)", con);
-                cmdInsertReservation.Parameters.AddWithValue("@DateTime", DateTime.Now.AddYears(-10 -i));
+                cmdInsertReservation.Parameters.AddWithValue("@DateTime", DateTime.Now.AddYears(-10 - i));
                 cmdInsertReservation.Parameters.AddWithValue("@FromTime", TimeSpan.FromSeconds(3600));
                 cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.memberId);
                 cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
                 reservationIds[i] = (int)cmdInsertReservation.ExecuteScalar();
-                
+
             }
 
             //Act
@@ -200,7 +200,7 @@ namespace Tests
 
             int reservationId;
             //Act
-            reservationId = (int) cmdInsertReservation.ExecuteScalar();
+            reservationId = (int)cmdInsertReservation.ExecuteScalar();
             Reservation reservation = dataAccess.GetById(reservationId);
 
             //Assert
@@ -237,8 +237,8 @@ namespace Tests
                 isEquipment = true,
                 fromTime = TimeSpan.FromSeconds(3600),
                 courtNo = 1,
-                customer = new Person() { id = fixture.memberId},
-                employee = new Employee() { id = fixture.employeeId}
+                customer = new Person() { id = fixture.memberId },
+                employee = new Employee() { id = fixture.employeeId }
             };
             //Act
             bool updated = dataAccess.Update(reservationUpdate);
