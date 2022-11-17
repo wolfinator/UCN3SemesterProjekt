@@ -73,5 +73,10 @@ namespace DesktopApp
             string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "1", "3" };
             dataGridViewOverview.Rows.Add(rowOverview);
         }
+
+        private void dataGridViewNu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
