@@ -7,12 +7,12 @@ namespace WebServer.Controllers;
 public class ReservationController : Controller
 {
     static List<Reservation> _reservations = new List<Reservation>() {
-            new Reservation() {Id=1, dateTime = DateTime.Now.AddDays(-1),
-                isEquipment="true" },
-            new Reservation() {Id=2, dateTime = DateTime.Now.AddDays(-2),
-                isEquipment="false" },
-            new Reservation() {Id=3, dateTime = DateTime.Now.AddDays(-3),
-                isEquipment="true" }
+            new Reservation() {Id=1, fromTime = TimeSpan.FromHours(1),
+                isEquipment=true },
+            new Reservation() {Id=2, fromTime = TimeSpan.FromHours(2),
+                isEquipment=false },
+            new Reservation() {Id=3, fromTime = TimeSpan.FromHours(1),
+                isEquipment=true }
 
 
 
@@ -31,13 +31,12 @@ public class ReservationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(BlogPost blogPost)
+    public ActionResult Create(Reservation reservation)
     {
         try
         {
-            blogPost.Id = _blogPosts.Max(blogPost => blogPost.Id) + 1;
-            blogPost.CreationDate = DateTime.Now;
-            _blogPosts.Add(blogPost);
+            reservation.Id = _reservations.Max(reservation => reservation.Id) + 1;
+            _reservations.Add(reservation);
 
             return RedirectToAction(nameof(Index));
         }
@@ -48,19 +47,19 @@ public class ReservationController : Controller
     }
     public ActionResult Edit(int id)
     {
-        return View(_blogPosts.First(blogPost => blogPost.Id == id));
+        return View(_reservations.First(reservation => reservation.Id == id));
     }
 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(BlogPost editedBlogPost)
+    public ActionResult Edit(Reservation editedReservation)
     {
         try
         {
-            var blogPost = _blogPosts.First(blogPost => blogPost.Id == editedBlogPost.Id);
-            blogPost.Title = editedBlogPost.Title;
-            blogPost.Content = editedBlogPost.Content;
+            var reservation = _reservations.First(reservation => reservation.Id == editedReservation.Id);
+            reservation.fromTime = editedReservation.fromTime;
+            reservation.isEquipment = editedReservation.isEquipment;
             return RedirectToAction(nameof(Index));
         }
         catch
@@ -70,16 +69,16 @@ public class ReservationController : Controller
     }
     public ActionResult Delete(int id)
     {
-        return View(_blogPosts.First(blogPost => blogPost.Id == id));
+        return View(_reservations.First(reservation => reservation.Id == id));
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(BlogPost deletedBlogPost)
+    public ActionResult Delete(Reservation deletedReservation)
     {
         try
         {
-            _blogPosts.RemoveAll(blogPost => blogPost.Id == deletedBlogPost.Id);
+            _reservations.RemoveAll(reservation => reservation.Id == deletedReservation.Id);
             return RedirectToAction(nameof(Index));
         }
         catch
