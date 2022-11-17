@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    internal interface IDataAccess<T>
+    public interface IDataAccess<T>
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
