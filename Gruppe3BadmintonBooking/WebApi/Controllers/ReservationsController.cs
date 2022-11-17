@@ -83,7 +83,15 @@ namespace WebApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-
+            try
+            {
+                _reservationDb.DeleteById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, $"Failed to create reservation in database:\n{ex.Message}");
+                throw;
+            }
         }
     }
 }

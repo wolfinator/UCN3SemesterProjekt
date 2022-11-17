@@ -60,9 +60,9 @@ namespace DataAccess
                 {
                     deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
-                    throw new NotImplementedException(); //TODO SKRIV throw ting
+                    throw; //TODO SKRIV throw ting
                 }
             }
             return deleted;
