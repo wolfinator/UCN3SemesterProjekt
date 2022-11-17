@@ -26,10 +26,10 @@ namespace DataAccess
             cmd.CommandText = "INSERT INTO Invoice VALUES (@totalPrice, @reservationId)";
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
             cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
-            
-           int rowsAffected = cmd.ExecuteNonQuery();
 
-            return rowsAffected == 1 ;
+            int rowsAffected = cmd.ExecuteNonQuery();
+
+            return rowsAffected == 1;
         }
 
         public bool DeleteById(int id)
@@ -52,17 +52,17 @@ namespace DataAccess
         {
             throw new NotImplementedException();
 
-                      SqlConnection con = new(conStr.ConnectionString);
-                        con.Open();
+            SqlConnection con = new(conStr.ConnectionString);
+            con.Open();
 
-                        SqlCommand cmd = con.CreateCommand();
+            SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
                               "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
 
-                        SqlDataReader reader = cmd.ExecuteReader();
+            SqlDataReader reader = cmd.ExecuteReader();
 
-                        List<Invoice> list = new List<Invoice>();
+            List<Invoice> list = new List<Invoice>();
 
             while (reader.Read())
             {
@@ -76,7 +76,7 @@ namespace DataAccess
                         dateTime = reader.GetDateTime(1),
                         isEquipment = reader.GetBoolean(2),
                         //Todo get fromtime Fra reservation
-                       // fromTime = reader.GetTimeSpan(3).
+                        // fromTime = reader.GetTimeSpan(3).
 
 
 
@@ -97,12 +97,12 @@ namespace DataAccess
                 list.Add(invoice);
             }
 
-                con.Close();
+            con.Close();
 
-                return list;
-            }
-                        
-           
+            return list;
+        }
+
+
 
 
         public Invoice? GetById(int id)
@@ -159,8 +159,8 @@ namespace DataAccess
             int rowsAffected = cmd.ExecuteNonQuery();
 
             return rowsAffected == 1;
-            
-                
+
+
         }
 
     }
