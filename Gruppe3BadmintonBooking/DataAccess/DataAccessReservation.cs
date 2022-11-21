@@ -90,6 +90,13 @@ namespace DataAccess
             return list;
         }
 
+        public IEnumerable<Reservation> GetAllByDate()
+        {
+            string cmdTextGetByDate = "select * from Reservation where";
+            IEnumerable<Reservation> list = null;
+                return null;
+        }
+
         public Reservation GetById(int id)
         {
             string cmdTextGetById = "select * from Reservation where id = @Id";
