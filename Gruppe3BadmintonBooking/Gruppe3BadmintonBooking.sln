@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{92CFA94D-3FDC-48EE-A507-8D24885C7392}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharpClient", "RestSharpClient\RestSharpClient.csproj", "{B4D6E981-AFBA-4DD5-BAEE-94F540D24313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestSharpClient", "RestSharpClient\RestSharpClient.csproj", "{96C97D2E-D0AB-45CB-BFE4-B55756642DBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{92CFA94D-3FDC-48EE-A507-8D24885C7392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92CFA94D-3FDC-48EE-A507-8D24885C7392}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92CFA94D-3FDC-48EE-A507-8D24885C7392}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4D6E981-AFBA-4DD5-BAEE-94F540D24313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4D6E981-AFBA-4DD5-BAEE-94F540D24313}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4D6E981-AFBA-4DD5-BAEE-94F540D24313}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4D6E981-AFBA-4DD5-BAEE-94F540D24313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96C97D2E-D0AB-45CB-BFE4-B55756642DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96C97D2E-D0AB-45CB-BFE4-B55756642DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96C97D2E-D0AB-45CB-BFE4-B55756642DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96C97D2E-D0AB-45CB-BFE4-B55756642DBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

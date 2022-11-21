@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataAccess;
 using Model;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using RestSharpClient;
 
 namespace DesktopApp
 {
@@ -22,19 +24,17 @@ namespace DesktopApp
         string fromTime;
         private string hal = "";
         private string bane = "";
+        private CourtService courtService;
+        public IEnumerable<Court> courts;
 
         public OpretBooking()
         {
-            conStr = new SqlConnectionStringBuilder();
-            conStr.DataSource = "hildur.ucn.dk";
-            conStr.InitialCatalog = "DMA-CSD-S212_10407522";
-            conStr.Encrypt = false;
-            conStr.UserID = "DMA-CSD-S212_10407522";
-            conStr.Password = "Password1!";
-            Reservation reservation = new Reservation();
             InitializeComponent();
+            courts = courtService.GetAll();
         }
         
+
+
         private void btnBookBane_Click_1(object sender, EventArgs e)
         {
             TimeSpan ts;
@@ -98,12 +98,9 @@ namespace DesktopApp
             dataGridViewCourts.Columns[1].Name = "Ledige baner:";
             //[] row = new string[] { "1", "3" };
             
+            courts.ToList().ForEach(courts => dataGridViewCourts.Rows.Add(courts));
 
             string[] row = new string[] { "1", "3" };
-            dataGridViewCourts.Rows.Add(row);
-            row = new string[] { "2", "1" };
-            dataGridViewCourts.Rows.Add(row);
-            row = new string[] { "3", "2" };
             dataGridViewCourts.Rows.Add(row);
             dataGridViewCourts.Rows[0].Cells[0].Selected = false;
         }
