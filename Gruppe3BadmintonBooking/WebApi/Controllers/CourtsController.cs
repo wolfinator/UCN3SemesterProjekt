@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess;
+using Microsoft.AspNetCore.Mvc;
+using Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +10,15 @@ namespace WebApi.Controllers
     [ApiController]
     public class CourtsController : ControllerBase
     {
+        private readonly IDataAccess<Court> _courtDb;
+
+        public CourtsController(IDataAccess<Court> courtDb)
+        {
+            _courtDb = courtDb;
+        }
+
+
+    
         // GET: api/<CourtsController>
         [HttpGet]
         public IEnumerable<string> Get()
