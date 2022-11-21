@@ -21,9 +21,9 @@ namespace WebApi.Controllers
     
         // GET: api/<CourtsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Court> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _courtDb.GetAll();
         }
 
         // GET api/<CourtsController>/5
