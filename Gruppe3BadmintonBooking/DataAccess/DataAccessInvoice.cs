@@ -58,7 +58,7 @@ namespace DataAccess
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
-                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
+                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id"; // AND Reservation.employee_id = Person.id";
 
             SqlDataReader reader = cmd.ExecuteReader();
 
