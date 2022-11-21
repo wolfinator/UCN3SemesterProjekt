@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IDataAccess<Person>, DataAccessPerson>();
 builder.Services.AddSingleton<IDataAccess<Reservation>, DataAccessReservation>();
+builder.Services.AddSingleton<IDataAccess<Invoice>, DataAccessInvoice>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
