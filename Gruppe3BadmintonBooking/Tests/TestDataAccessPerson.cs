@@ -18,7 +18,7 @@ namespace Tests
             con = new SqlConnection(Connection.conStr.ConnectionString);
             con.Open();
             SqlCommand cmdAddTestCityZip = new("insert into CityZip values ('test', 'cityzip')", con);
-
+            
             cmdAddTestCityZip.ExecuteNonQuery();
         }
         public void Dispose()
@@ -59,7 +59,7 @@ namespace Tests
             zipcode = "test"
         };
         private Guest testGuest = new Guest()
-        {
+    {
             firstName = "test",
             lastName = "guest",
             email = "test@mail.dk",
@@ -142,11 +142,11 @@ namespace Tests
             Assert.True(reader.GetString(2).Equals("employee"));
             Assert.True(reader.GetString(8).Equals("test"));
             Assert.True(reader.GetString(9).Equals("0"));
-
+            
             //Cleanup
             reader.Close();
             cleanupPerson.ExecuteNonQuery();
-            cleanupAddress.ExecuteNonQuery();
+            cleanupAddress.ExecuteNonQuery();   
         }
         [Fact]
         public void TestCreateGuest()
@@ -332,16 +332,16 @@ namespace Tests
             int personId = (int)cmdInsertPerson.ExecuteScalar();
             cleanupPerson.Parameters.AddWithValue("@Id", personId);
 
-            Person person = new Member()
+            Person person = new Member() 
             {
-                id = personId,
-                firstName = "test",
-                lastName = "updated",
-                email = "test@mail.dk",
-                phoneNo = "testtest",
-                street = "test",
-                houseNo = "6",
-                zipcode = "test"
+                id = personId, 
+                firstName = "test", 
+                lastName = "updated", 
+                email = "test@mail.dk", 
+                phoneNo = "testtest", 
+                street = "test", 
+                houseNo = "6", 
+                zipcode = "test" 
             };
             dataAccess.Update(person);
             Person updatedPerson = dataAccess.GetById(personId);

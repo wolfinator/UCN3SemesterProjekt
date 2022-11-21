@@ -95,7 +95,7 @@ namespace DataAccess
                     cmdDelete.CommandText = cmdTextDeleteAddress;
                     cmdDelete.Parameters.AddWithValue("@AddressId", addressId);
                     isDeleted = isDeleted && cmdDelete.ExecuteNonQuery() == 1;
-                }
+                }    
             }
             catch (SqlException)
             {
@@ -146,7 +146,7 @@ namespace DataAccess
             {
                 //TODO handle exception
                 throw;
-            }
+        }
 
             return person;
         }
@@ -177,7 +177,7 @@ namespace DataAccess
 
             con.Open();
             using (var trans = con.BeginTransaction())
-            {
+        {
                 try
                 {
                     cmdUpdatePerson.Transaction = trans;
@@ -188,7 +188,7 @@ namespace DataAccess
 
                     // Checks if both the person and address tables are updated
                     isUpdated = updatedAddress + updatedAddress == 2;
-                }
+        }
                 catch (SqlException)
                 {
                     trans.Rollback();
@@ -214,10 +214,10 @@ namespace DataAccess
                 }
             }
             catch (SqlException)
-            {
+        {
                 //TODO Handle exception
                 throw;
-            }
+            } 
             return persons;
         }
 
@@ -228,7 +228,7 @@ namespace DataAccess
             {
                 int personType = int.Parse(reader.GetString(5));
                 switch (personType)
-                {
+        {
                     case 0:
                         person = new Employee();
                         break;
@@ -241,7 +241,7 @@ namespace DataAccess
                     default:
                         throw new NotImplementedException(); // Todo handle exception
                         break;
-                }
+        }
 
                 person.firstName = reader.GetString(1);
                 person.lastName = reader.GetString(2);
@@ -254,12 +254,12 @@ namespace DataAccess
                 //TODO if member add all reservations to object
             }
             catch (InvalidCastException ex)
-            {
+        {
 
                 throw;
             }
             return person;
         }
     }
-
+    
 }

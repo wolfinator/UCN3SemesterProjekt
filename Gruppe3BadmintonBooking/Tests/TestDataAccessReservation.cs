@@ -162,7 +162,7 @@ namespace Tests
                 cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.memberId);
                 cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
                 reservationIds[i] = (int)cmdInsertReservation.ExecuteScalar();
-
+                
             }
 
             //Act
