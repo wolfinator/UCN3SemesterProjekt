@@ -32,7 +32,7 @@ namespace RestSharpClient
 
         public Court GetById(int id)
         {
-            throw new NotImplementedException();
+            return _restClient.Get<Court>(new RestRequest());
         }
 
         public bool Update(Court entity)
