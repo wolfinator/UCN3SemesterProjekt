@@ -10,7 +10,7 @@ namespace RestSharpClient
 
         public CourtService()
         {
-            _restClient = new RestSharp.RestClient("https://localhost:7077/api/courts");
+            _restClient = new RestSharp.RestClient("https://localhost:44325/api/courts");
         }
 
         public bool Create(Court entity)

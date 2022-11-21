@@ -32,7 +32,6 @@ namespace DataAccess
 
         public IEnumerable<Court> GetAll()
         {
-            throw new NotImplementedException();
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
 

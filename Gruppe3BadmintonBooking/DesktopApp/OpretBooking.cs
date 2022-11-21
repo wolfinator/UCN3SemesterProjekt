@@ -30,6 +30,7 @@ namespace DesktopApp
         public OpretBooking()
         {
             InitializeComponent();
+            courtService = new CourtService();
             courts = courtService.GetAll();
         }
         
@@ -91,14 +92,19 @@ namespace DesktopApp
 
         private void monthCalendarOverview_DateSelected(object sender, DateRangeEventArgs e)
         {
-            
+
             dataGridViewCourts.Rows.Clear();
             dataGridViewCourts.ColumnCount = 2;
             dataGridViewCourts.Columns[0].Name = "Hal nummer:";
             dataGridViewCourts.Columns[1].Name = "Ledige baner:";
             //[] row = new string[] { "1", "3" };
-            
-            courts.ToList().ForEach(courts => dataGridViewCourts.Rows.Add(courts));
+
+            courts.ToList().ForEach(court => {
+                string[] row = new string[] { court.id.ToString(), court.hallNo.ToString() };
+                dataGridViewCourts.Rows.Add(row);
+                }
+            );
+
 
             string[] row = new string[] { "1", "3" };
             dataGridViewCourts.Rows.Add(row);
