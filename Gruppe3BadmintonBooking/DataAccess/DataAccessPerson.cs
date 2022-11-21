@@ -243,6 +243,7 @@ namespace DataAccess
                         break;
         }
 
+                person.id = reader.GetInt32(0);
                 person.firstName = reader.GetString(1);
                 person.lastName = reader.GetString(2);
                 person.email = reader.GetString(3);

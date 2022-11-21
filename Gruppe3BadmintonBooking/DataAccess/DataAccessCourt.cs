@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
@@ -20,7 +21,7 @@ namespace DataAccess
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
-            
+
             throw new NotImplementedException();
         }
 
@@ -55,8 +56,25 @@ namespace DataAccess
 
         public Court GetById(int id)
         {
-            throw new NotImplementedException();
+            Court court = null;
+            SqlConnection con = new(conStr.ConnectionString);       
+            con.Open();
+
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = " SELECT * FROM Court where court.id = @id";
+            cmd.Parameters.AddWithValue("id", id);
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                court = new Court();
+                court.id = reader.GetInt32(0);
+                court.hallNo = reader.GetInt32(1); 
+            }
+            return court;
         }
+        
+
 
         public bool Update(Court entity)
         {

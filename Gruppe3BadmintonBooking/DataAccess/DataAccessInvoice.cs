@@ -27,6 +27,7 @@ namespace DataAccess
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
             cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
 
+
             int rowsAffected = cmd.ExecuteNonQuery();
 
             return rowsAffected == 1;
@@ -52,17 +53,19 @@ namespace DataAccess
         {
             throw new NotImplementedException();
 
+
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
+
+            List<Invoice> list = new List<Invoice>();
 
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
-                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
-
+                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id"; // AND Reservation.employee_id = Person.id";
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<Invoice> list = new List<Invoice>();
+
 
             while (reader.Read())
             {
@@ -76,7 +79,11 @@ namespace DataAccess
                         dateTime = reader.GetDateTime(1),
                         isEquipment = reader.GetBoolean(2),
                         //Todo get fromtime Fra reservation
+
                         // fromTime = reader.GetTimeSpan(3).
+
+                        // fromTime = reader.GetTimeSpan(3).
+
 
 
 
@@ -97,15 +104,12 @@ namespace DataAccess
                 list.Add(invoice);
             }
 
+
             con.Close();
 
             return list;
         }
-
-
-
-
-        public Invoice? GetById(int id)
+        public Invoice GetById(int id)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
@@ -129,8 +133,6 @@ namespace DataAccess
                         //Todo get fromtime Fra reservation
                         // fromTime = reader.GetTimeSpan(3).
 
-
-
                         court = new Court()
                         {
                             id = reader.GetInt32(4),
@@ -148,7 +150,6 @@ namespace DataAccess
             return null;
         }
 
-
         public bool Update(Invoice entity)
         {
             SqlConnection con = new(conStr.ConnectionString);
@@ -160,8 +161,7 @@ namespace DataAccess
 
             return rowsAffected == 1;
 
-
         }
-
     }
 }
+

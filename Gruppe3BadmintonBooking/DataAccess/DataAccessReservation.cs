@@ -60,9 +60,9 @@ namespace DataAccess
                 {
                     deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
-                    throw new NotImplementedException(); //TODO SKRIV throw ting
+                    throw; //TODO SKRIV throw ting
                 }
             }
             return deleted;
@@ -88,6 +88,13 @@ namespace DataAccess
                 }
             }
             return list;
+        }
+
+        public IEnumerable<Reservation> GetAllByDate()
+        {
+            string cmdTextGetByDate = "select * from Reservation where";
+            IEnumerable<Reservation> list = null;
+                return null;
         }
 
         public Reservation GetById(int id)
