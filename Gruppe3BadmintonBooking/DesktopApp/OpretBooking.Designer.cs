@@ -102,6 +102,7 @@
             // 
             // comboKlok
             // 
+            this.comboKlok.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboKlok.FormattingEnabled = true;
             this.comboKlok.Items.AddRange(new object[] {
             "10:00",
