@@ -8,7 +8,7 @@ using Model;
 
 namespace RestSharpClient
 {
-    public class PersonService : IServiceDatabase<Person>
+    public class PersonService : IServiceDatabase<Customer>
     {
         private RestSharp.RestClient _restClient;
         
@@ -17,7 +17,7 @@ namespace RestSharpClient
             _restClient = new RestSharp.RestClient("https://localhost:44325/api/courts");
         }
 
-        public bool Create(Person entity)
+        public bool Create(Customer entity)
         {
             throw new NotImplementedException();
         }
@@ -27,17 +27,17 @@ namespace RestSharpClient
             return _restClient.Delete(new RestRequest(id.ToString())).IsSuccessful;
         }
 
-        public IEnumerable<Person> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            return _restClient.Get<IEnumerable<Person>>(new RestRequest());
+            return _restClient.Get<IEnumerable<Customer>>(new RestRequest());
         }
 
-        public Person GetById(int id)
+        public Customer GetById(int id)
         {
-            return _restClient.Get<Person>(new RestRequest());
+            return _restClient.Get<Customer>(new RestRequest());
         }
 
-        public bool Update(Person entity)
+        public bool Update(Customer entity)
         {
             throw new NotImplementedException();
         }

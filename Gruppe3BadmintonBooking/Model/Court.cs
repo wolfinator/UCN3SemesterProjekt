@@ -12,7 +12,7 @@ namespace Model
 
         public int id { get; set; }
 
-        public int hallNo { get; set; }
+        // public int hallNo { get; set; }
        // public bool isAvailable { get; set; }
        // public TimeSpan timeInterval { get; set; }
 

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IDataAccess<Person>, DataAccessPerson>();
+builder.Services.AddSingleton<IDataAccess<Customer>, DataAccessPerson>();
 builder.Services.AddSingleton<IDataAccess<Reservation>, DataAccessReservation>();
 builder.Services.AddSingleton<IDataAccess<Invoice>, DataAccessInvoice>();
 builder.Services.AddSingleton<IDataAccess<Court>, DataAccessCourt>();

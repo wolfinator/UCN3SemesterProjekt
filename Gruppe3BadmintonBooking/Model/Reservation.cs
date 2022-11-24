@@ -10,12 +10,13 @@ namespace Model
     {
 
         public int Id { get; set; }
-        public DateTime dateTime { get; set; }
-        public TimeSpan fromTime { get; set; } 
+        public DateTime creationDate { get; set; }
+        public DateTime startTime { get; set; }
+        public DateTime endTime { get; set; } 
         public int courtNo { get; set; }
-        public bool isEquipment { get; set; }
-        public Person customer { get; set; }
-        public Employee employee { get; set; }
+        public bool shuttleReserved { get; set; }
+        public Customer customer { get; set; }
         public Court court { get; set; }
+        public int numberOfRackets { get; set; }
     }
 }

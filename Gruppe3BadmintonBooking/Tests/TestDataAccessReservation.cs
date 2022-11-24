@@ -88,7 +88,7 @@ namespace Tests
             Reservation reservation = new()
             {
                 dateTime = DateTime.Now.AddYears(-10),
-                isEquipment = true,
+                shuttleReserved = true,
                 fromTime = TimeSpan.FromSeconds(3600),
                 courtNo = 1,
                 customer = new() { id = fixture.memberId },
@@ -107,7 +107,7 @@ namespace Tests
             SqlCommand cleanupReservation = new("delete from Reservation where id = @Id", con);
 
             cmdTestSelect.Parameters.AddWithValue("@DateTime", reservation.dateTime);
-            cmdTestSelect.Parameters.AddWithValue("@IsEquipment", reservation.isEquipment ? 1 : 0);
+            cmdTestSelect.Parameters.AddWithValue("@IsEquipment", reservation.shuttleReserved ? 1 : 0);
             cmdTestSelect.Parameters.AddWithValue("@FromTime", reservation.fromTime);
             cmdTestSelect.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
             cmdTestSelect.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
@@ -234,10 +234,10 @@ namespace Tests
             {
                 Id = reservationId,
                 dateTime = DateTime.Now.AddYears(-15),
-                isEquipment = true,
+                shuttleReserved = true,
                 fromTime = TimeSpan.FromSeconds(3600),
                 courtNo = 1,
-                customer = new Person() { id = fixture.memberId },
+                customer = new Customer() { id = fixture.memberId },
                 employee = new Employee() { id = fixture.employeeId }
             };
             //Act

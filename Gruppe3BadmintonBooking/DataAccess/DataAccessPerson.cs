@@ -3,34 +3,34 @@ using Model;
 
 namespace DataAccess
 {
-    public class DataAccessPerson : IDataAccess<Person>
+    public class DataAccessPerson : IDataAccess<Customer>
     {
         private SqlConnectionStringBuilder conStr;
         public DataAccessPerson()
         {
             conStr = Connection.conStr;
         }
-        public int GetPersonType(Person person)
-        {
-            int persontype = -1;
-            if (person is Employee)
-            {
-                persontype = 0;
-            }
-            else if (person is Guest)
-            {
-                persontype = 1;
-            }
-            else if (person is Member)
-            {
-                persontype = 2;
-            }
-            return persontype;
-        }
-        public bool Create(Person entity)
+        //public int GetPersonType(Customer person)
+        //{
+        //    int persontype = -1;
+        //    if (person is Employee)
+        //    {
+        //        persontype = 0;
+        //    }
+        //    else if (person is Guest)
+        //    {
+        //        persontype = 1;
+        //    }
+        //    else if (person is Member)
+        //    {
+        //        persontype = 2;
+        //    }
+        //    return persontype;
+        //}
+        public bool Create(Customer entity)
         {
             bool created = false;
-            int persontype = GetPersonType(entity);
+            // int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
             string cmdTextPerson = "insert into Person (f_name, l_name, email, phone_no, person_type, address_id) " +
@@ -44,7 +44,7 @@ namespace DataAccess
             cmdPerson.Parameters.AddWithValue("@Lname", entity.lastName);
             cmdPerson.Parameters.AddWithValue("@Email", entity.email);
             cmdPerson.Parameters.AddWithValue("@PhoneNo", entity.phoneNo);
-            cmdPerson.Parameters.AddWithValue("@PersonType", persontype);
+            //cmdPerson.Parameters.AddWithValue("@PersonType", persontype);
 
             cmdAddress.Parameters.AddWithValue("@Street", entity.street);
             cmdAddress.Parameters.AddWithValue("@HouseNo", entity.houseNo);
@@ -95,7 +95,7 @@ namespace DataAccess
                     cmdDelete.CommandText = cmdTextDeleteAddress;
                     cmdDelete.Parameters.AddWithValue("@AddressId", addressId);
                     isDeleted = isDeleted && cmdDelete.ExecuteNonQuery() == 1;
-                }    
+                }
             }
             catch (SqlException)
             {
@@ -105,9 +105,9 @@ namespace DataAccess
             con.Close();
             return isDeleted;
         }
-        public IEnumerable<Person> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            List<Person> persons = null;
+            List<Customer> persons = null;
 
             SqlConnection con = new(conStr.ConnectionString);
             string cmdTextGelAll = "select * from Person p, _Address a where p.address_id = a.id";
@@ -127,9 +127,9 @@ namespace DataAccess
             con.Close();
             return persons;
         }
-        public Person GetById(int id)
+        public Customer GetById(int id)
         {
-            Person person = null;
+            Customer person = null;
             SqlConnection con = new(conStr.ConnectionString);
             string cmdTextGetById = "select * from Person p, _Address a where p.address_id = a.id and p.id = @Id";
             SqlCommand cmdGetById = new(cmdTextGetById, con);
@@ -146,18 +146,18 @@ namespace DataAccess
             {
                 //TODO handle exception
                 throw;
-        }
+            }
 
             return person;
         }
 
-        public bool Update(Person entity)
+        public bool Update(Customer entity)
         {
             bool isUpdated = false;
 
-            int persontype = GetPersonType(entity);
+            //int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextUpdatePerson = "update person set f_name = @Fname, l_name = @Lname, email = @Email, phone_no = @PhoneNo, person_type = @PersonType where id = @Id";
+            string cmdTextUpdatePerson = "update person set f_name = @Fname, l_name = @Lname, email = @Email, phone_no = @PhoneNo where id = @Id";
             string cmdTextUpdateAddress = "update _address set street = @Street, house_no = @HouseNo, city_zipcode = @CityZipcode " +
                 "from Person p, _Address a where a.id = p.address_id and a.id = @Id";
             SqlCommand cmdUpdatePerson = new(cmdTextUpdatePerson, con);
@@ -167,7 +167,7 @@ namespace DataAccess
             cmdUpdatePerson.Parameters.AddWithValue("@Lname", entity.lastName);
             cmdUpdatePerson.Parameters.AddWithValue("@Email", entity.email);
             cmdUpdatePerson.Parameters.AddWithValue("@PhoneNo", entity.phoneNo);
-            cmdUpdatePerson.Parameters.AddWithValue("@PersonType", persontype);
+            // cmdUpdatePerson.Parameters.AddWithValue("@PersonType", persontype);
             cmdUpdatePerson.Parameters.AddWithValue("@Id", entity.id);
 
             cmdUpdateAddress.Parameters.AddWithValue("@Street", entity.street);
@@ -177,7 +177,7 @@ namespace DataAccess
 
             con.Open();
             using (var trans = con.BeginTransaction())
-        {
+            {
                 try
                 {
                     cmdUpdatePerson.Transaction = trans;
@@ -188,7 +188,7 @@ namespace DataAccess
 
                     // Checks if both the person and address tables are updated
                     isUpdated = updatedAddress + updatedAddress == 2;
-        }
+                }
                 catch (SqlException)
                 {
                     trans.Rollback();
@@ -202,65 +202,65 @@ namespace DataAccess
             return isUpdated;
         }
 
-        private List<Person>? BuildObjects(SqlDataReader reader)
+        private List<Customer>? BuildObjects(SqlDataReader reader)
         {
-            List<Person> persons = new();
+            List<Customer> persons = new();
             try
             {
                 while (reader.Read())
                 {
-                    Person person = BuildObject(reader);
+                    Customer person = BuildObject(reader);
                     persons.Add(person);
                 }
             }
             catch (SqlException)
-        {
+            {
                 //TODO Handle exception
                 throw;
-            } 
+            }
             return persons;
         }
 
-        private Person BuildObject(SqlDataReader reader)
+        private Customer BuildObject(SqlDataReader reader)
         {
-            Person person = null;
-            try
-            {
-                int personType = int.Parse(reader.GetString(5));
-                switch (personType)
-        {
-                    case 0:
-                        person = new Employee();
-                        break;
-                    case 1:
-                        person = new Guest();
-                        break;
-                    case 2:
-                        person = new Member();
-                        break;
-                    default:
-                        throw new NotImplementedException(); // Todo handle exception
-                        break;
+            Customer customer = new();
+            //try
+            //{
+            //    int personType = int.Parse(reader.GetString(5));
+            //switch (personType)
+            //{
+            //            case 0:
+            //                person = new Employee();
+            //                break;
+            //            case 1:
+            //                person = new Guest();
+            //                break;
+            //            case 2:
+            //                person = new Member();
+            //                break;
+            //            default:
+            //                throw new NotImplementedException(); // Todo handle exception
+            //                break;
+            //}
+
+            customer.id = reader.GetInt32(0);
+            customer.firstName = reader.GetString(1);
+            customer.lastName = reader.GetString(2);
+            customer.email = reader.GetString(3);
+            customer.phoneNo = reader.GetString(4);
+            customer.street = reader.GetString(8);
+            customer.houseNo = reader.GetString(9);
+            customer.zipcode = reader.GetString(10);
+
+            //TODO if member add all reservations to object
+            return customer;
         }
+        //    catch (InvalidCastException ex)
+        //{
 
-                person.id = reader.GetInt32(0);
-                person.firstName = reader.GetString(1);
-                person.lastName = reader.GetString(2);
-                person.email = reader.GetString(3);
-                person.phoneNo = reader.GetString(4);
-                person.street = reader.GetString(8);
-                person.houseNo = reader.GetString(9);
-                person.zipcode = reader.GetString(10);
-
-                //TODO if member add all reservations to object
-            }
-            catch (InvalidCastException ex)
-        {
-
-                throw;
-            }
-            return person;
-        }
+        //        throw;
+        //    }
+        //return person;
     }
-    
 }
+    

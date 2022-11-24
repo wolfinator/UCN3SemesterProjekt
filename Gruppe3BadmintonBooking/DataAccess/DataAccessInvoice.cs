@@ -60,7 +60,7 @@ namespace DataAccess
             List<Invoice> list = new List<Invoice>();
 
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.is_equipment, Court.id, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
                               "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id"; // AND Reservation.employee_id = Person.id";
             SqlDataReader reader = cmd.ExecuteReader();
@@ -76,26 +76,19 @@ namespace DataAccess
 
                     reservation = new Reservation()
                     {
-                        dateTime = reader.GetDateTime(1),
-                        isEquipment = reader.GetBoolean(2),
-                        //Todo get fromtime Fra reservation
-
-                        // fromTime = reader.GetTimeSpan(3).
-
-                        // fromTime = reader.GetTimeSpan(3).
-
-
+                        startTime = reader.GetDateTime(1),
+                        endTime = reader.GetDateTime(2),
+                        shuttleReserved = reader.GetBoolean(3),
 
 
                         court = new Court()
                         {
                             id = reader.GetInt32(4),
-                            hallNo = reader.GetInt32(5),
                         },
 
-                        customer = new Person()
+                        customer = new Customer()
                         {
-                            firstName = reader.GetString(6),
+                            firstName = reader.GetString(5),
                         }
                     }
                 };
@@ -114,7 +107,7 @@ namespace DataAccess
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.is_equipment, Court.id, Person.f_name" +
                               " FROM Invoice, Reservation, Court, Person WHERE Invoice.id = @id";
             cmd.Parameters.AddWithValue("id", id);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -128,20 +121,18 @@ namespace DataAccess
 
                     reservation = new Reservation()
                     {
-                        dateTime = reader.GetDateTime(1),
-                        isEquipment = reader.GetBoolean(2),
-                        //Todo get fromtime Fra reservation
-                        // fromTime = reader.GetTimeSpan(3).
+                        startTime = reader.GetDateTime(1),
+                        endTime= reader.GetDateTime(2),
+                        shuttleReserved = reader.GetBoolean(3),
 
                         court = new Court()
                         {
                             id = reader.GetInt32(4),
-                            hallNo = reader.GetInt32(5),
                         },
 
-                        customer = new Person()
+                        customer = new Customer()
                         {
-                            firstName = reader.GetString(6),
+                            firstName = reader.GetString(5),
                         }
                     }
                 };

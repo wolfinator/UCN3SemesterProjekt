@@ -77,10 +77,10 @@ namespace Tests
             //Arrange
             DataAccessPerson dataAccessPerson = new();
 
-            Person employee = new Employee();
-            Person guest = new Guest();
-            Person member = new Member();
-            Person person = new Person();
+            Customer employee = new Employee();
+            Customer guest = new Guest();
+            Customer member = new Member();
+            Customer person = new Customer();
 
             int expectedEmployee = 0;
             int expectedGuest = 1;
@@ -248,7 +248,7 @@ namespace Tests
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             int personId = (int)cmdInsertPerson.ExecuteScalar();
 
-            Person person = dataAccess.GetById(personId);
+            Customer person = dataAccess.GetById(personId);
 
             //Assert
             Assert.Equal("test", person.firstName);
@@ -275,7 +275,7 @@ namespace Tests
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             int personId = (int)cmdInsertPerson.ExecuteScalar();
 
-            Person person = dataAccess.GetById(-1);
+            Customer person = dataAccess.GetById(-1);
 
             //Assert
             Assert.Null(person);
@@ -306,7 +306,7 @@ namespace Tests
                 cmdInsertPerson.ExecuteNonQuery();
             }
 
-            List<Person> persons = dataAccess.GetAll().ToList();
+            List<Customer> persons = dataAccess.GetAll().ToList();
 
             //Assert
             Assert.True(persons.Where(person => person.lastName == "getAll").Count() == 3);
@@ -332,7 +332,7 @@ namespace Tests
             int personId = (int)cmdInsertPerson.ExecuteScalar();
             cleanupPerson.Parameters.AddWithValue("@Id", personId);
 
-            Person person = new Member() 
+            Customer person = new Member() 
             {
                 id = personId, 
                 firstName = "test", 
@@ -344,7 +344,7 @@ namespace Tests
                 zipcode = "test" 
             };
             dataAccess.Update(person);
-            Person updatedPerson = dataAccess.GetById(personId);
+            Customer updatedPerson = dataAccess.GetById(personId);
 
             //Assert
             Assert.True(updatedPerson != null, "Couldn't find person");

@@ -45,7 +45,6 @@ namespace DataAccess
                 Court court = new Court()
                 {
                     id = reader.GetInt32(0),
-                    hallNo = reader.GetInt32(1)
                 };
                 list.Add(court);
             }
@@ -68,7 +67,6 @@ namespace DataAccess
             {
                 court = new Court();
                 court.id = reader.GetInt32(0);
-                court.hallNo = reader.GetInt32(1); 
             }
             return court;
         }

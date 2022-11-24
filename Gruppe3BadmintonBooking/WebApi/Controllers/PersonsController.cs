@@ -11,18 +11,18 @@ namespace WebApi.Controllers
     {
 
         private readonly ILogger<PersonsController> _logger;
-        private readonly IDataAccess<Person> _personDb;
+        private readonly IDataAccess<Customer> _personDb;
 
-        public PersonsController(ILogger<PersonsController> logger, IDataAccess<Person> personDb)
+        public PersonsController(ILogger<PersonsController> logger, IDataAccess<Customer> personDb)
         {
             _logger = logger;
             _personDb = personDb;
         }
 
         [HttpGet]
-        public IEnumerable<Person> GetAllPersons()
+        public IEnumerable<Customer> GetAllPersons()
         {
-            IEnumerable<Person> persons = null;
+            IEnumerable<Customer> persons = null;
             try
             {
                 persons = _personDb.GetAll();
@@ -34,9 +34,9 @@ namespace WebApi.Controllers
             return persons;
         }
         [HttpGet("{id}")]
-        public ActionResult<Person> GetPerson(int id)
+        public ActionResult<Customer> GetPerson(int id)
         {
-            Person person = null;
+            Customer person = null;
             try
             {
                 person = _personDb.GetById(id);
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Person> PostPerson(Person person)
+        public ActionResult<Customer> PostPerson(Customer person)
         {
             bool created = false;
             person = new Guest()
@@ -76,7 +76,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutPerson(int id, Person updatedPerson)
+        public IActionResult PutPerson(int id, Customer updatedPerson)
         {
             bool updated = false;
             updatedPerson = new Guest()
