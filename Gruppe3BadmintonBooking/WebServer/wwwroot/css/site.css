@@ -25,3 +25,7 @@ body, html {
     border: 1px solid #000000;
     margin: 10% auto 0;
 }
+
+.choose-court {
+    margin-top: 20px 0px 20px 0px;
+}
