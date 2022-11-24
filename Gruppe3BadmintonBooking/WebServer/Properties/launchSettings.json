@@ -11,7 +11,7 @@
     "WebServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7099;http://localhost:5099",
+      "applicationUrl": "http://localhost:36670",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
