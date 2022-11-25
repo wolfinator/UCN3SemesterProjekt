@@ -14,18 +14,18 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="fromTime" class="control-label"></label>
-                <input asp-for="fromTime" class="form-control" />
-                <span asp-validation-for="fromTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="dateTime" class="control-label">Dato</label>
                 <input type="date" asp-for="dateTime" class="form-control" />
                 <span asp-validation-for="dateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="isEquipment" class="control-label">Udstyr</label>
+                <label asp-for="isEquipment" class="control-label">Fjerbolde</label>
                 <input asp-for="isEquipment" type="checkbox" />
+                <span asp-validation-for="isEquipment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="isEquipment" class="control-label">Antal ketsjere</label>
+                <input asp-for="isEquipment"/>
                 <span asp-validation-for="isEquipment" class="text-danger"></span>
             </div>
 
