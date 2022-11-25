@@ -15,9 +15,9 @@ namespace Tests
     {
         //https://xunit.net/docs/shared-context
         public SqlConnection con { get; private set; }
-        public int employeeId { get; set; }
-        public int memberId { get; set; }
-        public int guestId { get; set; }
+        public int customerId1 { get; set; }
+        public int customerId2 { get; set; }
+        public int customerId3 { get; set; }
 
         private SqlCommand cmdRemoveTestCityZip;
         private SqlCommand cmdRemoveTestAddress;
@@ -31,16 +31,16 @@ namespace Tests
             // Setting up clean up queries to delete test data
             cmdRemoveTestCityZip = new("delete from CityZip where zipcode = 'rese'", con);
             cmdRemoveTestAddress = new("delete from _address where street = 'reservation'", con);
-            cmdRemoveTestPersons = new("delete from person where email = 'reservation@test.test'", con);
+            cmdRemoveTestPersons = new("delete from customer where email = 'reservation@test.test'", con);
 
             SqlCommand cmdAddTestCityZip = new("insert into CityZip values ('rese', 'rvation')", con);
             SqlCommand cmdAddTestAddress = new("insert into _address output inserted.id values ('reservation', 'test', 'rese')", con);
-            SqlCommand cmdAddTestEmployee = new("insert into person output inserted.id values " +
-                "('TestReservation', 'Employee', 'reservation@test.test', '12345678' , '0', @AddressId)", con);
-            SqlCommand cmdAddTestMember = new("insert into person output inserted.id values " +
-                "('TestReservation', 'Member', 'reservation@test.test', '87654321', '2', @AddressId)", con);
-            SqlCommand cmdAddTestGuest = new("insert into person output inserted.id values " +
-                "('TestReservation', 'Guest', 'reservation@test.test', '12348765', '1', @AddressId)", con);
+            SqlCommand cmdAddTestCustomer1 = new("insert into customer output inserted.id values " +
+                "('TestReservation', 'Customer1', 'reservation@test.test', '12345678', @AddressId)", con);
+            SqlCommand cmdAddTestCustomer2 = new("insert into customer output inserted.id values " +
+                "('TestReservation', 'Customer2', 'reservation@test.test', '87654321', @AddressId)", con);
+            SqlCommand cmdAddTestCustomer3 = new("insert into customer output inserted.id values " +
+                "('TestReservation', 'Customer3', 'reservation@test.test', '12348765', @AddressId)", con);
 
             // Removing existing test data if there is any, e.g. tests failed and left some test data
             cmdRemoveTestPersons.ExecuteNonQuery();
@@ -50,14 +50,14 @@ namespace Tests
             // Add test data nessecary to set up reservations in the database
             cmdAddTestCityZip.ExecuteNonQuery();
             int addressId = (int)cmdAddTestAddress.ExecuteScalar(); // Getting the id for the address to add on the person
-            cmdAddTestEmployee.Parameters.AddWithValue("@AddressId", addressId);
-            cmdAddTestMember.Parameters.AddWithValue("@AddressId", addressId);
-            cmdAddTestGuest.Parameters.AddWithValue("@AddressId", addressId);
+            cmdAddTestCustomer1.Parameters.AddWithValue("@AddressId", addressId);
+            cmdAddTestCustomer2.Parameters.AddWithValue("@AddressId", addressId);
+            cmdAddTestCustomer3.Parameters.AddWithValue("@AddressId", addressId);
 
             // Getting the inserted ids for the persons for easy access when inserting reservations
-            employeeId = (int)cmdAddTestEmployee.ExecuteScalar();
-            memberId = (int)cmdAddTestMember.ExecuteScalar();
-            guestId = (int)cmdAddTestGuest.ExecuteScalar();
+            customerId1 = (int)cmdAddTestCustomer1.ExecuteScalar();
+            customerId2 = (int)cmdAddTestCustomer2.ExecuteScalar();
+            customerId3 = (int)cmdAddTestCustomer3.ExecuteScalar();
         }
         public void Dispose()
         {
@@ -87,30 +87,34 @@ namespace Tests
             //Arrange
             Reservation reservation = new()
             {
-                dateTime = DateTime.Now.AddYears(-10),
+                creationDate = DateTime.Now.AddYears(-10),
+                startTime = DateTime.Now.AddYears(-9).Date.AddHours(13),
+                endTime = DateTime.Now.AddYears(-9).Date.AddHours(14),
                 shuttleReserved = true,
-                fromTime = TimeSpan.FromSeconds(3600),
+                numberOfRackets = 4,
                 courtNo = 1,
-                customer = new() { id = fixture.memberId },
-                employee = new() { id = fixture.employeeId }
+                customer = new() { id = fixture.customerId1 },
             };
 
             SqlConnection con = fixture.con;
 
+            SqlCommand cleanupReservation = new("delete from reservation where id = @Id", con);
             SqlCommand cmdTestSelect = new("select * from Reservation where " +
-                "date_time = @DateTime and " +
-                "is_equipment = @IsEquipment and " +
-                "from_time = @FromTime and " +
-                "court_id = 1 and " +
-                "customer_id = @CustomerId and " +
-                "employee_id = @EmployeeId", con);
-            SqlCommand cleanupReservation = new("delete from Reservation where id = @Id", con);
+                "creation_date = @CreationDate and " +
+                "start_time = @StartTime and " +
+                "end_time = @EndTime and " +
+                "shuttle_reserved = @ShuttleReserved and " +
+                "number_of_rackets = @NumberOfRackets and " +
+                "court_court_no = 1 and " +
+                "customer_id = @CustomerId"
+                , con);
 
-            cmdTestSelect.Parameters.AddWithValue("@DateTime", reservation.dateTime);
-            cmdTestSelect.Parameters.AddWithValue("@IsEquipment", reservation.shuttleReserved ? 1 : 0);
-            cmdTestSelect.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+            cmdTestSelect.Parameters.AddWithValue("@CreationDate", reservation.creationDate);
+            cmdTestSelect.Parameters.AddWithValue("@StartTime", reservation.startTime);
+            cmdTestSelect.Parameters.AddWithValue("@EndTime", reservation.endTime);
+            cmdTestSelect.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved ? 1 : 0);
+            cmdTestSelect.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
             cmdTestSelect.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
-            cmdTestSelect.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
             //Act
             dataAccess.Create(reservation);
             SqlDataReader reader = cmdTestSelect.ExecuteReader();
@@ -130,13 +134,13 @@ namespace Tests
             SqlConnection con = fixture.con;
 
             var dateTime = DateTime.Now;
-            var timeSpan = TimeSpan.FromSeconds(3600);
             SqlCommand cmdInsertReservation = new("insert into reservation output inserted.id values " +
-                "(@DateTime, 0, @FromTime, 1, @CustomerId, @EmployeeId)", con);
-            cmdInsertReservation.Parameters.AddWithValue("@DateTime", dateTime);
-            cmdInsertReservation.Parameters.AddWithValue("@FromTime", timeSpan);
-            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.guestId);
-            cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
+                "(@CreationDate, @StartTime, @EndTime, 0, 2, 3, @CustomerId)", con);
+            cmdInsertReservation.Parameters.AddWithValue("@CreationDate", dateTime.Date.AddYears(-10).AddHours(1));
+            cmdInsertReservation.Parameters.AddWithValue("@StartTime", dateTime.Date.AddYears(-10).AddHours(15));
+            cmdInsertReservation.Parameters.AddWithValue("@EndTime", dateTime.Date.AddYears(-10).AddHours(16));
+            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.customerId2);
+  
             //Act
             int reservationId = (int)cmdInsertReservation.ExecuteScalar();
             bool deleted = dataAccess.DeleteById(reservationId);
@@ -150,19 +154,20 @@ namespace Tests
         {
             //Arrange
             var con = fixture.con;
+            var dateTime = DateTime.Now;
             SqlCommand cmdInsertReservation;
             SqlCommand cleanupReservations;
             int[] reservationIds = new int[3];
             for (int i = 0; i <= 2; i++)
             {
                 cmdInsertReservation = new("insert into reservation output inserted.id values " +
-                "(@DateTime, 0, @FromTime, 1, @CustomerId, @EmployeeId)", con);
-                cmdInsertReservation.Parameters.AddWithValue("@DateTime", DateTime.Now.AddYears(-10 - i));
-                cmdInsertReservation.Parameters.AddWithValue("@FromTime", TimeSpan.FromSeconds(3600));
-                cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.memberId);
-                cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
-                reservationIds[i] = (int)cmdInsertReservation.ExecuteScalar();
-                
+                "(@CreationDate, @StartTime, @EndTime, 0, 4, 2, @CustomerId)", con);
+                cmdInsertReservation.Parameters.AddWithValue("@CreationDate", dateTime.Date.AddYears(-11).AddHours(1));
+                cmdInsertReservation.Parameters.AddWithValue("@StartTime", dateTime.Date.AddYears(-11).AddHours(15+i));
+                cmdInsertReservation.Parameters.AddWithValue("@EndTime", dateTime.Date.AddYears(-11).AddHours(16+i));
+                cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.customerId2);
+
+                reservationIds[i] = (int)cmdInsertReservation.ExecuteScalar();     
             }
 
             //Act
@@ -170,9 +175,9 @@ namespace Tests
 
             //Assert
             Assert.NotNull(reservations);
-            Assert.True(reservations.Any(reservation => reservation.Id == reservationIds[0]));
-            Assert.True(reservations.Any(reservation => reservation.Id == reservationIds[1]));
-            Assert.True(reservations.Any(reservation => reservation.Id == reservationIds[2]));
+            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[0]);
+            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[1]);
+            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[2]);
 
             //Cleanup
             for (int i = 0; i < reservationIds.Length; i++)
@@ -188,15 +193,16 @@ namespace Tests
         {
             //Arrange
             var con = fixture.con;
+            var dateTime = DateTime.Now;
 
             SqlCommand cmdInsertReservation = new("insert into reservation output inserted.id values " +
-                "(@DateTime, 0, @FromTime, 1, @CustomerId, @EmployeeId)", con);
+                "(@CreationDate, @StartTime, @EndTime, 0, 2, 1, @CustomerId)", con);
             SqlCommand cleanupReservation = new("delete from reservation where id = @Id", con);
-
-            cmdInsertReservation.Parameters.AddWithValue("@DateTime", DateTime.Now.AddYears(-10));
-            cmdInsertReservation.Parameters.AddWithValue("@FromTime", TimeSpan.FromSeconds(3600));
-            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.memberId);
-            cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
+            
+            cmdInsertReservation.Parameters.AddWithValue("@CreationDate", dateTime.Date.AddYears(-12).AddHours(1));
+            cmdInsertReservation.Parameters.AddWithValue("@StartTime", dateTime.Date.AddYears(-12).AddHours(15));
+            cmdInsertReservation.Parameters.AddWithValue("@EndTime", dateTime.Date.AddYears(-12).AddHours(16));
+            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.customerId3);
 
             int reservationId;
             //Act
@@ -217,15 +223,16 @@ namespace Tests
         {
             //Arrange
             var con = fixture.con;
+            var dateTime = DateTime.Now;
 
             SqlCommand cmdInsertReservation = new("insert into reservation output inserted.id values " +
-                "(@DateTime, 0, @FromTime, 1, @CustomerId, @EmployeeId)", con);
+                "(@CreationDate, @StartTime, @EndTime, 0, 2, 1, @CustomerId)", con);
             SqlCommand cleanupReservation = new("delete from reservation where id = @Id", con);
 
-            cmdInsertReservation.Parameters.AddWithValue("@DateTime", DateTime.Now.AddYears(-10));
-            cmdInsertReservation.Parameters.AddWithValue("@FromTime", TimeSpan.FromSeconds(3600));
-            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.memberId);
-            cmdInsertReservation.Parameters.AddWithValue("@EmployeeId", fixture.employeeId);
+            cmdInsertReservation.Parameters.AddWithValue("@CreationDate", dateTime.Date.AddYears(-12).AddHours(1));
+            cmdInsertReservation.Parameters.AddWithValue("@StartTime", dateTime.Date.AddYears(-12).AddHours(9));
+            cmdInsertReservation.Parameters.AddWithValue("@EndTime", dateTime.Date.AddYears(-12).AddHours(10));
+            cmdInsertReservation.Parameters.AddWithValue("@CustomerId", fixture.customerId3);
 
             int reservationId;
             reservationId = (int)cmdInsertReservation.ExecuteScalar();
@@ -233,12 +240,13 @@ namespace Tests
             Reservation reservationUpdate = new()
             {
                 Id = reservationId,
-                dateTime = DateTime.Now.AddYears(-15),
-                shuttleReserved = true,
-                fromTime = TimeSpan.FromSeconds(3600),
-                courtNo = 1,
-                customer = new Customer() { id = fixture.memberId },
-                employee = new Employee() { id = fixture.employeeId }
+                creationDate = dateTime.Date.AddYears(-12).AddHours(1),
+                startTime = dateTime.Date.AddYears(-12).AddHours(10),
+                endTime = dateTime.Date.AddYears(-12).AddHours(11),
+                shuttleReserved = false,
+                numberOfRackets = 2,
+                courtNo = 2,
+                customer = new() { id = fixture.customerId3 },
             };
             //Act
             bool updated = dataAccess.Update(reservationUpdate);

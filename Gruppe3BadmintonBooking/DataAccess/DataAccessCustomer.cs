@@ -159,7 +159,7 @@ namespace DataAccess
             SqlConnection con = new(conStr.ConnectionString);
             string cmdTextUpdateCustomer = "update customer set f_name = @Fname, l_name = @Lname, email = @Email, phone_no = @PhoneNo where id = @Id";
             string cmdTextUpdateAddress = "update _address set street = @Street, house_no = @HouseNo, city_zipcode = @CityZipcode " +
-                "from Customer p, _Address a where a.id = p.address_id and a.id = @Id";
+                "from Customer c, _Address a where a.id = c.address_id and c.id = @Id";
             SqlCommand cmdUpdateCustomer = new(cmdTextUpdateCustomer, con);
             SqlCommand cmdUpdateAddress = new(cmdTextUpdateAddress, con);
 
@@ -223,7 +223,7 @@ namespace DataAccess
 
         private Customer BuildObject(SqlDataReader reader)
         {
-            Customer customer = new();
+            Customer customer = null;
             //try
             //{
             //    int personType = int.Parse(reader.GetString(5));
@@ -242,25 +242,27 @@ namespace DataAccess
             //                throw new NotImplementedException(); // Todo handle exception
             //                break;
             //}
+            try
+            {
+                customer = new Customer();
+                customer.id = reader.GetInt32(0);
+                customer.firstName = reader.GetString(1);
+                customer.lastName = reader.GetString(2);
+                customer.email = reader.GetString(3);
+                customer.phoneNo = reader.GetString(4);
+                customer.street = reader.GetString(7);
+                customer.houseNo = reader.GetString(8);
+                customer.zipcode = reader.GetString(9);
+            }
+            catch (Exception)
+            {
 
-            customer.id = reader.GetInt32(0);
-            customer.firstName = reader.GetString(1);
-            customer.lastName = reader.GetString(2);
-            customer.email = reader.GetString(3);
-            customer.phoneNo = reader.GetString(4);
-            customer.street = reader.GetString(8);
-            customer.houseNo = reader.GetString(9);
-            customer.zipcode = reader.GetString(10);
+            }
+            
 
             //TODO if member add all reservations to object
             return customer;
         }
-        //    catch (InvalidCastException ex)
-        //{
-
-        //        throw;
-        //    }
-        //return person;
     }
 }
     

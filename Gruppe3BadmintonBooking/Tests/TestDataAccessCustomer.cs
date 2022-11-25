@@ -29,39 +29,19 @@ namespace Tests
             con.Close();
         }
     }
-    public class TestDataAccessPerson : IClassFixture<DatabaseFixture>
+    public class TestDataAccessCustomer : IClassFixture<DatabaseFixture>
     {
         DatabaseFixture fixture;
 
-        public TestDataAccessPerson(DatabaseFixture fixture)
+        public TestDataAccessCustomer(DatabaseFixture fixture)
         {
             this.fixture = fixture;
         }
 
-        private Member testMember = new Member()
+        private Customer testCustomer = new Customer()
         {
             firstName = "test",
-            lastName = "member",
-            email = "test@mail.dk",
-            phoneNo = "testtest",
-            street = "test",
-            houseNo = "2",
-            zipcode = "test"
-        };
-        private Employee testEmployee = new Employee()
-        {
-            firstName = "test",
-            lastName = "employee",
-            email = "test@mail.dk",
-            phoneNo = "testtest",
-            street = "test",
-            houseNo = "0",
-            zipcode = "test"
-        };
-        private Guest testGuest = new Guest()
-    {
-            firstName = "test",
-            lastName = "guest",
+            lastName = "customer",
             email = "test@mail.dk",
             phoneNo = "testtest",
             street = "test",
@@ -71,6 +51,7 @@ namespace Tests
 
         private DataAccessCustomer dataAccess = new();
 
+        /* No longer used
         [Fact]
         public void TestGetPersonType()
         {
@@ -98,31 +79,32 @@ namespace Tests
             Assert.Equal(expectedMember, actualMember);
             Assert.Equal(expectedPerson, actualPerson);
         }
+        */
         [Fact]
-        public void TestCreateMember()
+        public void TestCreateCustomer()
         {
             //Arrange
             SqlConnection con = fixture.con;
-            SqlCommand cmd = new("select * from Person p, _Address a where p.f_name = 'test' and p.l_name = 'member' and p.address_id = a.id", con);
-            SqlCommand cleanupPerson = new("delete from Person where f_name = 'test' and l_name = 'member'", con);
-            SqlCommand cleanupAddress = new("delete from _Address where street = 'test' and house_no = '2'", con);
+            SqlCommand cmd = new("select * from Customer p, _Address a where p.f_name = 'test' and p.l_name = 'customer' and p.address_id = a.id", con);
+            SqlCommand cleanupPerson = new("delete from Customer where f_name = 'test' and l_name = 'customer'", con);
+            SqlCommand cleanupAddress = new("delete from _Address where street = 'test' and house_no = '1'", con);
             //Act
-            dataAccess.Create(testMember);
+            dataAccess.Create(testCustomer);
             SqlDataReader reader = cmd.ExecuteReader();
 
             //Assert
             Assert.True(reader.Read());
-            Assert.True(int.Parse(reader.GetString(5)) == 2);
             Assert.True(reader.GetString(1).Equals("test"));
-            Assert.True(reader.GetString(2).Equals("member"));
-            Assert.True(reader.GetString(8).Equals("test"));
-            Assert.True(reader.GetString(9).Equals("2"));
+            Assert.True(reader.GetString(2).Equals("customer"));
+            Assert.True(reader.GetString(8).Equals("1"));
+            Assert.True(reader.GetString(9).Equals("test"));
 
             //Cleanup
             reader.Close();
             cleanupPerson.ExecuteNonQuery();
             cleanupAddress.ExecuteNonQuery();
         }
+        /* only one type of customer now
         [Fact]
         public void TestCreateEmployee()
         {
@@ -173,14 +155,15 @@ namespace Tests
             cleanupPerson.ExecuteNonQuery();
             cleanupAddress.ExecuteNonQuery();
         }
+        */
         [Fact]
         public void TestDeleteByIdPerson()
         {
             //Arrange
             SqlConnection con = fixture.con;
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '9', 'test')", con);
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'delete', 'test@mail.dk', 'testtest', '9', @Id)", con);
-            SqlCommand cmdCheckDeletedPerson = new("select * from Person p where p.f_name = 'test' and p.l_name = 'delete'", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'delete', 'test@mail.dk', 'testtest', @Id)", con);
+            SqlCommand cmdCheckDeletedPerson = new("select * from Customer p where p.f_name = 'test' and p.l_name = 'delete'", con);
             SqlCommand cmdCheckDeletedAddress = new("select * from _Address where street = 'test' and house_no = '9'", con);
 
             //Act
@@ -207,8 +190,8 @@ namespace Tests
             //Arrange
             SqlConnection con = fixture.con;
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '9', 'test')", con);
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'delete', 'test@mail.dk', 'testtest', '9', @Id)", con);
-            SqlCommand cmdCheckDeletedPerson = new("select * from Person p where p.f_name = 'test' and p.l_name = 'delete'", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'delete', 'test@mail.dk', 'testtest', @Id)", con);
+            SqlCommand cmdCheckDeletedPerson = new("select * from Customer p where p.f_name = 'test' and p.l_name = 'delete'", con);
             SqlCommand cmdCheckDeletedAddress = new("select * from _Address where street = 'test' and house_no = '9'", con);
 
             //Act
@@ -237,9 +220,9 @@ namespace Tests
         {
             //Arrange
             SqlConnection con = fixture.con;
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'getById', 'test@mail.dk', 'testtest', '2', @Id)", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'getById', 'test@mail.dk', 'testtest', @Id)", con);
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '8', 'test')", con);
-            SqlCommand cleanupPerson = new("delete from Person where f_name = 'test' and l_name = 'getById'", con);
+            SqlCommand cleanupPerson = new("delete from Customer where f_name = 'test' and l_name = 'getById'", con);
             SqlCommand cleanupAddress = new("delete from _Address where id = @AddressId", con);
 
             //Act
@@ -248,11 +231,11 @@ namespace Tests
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             int personId = (int)cmdInsertPerson.ExecuteScalar();
 
-            Customer person = dataAccess.GetById(personId);
+            Customer customer = dataAccess.GetById(personId);
 
             //Assert
-            Assert.Equal("test", person.firstName);
-            Assert.Equal("getById", person.lastName);
+            Assert.Equal("test", customer.firstName);
+            Assert.Equal("getById", customer.lastName);
 
             //Cleanup
             cleanupPerson.ExecuteNonQuery();
@@ -264,9 +247,9 @@ namespace Tests
         {
             //Arrange
             SqlConnection con = fixture.con;
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'getByIdNotFound', 'test@mail.dk', 'testtest', '2', @Id)", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'getByIdNotFound', 'test@mail.dk', 'testtest', @Id)", con);
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '8', 'test')", con);
-            SqlCommand cleanupPerson = new("delete from Person where f_name = 'test' and l_name = 'getByIdNotFound'", con);
+            SqlCommand cleanupPerson = new("delete from Customer where f_name = 'test' and l_name = 'getByIdNotFound'", con);
             SqlCommand cleanupAddress = new("delete from _Address where id = @AddressId", con);
 
             //Act
@@ -290,9 +273,9 @@ namespace Tests
         {
             //Arrange
             SqlConnection con = fixture.con;
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'getAll', 'test@mail.dk', 'testtest', @PersonType, @Id)", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'getAll', @TestMail, 'testtest', @Id)", con);
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '7', 'test')", con);
-            SqlCommand cleanupPerson = new("delete from Person where f_name = 'test' and l_name = 'getAll'", con);
+            SqlCommand cleanupPerson = new("delete from Customer where f_name = 'test' and l_name = 'getAll'", con);
             SqlCommand cleanupAddress = new("delete from _Address where id = @AddressId", con);
 
             //Act
@@ -302,7 +285,7 @@ namespace Tests
             {
                 cmdInsertPerson.Parameters.Clear();
                 cmdInsertPerson.Parameters.AddWithValue("@Id", addressId);
-                cmdInsertPerson.Parameters.AddWithValue("@PersonType", i);
+                cmdInsertPerson.Parameters.AddWithValue("@TestMail", $"test{i}@mail.dk");
                 cmdInsertPerson.ExecuteNonQuery();
             }
 
@@ -320,9 +303,9 @@ namespace Tests
         {
             //Arrange
             SqlConnection con = fixture.con;
-            SqlCommand cmdInsertPerson = new("insert into Person output INSERTED.ID values ('test', 'update', 'test@mail.dk', 'testtest', '2', @Id)", con);
+            SqlCommand cmdInsertPerson = new("insert into Customer output INSERTED.ID values ('test', 'update', 'test@mail.dk', 'testtest', @Id)", con);
             SqlCommand cmdInsertAddress = new("insert into _Address output INSERTED.ID values ('test', '6', 'test')", con);
-            SqlCommand cleanupPerson = new("delete from Person where id = @Id", con);
+            SqlCommand cleanupPerson = new("delete from Customer where id = @Id", con);
             SqlCommand cleanupAddress = new("delete from _Address where id = @AddressId", con);
 
             //Act
@@ -332,7 +315,7 @@ namespace Tests
             int personId = (int)cmdInsertPerson.ExecuteScalar();
             cleanupPerson.Parameters.AddWithValue("@Id", personId);
 
-            Customer person = new Member() 
+            Customer person = new Customer() 
             {
                 id = personId, 
                 firstName = "test", 
@@ -348,7 +331,8 @@ namespace Tests
 
             //Assert
             Assert.True(updatedPerson != null, "Couldn't find person");
-            Assert.False(updatedPerson.firstName == "update", "Person was not updated");
+            Assert.False(updatedPerson.lastName.Equals("update"), "Person was not updated");
+            Assert.True(updatedPerson.lastName.Equals("updated"), "Person was not updated correctly");
 
             //Cleanup
             cleanupPerson.ExecuteNonQuery();

@@ -21,8 +21,8 @@ namespace DataAccess
         public bool Create(Reservation reservation)
         {
             bool created = false;
-            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_id, customer_id) " +
-                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtId @CustomerId)";
+            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) " +
+                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtId, @CustomerId)";
             using (SqlConnection con = new(conStr.ConnectionString))
             { 
                 SqlCommand cmdReservation = new(cmdTextCreate, con);
@@ -42,7 +42,7 @@ namespace DataAccess
                 }
                 catch (SqlException)
                 {
-                    throw new NotImplementedException(); //TODO SKRIV throw ting
+                    throw; //TODO SKRIV throw ting
                 }
             }
             return created;
@@ -118,7 +118,7 @@ namespace DataAccess
                 }
                 catch
                 {
-                    throw new NotImplementedException();
+                    throw;
                 }
             }
             return reservation;
@@ -127,18 +127,26 @@ namespace DataAccess
         public bool Update(Reservation reservation)
         {
             bool updated = false;
-            string cmdTextUpdate = "update Reservation set start_time = @StartTime, court_id = @CourtId, shuttle_reserved = @ShuttleReserved, " +
-                "end_time = @EndTime, customer_id = @CustomerId " +
-                "number_of_rackets = @NumberOfRackets, where id = @Id";
+            string cmdTextUpdate = "update Reservation set " +
+                "creation_date = @CreationDate, " +
+                "start_time = @StartTime, " +
+                "end_time = @EndTime, " +
+                "shuttle_reserved = @ShuttleReserved, " +
+                "number_of_rackets = @NumberOfRackets, " +
+                "customer_id = @CustomerId, " +
+                "court_court_no = @CourtId " +
+                "where id = @Id";
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdUpdate = new(cmdTextUpdate, con);
+                cmdUpdate.Parameters.AddWithValue("@CreationDate", reservation.creationDate);
                 cmdUpdate.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                cmdUpdate.Parameters.AddWithValue("@EndTime", reservation.endTime);
                 cmdUpdate.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved ? 1 : 0);
                 cmdUpdate.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
-                cmdUpdate.Parameters.AddWithValue("@EndTime", reservation.endTime);
-                cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
                 cmdUpdate.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
+                cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
+                
                 //cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
                 cmdUpdate.Parameters.AddWithValue("@Id", reservation.Id);
@@ -150,7 +158,7 @@ namespace DataAccess
                 }
                 catch (SqlException)
                 {
-                    throw new NotImplementedException(); //TODO SKRIV throw ting
+                    throw; //TODO SKRIV throw ting
                 }
             }
             return updated;
@@ -180,19 +188,13 @@ namespace DataAccess
         {
             Reservation reservation = new();
             reservation.Id = reader.GetInt32(0);
-            reservation.startTime = reader.GetDateTime(1);
-            reservation.shuttleReserved = reader.GetBoolean(2);
+            reservation.creationDate = reader.GetDateTime(1);
+            reservation.startTime = reader.GetDateTime(2);
             reservation.endTime = reader.GetDateTime(3);
-            reservation.court = new Court() { id = reader.GetInt32(4) };
-            reservation.customer = new Customer() {id = reader.GetInt32(5) };
-            try
-            {
-                reservation.customer = new Customer() { id = reader.GetInt32(6) };
-            }
-            catch (Exception)
-            {
-                reservation.customer = null;
-            }
+            reservation.shuttleReserved = reader.GetBoolean(4);
+            reservation.numberOfRackets = reader.GetInt32(5);
+            reservation.court = new Court() { id = reader.GetInt32(6) };
+            reservation.customer = new Customer() {id = reader.GetInt32(7) };
             
             return reservation;
         }
