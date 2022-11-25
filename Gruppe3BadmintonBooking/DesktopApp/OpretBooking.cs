@@ -20,7 +20,8 @@ namespace DesktopApp
     {
         private SqlConnectionStringBuilder conStr;
 
-        DateTime dt;
+        DateTime st;
+        DateTime et;
         string fromTime;
         private string hal = "";
         private string bane = "";
@@ -44,16 +45,16 @@ namespace DesktopApp
             //dt = dt.Date + ts;
             if (comboKlok.SelectedIndex > -1 && !hal.Equals("") && !bane.Equals(""))
             {
-                dt = monthCalendarOverview.SelectionStart;
+                st = monthCalendarOverview.SelectionStart;
                 ts = TimeSpan.Parse((string)comboKlok.SelectedItem);
-                dt = dt.Date + ts;
+                st = st.Date + ts;
                 this.Hide();
-                BookingInfo bookingInfo = new BookingInfo(dt, hal, bane);
+                BookingInfo bookingInfo = new BookingInfo(st, hal, bane);
                 bookingInfo.ShowDialog();
 
                 Reservation reservation = new Reservation();
-                reservation.dateTime = dt;
-                reservation.fromTime = TimeSpan.Parse(fromTime);
+                reservation.startTime = st;
+                reservation.endTime = et;
                 
             }
             else
@@ -94,13 +95,13 @@ namespace DesktopApp
         {
 
             dataGridViewCourts.Rows.Clear();
-            dataGridViewCourts.ColumnCount = 2;
-            dataGridViewCourts.Columns[0].Name = "Hal nummer:";
-            dataGridViewCourts.Columns[1].Name = "Ledige baner:";
+            dataGridViewCourts.ColumnCount = 1;
+            //dataGridViewCourts.Columns[0].Name = "Hal nummer:";
+            dataGridViewCourts.Columns[0].Name = "Ledige baner:";
             //[] row = new string[] { "1", "3" };
 
             courts.ToList().ForEach(court => {
-                string[] row = new string[] { court.id.ToString(), court.hallNo.ToString() };
+                string[] row = new string[] { court.id.ToString()/*, court.hallNo.ToString()*/ };
                 dataGridViewCourts.Rows.Add(row);
                 }
             );
