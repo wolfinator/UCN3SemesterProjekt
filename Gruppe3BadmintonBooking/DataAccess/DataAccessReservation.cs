@@ -127,18 +127,19 @@ namespace DataAccess
         public bool Update(Reservation reservation)
         {
             bool updated = false;
-            string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipment, " +
-                "from_time = @FromTime, customer_id = @CustomerId, employee_id = @EmployeeId " +
-                "where id = @Id";
+            string cmdTextUpdate = "update Reservation set start_time = @StartTime, court_id = @CourtId, shuttle_reserved = @ShuttleReserved, " +
+                "end_time = @EndTime, customer_id = @CustomerId " +
+                "number_of_rackets = @NumberOfRackets, where id = @Id";
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdUpdate = new(cmdTextUpdate, con);
-                cmdUpdate.Parameters.AddWithValue("@DateTime", reservation.dateTime);
-                cmdUpdate.Parameters.AddWithValue("@IsEquipment", reservation.shuttleReserved ? 1 : 0);
-                cmdUpdate.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+                cmdUpdate.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                cmdUpdate.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved ? 1 : 0);
+                cmdUpdate.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
+                cmdUpdate.Parameters.AddWithValue("@EndTime", reservation.endTime);
                 cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
                 cmdUpdate.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
-                cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
+                //cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
                 cmdUpdate.Parameters.AddWithValue("@Id", reservation.Id);
 
@@ -179,18 +180,18 @@ namespace DataAccess
         {
             Reservation reservation = new();
             reservation.Id = reader.GetInt32(0);
-            reservation.dateTime = reader.GetDateTime(1);
+            reservation.startTime = reader.GetDateTime(1);
             reservation.shuttleReserved = reader.GetBoolean(2);
-            reservation.fromTime = reader.GetTimeSpan(3);
+            reservation.endTime = reader.GetDateTime(3);
             reservation.court = new Court() { id = reader.GetInt32(4) };
             reservation.customer = new Customer() {id = reader.GetInt32(5) };
             try
             {
-                reservation.employee = new Employee() { id = reader.GetInt32(6) };
+                reservation.customer = new Customer() { id = reader.GetInt32(6) };
             }
             catch (Exception)
             {
-                reservation.employee = null;
+                reservation.customer = null;
             }
             
             return reservation;
