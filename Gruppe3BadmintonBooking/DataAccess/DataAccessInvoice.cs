@@ -60,9 +60,9 @@ namespace DataAccess
             List<Invoice> list = new List<Invoice>();
 
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.is_equipment, Court.id, Person.f_name" +
-                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
-                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id"; // AND Reservation.employee_id = Person.id";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
+                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.reservation_id = Reservation.id " +
+                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Customer.id"; // AND Reservation.employee_id = Person.id";
             SqlDataReader reader = cmd.ExecuteReader();
 
 
@@ -107,8 +107,8 @@ namespace DataAccess
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.is_equipment, Court.id, Person.f_name" +
-                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.id = @id";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
+                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.id = @id";
             cmd.Parameters.AddWithValue("id", id);
             SqlDataReader reader = cmd.ExecuteReader();
 

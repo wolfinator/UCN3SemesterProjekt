@@ -69,13 +69,13 @@ namespace Tests
             zipcode = "test"
         };
 
-        private DataAccessPerson dataAccess = new();
+        private DataAccessCustomer dataAccess = new();
 
         [Fact]
         public void TestGetPersonType()
         {
             //Arrange
-            DataAccessPerson dataAccessPerson = new();
+            DataAccessCustomer dataAccessPerson = new();
 
             Customer employee = new Employee();
             Customer guest = new Guest();
