@@ -17,14 +17,16 @@ namespace Tests
             /*
             //Arrange
             DataAccessInvoice dataAccessInvoice = new();
-            //Invoice invoice = new() { totalPrice = 200, courtNo = 5, dateTime = DateTime.Now,orderNo = 1001,  
-                                      //name = "Karen Blixen", phoneNo = "302229982", employee = new Employee(), reservation = new Reservation()};
+            Invoice invoice = new() { totalPrice = 200, courtNo = 5, dateTime = DateTime.Now,orderNo = 1001,  
+                                      name = "Karen Blixen", phoneNo = "302229982", employee = new Employee(), reservation = new Reservation()};
          
             SqlConnection con = new(Connection.conStr.ConnectionString);
             //SqlCommand cmd = new(select * from Invoice);
 
             //Act
-           // dataAccessInvoice.Create(invoice);
+            dataAccessInvoice.Create(invoice);
+            
+
             
 
             //Assert

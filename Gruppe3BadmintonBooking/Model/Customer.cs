@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Person
+    public class Customer
     {
         public int id { get; set; }
         public String firstName { get; set; }
@@ -17,6 +17,7 @@ namespace Model
         public String houseNo { get; set; }
         public String zipcode { get; set; }
         public String address { get { return $"{street} {houseNo}, {zipcode}"; } }
-        
+        public List<Reservation> reservations { get; set; }
+
     }
 }

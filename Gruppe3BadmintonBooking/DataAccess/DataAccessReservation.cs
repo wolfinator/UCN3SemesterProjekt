@@ -21,17 +21,19 @@ namespace DataAccess
         public bool Create(Reservation reservation)
         {
             bool created = false;
-            string cmdTextCreate = "insert into Reservation(date_time, is_equipment, from_time, court_id, customer_id, employee_id) " +
-                                            "values (@DateTime, @IsEquipment, @FromTime, @CourtId, @CustomerId, @EmployeeId)";
+            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_id, customer_id) " +
+                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtId @CustomerId)";
             using (SqlConnection con = new(conStr.ConnectionString))
             { 
                 SqlCommand cmdReservation = new(cmdTextCreate, con);
-                cmdReservation.Parameters.AddWithValue("@DateTime", reservation.dateTime);
-                cmdReservation.Parameters.AddWithValue("@IsEquipment", reservation.isEquipment);
-                cmdReservation.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+                cmdReservation.Parameters.AddWithValue("@CreationTime", reservation.creationDate);
+                cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                cmdReservation.Parameters.AddWithValue("@EndTime", reservation.endTime);
+                cmdReservation.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved);
+                cmdReservation.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
                 cmdReservation.Parameters.AddWithValue("@CourtId", reservation.courtNo);
                 cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
-                cmdReservation.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
+                //cmdReservation.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
                 con.Open();
                 try
@@ -60,9 +62,9 @@ namespace DataAccess
                 {
                     deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
-                    throw new NotImplementedException(); //TODO SKRIV throw ting
+                    throw; //TODO SKRIV throw ting
                 }
             }
             return deleted;
@@ -88,6 +90,13 @@ namespace DataAccess
                 }
             }
             return list;
+        }
+
+        public IEnumerable<Reservation> GetAllByDate()
+        {
+            string cmdTextGetByDate = "select * from Reservation where";
+            IEnumerable<Reservation> list = null;
+                return null;
         }
 
         public Reservation GetById(int id)
@@ -118,18 +127,19 @@ namespace DataAccess
         public bool Update(Reservation reservation)
         {
             bool updated = false;
-            string cmdTextUpdate = "update Reservation set date_time = @DateTime, court_id = @CourtId, is_equipment = @IsEquipment, " +
-                "from_time = @FromTime, customer_id = @CustomerId, employee_id = @EmployeeId " +
-                "where id = @Id";
+            string cmdTextUpdate = "update Reservation set start_time = @StartTime, court_id = @CourtId, shuttle_reserved = @ShuttleReserved, " +
+                "end_time = @EndTime, customer_id = @CustomerId " +
+                "number_of_rackets = @NumberOfRackets, where id = @Id";
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 SqlCommand cmdUpdate = new(cmdTextUpdate, con);
-                cmdUpdate.Parameters.AddWithValue("@DateTime", reservation.dateTime);
-                cmdUpdate.Parameters.AddWithValue("@IsEquipment", reservation.isEquipment ? 1 : 0);
-                cmdUpdate.Parameters.AddWithValue("@FromTime", reservation.fromTime);
+                cmdUpdate.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                cmdUpdate.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved ? 1 : 0);
+                cmdUpdate.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
+                cmdUpdate.Parameters.AddWithValue("@EndTime", reservation.endTime);
                 cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
                 cmdUpdate.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
-                cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
+                //cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
                 cmdUpdate.Parameters.AddWithValue("@Id", reservation.Id);
 
@@ -170,18 +180,18 @@ namespace DataAccess
         {
             Reservation reservation = new();
             reservation.Id = reader.GetInt32(0);
-            reservation.dateTime = reader.GetDateTime(1);
-            reservation.isEquipment = reader.GetBoolean(2);
-            reservation.fromTime = reader.GetTimeSpan(3);
+            reservation.startTime = reader.GetDateTime(1);
+            reservation.shuttleReserved = reader.GetBoolean(2);
+            reservation.endTime = reader.GetDateTime(3);
             reservation.court = new Court() { id = reader.GetInt32(4) };
-            reservation.customer = new Person() {id = reader.GetInt32(5) };
+            reservation.customer = new Customer() {id = reader.GetInt32(5) };
             try
             {
-                reservation.employee = new Employee() { id = reader.GetInt32(6) };
+                reservation.customer = new Customer() { id = reader.GetInt32(6) };
             }
             catch (Exception)
             {
-                reservation.employee = null;
+                reservation.customer = null;
             }
             
             return reservation;

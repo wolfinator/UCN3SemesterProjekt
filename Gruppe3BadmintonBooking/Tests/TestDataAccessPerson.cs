@@ -69,18 +69,18 @@ namespace Tests
             zipcode = "test"
         };
 
-        private DataAccessPerson dataAccess = new();
+        private DataAccessCustomer dataAccess = new();
 
         [Fact]
         public void TestGetPersonType()
         {
             //Arrange
-            DataAccessPerson dataAccessPerson = new();
+            DataAccessCustomer dataAccessPerson = new();
 
-            Person employee = new Employee();
-            Person guest = new Guest();
-            Person member = new Member();
-            Person person = new Person();
+            Customer employee = new Employee();
+            Customer guest = new Guest();
+            Customer member = new Member();
+            Customer person = new Customer();
 
             int expectedEmployee = 0;
             int expectedGuest = 1;
@@ -184,9 +184,9 @@ namespace Tests
             SqlCommand cmdCheckDeletedAddress = new("select * from _Address where street = 'test' and house_no = '9'", con);
 
             //Act
-            int addressId = (int) cmdInsertAddress.ExecuteScalar();
+            int addressId = (int)cmdInsertAddress.ExecuteScalar();
             cmdInsertPerson.Parameters.AddWithValue("@Id", addressId);
-            int personId = (int) cmdInsertPerson.ExecuteScalar();
+            int personId = (int)cmdInsertPerson.ExecuteScalar();
             bool deleted = dataAccess.DeleteById(personId);
 
             SqlDataReader reader = cmdCheckDeletedPerson.ExecuteReader();
@@ -248,7 +248,7 @@ namespace Tests
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             int personId = (int)cmdInsertPerson.ExecuteScalar();
 
-            Person person = dataAccess.GetById(personId);
+            Customer person = dataAccess.GetById(personId);
 
             //Assert
             Assert.Equal("test", person.firstName);
@@ -275,7 +275,7 @@ namespace Tests
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             int personId = (int)cmdInsertPerson.ExecuteScalar();
 
-            Person person = dataAccess.GetById(-1);
+            Customer person = dataAccess.GetById(-1);
 
             //Assert
             Assert.Null(person);
@@ -296,7 +296,7 @@ namespace Tests
             SqlCommand cleanupAddress = new("delete from _Address where id = @AddressId", con);
 
             //Act
-            int addressId = (int) cmdInsertAddress.ExecuteScalar();
+            int addressId = (int)cmdInsertAddress.ExecuteScalar();
             cleanupAddress.Parameters.AddWithValue("@AddressId", addressId);
             for (int i = 0; i <= 2; i++)
             {
@@ -306,7 +306,7 @@ namespace Tests
                 cmdInsertPerson.ExecuteNonQuery();
             }
 
-            List<Person> persons = dataAccess.GetAll().ToList();
+            List<Customer> persons = dataAccess.GetAll().ToList();
 
             //Assert
             Assert.True(persons.Where(person => person.lastName == "getAll").Count() == 3);
@@ -332,7 +332,7 @@ namespace Tests
             int personId = (int)cmdInsertPerson.ExecuteScalar();
             cleanupPerson.Parameters.AddWithValue("@Id", personId);
 
-            Person person = new Member() 
+            Customer person = new Member() 
             {
                 id = personId, 
                 firstName = "test", 
@@ -344,7 +344,7 @@ namespace Tests
                 zipcode = "test" 
             };
             dataAccess.Update(person);
-            Person updatedPerson = dataAccess.GetById(personId);
+            Customer updatedPerson = dataAccess.GetById(personId);
 
             //Assert
             Assert.True(updatedPerson != null, "Couldn't find person");

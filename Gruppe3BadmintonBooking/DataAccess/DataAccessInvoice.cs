@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,7 @@ namespace DataAccess
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
             cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
 
+
             int rowsAffected = cmd.ExecuteNonQuery();
 
             return rowsAffected == 1;
@@ -52,17 +53,19 @@ namespace DataAccess
         {
             throw new NotImplementedException();
 
+
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
-                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.reservation_id = Reservation.id " +
-                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Person.id AND Reservation.employee_id = Person.id";
+            List<Invoice> list = new List<Invoice>();
 
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
+                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.reservation_id = Reservation.id " +
+                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Customer.id"; // AND Reservation.employee_id = Person.id";
             SqlDataReader reader = cmd.ExecuteReader();
 
-            List<Invoice> list = new List<Invoice>();
+
 
             while (reader.Read())
             {
@@ -73,22 +76,19 @@ namespace DataAccess
 
                     reservation = new Reservation()
                     {
-                        dateTime = reader.GetDateTime(1),
-                        isEquipment = reader.GetBoolean(2),
-                        //Todo get fromtime Fra reservation
-                        // fromTime = reader.GetTimeSpan(3).
-
+                        startTime = reader.GetDateTime(1),
+                        endTime = reader.GetDateTime(2),
+                        shuttleReserved = reader.GetBoolean(3),
 
 
                         court = new Court()
                         {
                             id = reader.GetInt32(4),
-                            hallNo = reader.GetInt32(5),
                         },
 
-                        customer = new Person()
+                        customer = new Customer()
                         {
-                            firstName = reader.GetString(6),
+                            firstName = reader.GetString(5),
                         }
                     }
                 };
@@ -97,21 +97,18 @@ namespace DataAccess
                 list.Add(invoice);
             }
 
+
             con.Close();
 
             return list;
         }
-
-
-
-
-        public Invoice? GetById(int id)
+        public Invoice GetById(int id)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.date_time, Reservation.is_equipment, Reservation.from_time, Court.id, Court.hall_no, Person.f_name" +
-                              " FROM Invoice, Reservation, Court, Person WHERE Invoice.id = @id";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
+                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.id = @id";
             cmd.Parameters.AddWithValue("id", id);
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -124,22 +121,18 @@ namespace DataAccess
 
                     reservation = new Reservation()
                     {
-                        dateTime = reader.GetDateTime(1),
-                        isEquipment = reader.GetBoolean(2),
-                        //Todo get fromtime Fra reservation
-                        // fromTime = reader.GetTimeSpan(3).
-
-
+                        startTime = reader.GetDateTime(1),
+                        endTime= reader.GetDateTime(2),
+                        shuttleReserved = reader.GetBoolean(3),
 
                         court = new Court()
                         {
                             id = reader.GetInt32(4),
-                            hallNo = reader.GetInt32(5),
                         },
 
-                        customer = new Person()
+                        customer = new Customer()
                         {
-                            firstName = reader.GetString(6),
+                            firstName = reader.GetString(5),
                         }
                     }
                 };
@@ -147,7 +140,6 @@ namespace DataAccess
             }
             return null;
         }
-
 
         public bool Update(Invoice entity)
         {
@@ -160,8 +152,7 @@ namespace DataAccess
 
             return rowsAffected == 1;
 
-
         }
-
     }
 }
+

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace RestSharpClient
 {
-    public interface IDataAccess<T>
+    public interface IServiceDatabase<T>
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
         bool Update(T entity);
         bool DeleteById(int id);
         bool Create(T entity);
-      
     }
 }
