@@ -1,7 +1,8 @@
+drop table if exists timeslot
 drop table if exists invoice;
 drop table if exists reservation;
 drop table if exists court;
-drop table if exists person;
+drop table if exists customer;
 drop table if exists _address;
 drop table if exists cityzip;
 
@@ -19,13 +20,12 @@ city_zipcode char(4) not null foreign key references cityzip(zipcode),
 primary key (id)
 )
 
-create table Person(
+create table Customer(
 id int identity(1,1) not null,
 f_name nvarchar(30), 
 l_name nvarchar(30),
 email nvarchar(50),
 phone_no char(8),
-_role nvarchar(20),
 address_id int not null foreign key references _Address(id),
 primary key (id)
 )
@@ -43,8 +43,7 @@ end_time datetime,
 shuttle_reserved bit,
 number_of_rackets int,
 court_court_no int not null foreign key references court(court_no),
-customer_id int not null foreign key references person(id),
-employee_id int foreign key references person(id),
+customer_id int not null foreign key references customer(id),
 primary key(id)
 )
 
@@ -55,3 +54,7 @@ reservation_id int not null foreign key references reservation(id),
 primary key(id)
 )
 
+create table TimeSlot(
+time_slot time not null,
+primary key(time_slot)
+)
