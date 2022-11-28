@@ -11,9 +11,9 @@ namespace WebApi.Controllers
     {
 
         private readonly ILogger<CustomersController> _logger;
-        private readonly IDataAccess<Customer> _customerDb;
+        private readonly IDaoCustomer _customerDb;
 
-        public CustomersController(ILogger<CustomersController> logger, IDataAccess<Customer> personDb)
+        public CustomersController(ILogger<CustomersController> logger, IDaoCustomer personDb)
         {
             _logger = logger;
             _customerDb = personDb;
