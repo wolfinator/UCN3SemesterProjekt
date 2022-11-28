@@ -1,9 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
 using Model;
+using System.Diagnostics;
 
 namespace DataAccess
 {
-    public class DataAccessCustomer : IDataAccess<Customer>
+    public class DataAccessCustomer : IDaoCustomer
     {
         private SqlConnectionStringBuilder conStr;
         public DataAccessCustomer()
@@ -33,10 +34,10 @@ namespace DataAccess
             // int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
-            string cmdTextCustomer = "insert into Customer (f_name, l_name, email, phone_no, address_id) " +
-                                   "values (@Fname, @Lname, @Email, @PhoneNo, @AddressId)";
-            string cmdTextAddress = "insert into _Address (street, house_no, city_zipcode) output INSERTED.ID " +
-                                    "values (@Street, @HouseNo, @CityZipcode)";
+            string cmdTextCustomer = "insert into Customer (f_name, l_name, email, phone_no) output INSERTED.ID " +
+                                   "values (@Fname, @Lname, @Email, @PhoneNo)";
+            string cmdTextAddress = "insert into _Address (street, house_no, city_zipcode, customer_id) " +
+                                    "values (@Street, @HouseNo, @CityZipcode, @CustomerId)";
             SqlCommand cmdCustomer = new(cmdTextCustomer, con);
             SqlCommand cmdAddress = new(cmdTextAddress, con);
 
@@ -57,9 +58,9 @@ namespace DataAccess
                 {
                     cmdCustomer.Transaction = trans;
                     cmdAddress.Transaction = trans;
-                    int addressId = (int)cmdAddress.ExecuteScalar();
-                    cmdCustomer.Parameters.AddWithValue("@AddressId", addressId);
-                    created = cmdCustomer.ExecuteNonQuery() == 1;
+                    int customerId = (int)cmdCustomer.ExecuteScalar();
+                    cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
+                    created = cmdAddress.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
                 {
@@ -78,30 +79,24 @@ namespace DataAccess
             bool isDeleted = false;
 
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextDelete = "delete from customer output deleted.address_id where id = @Id";
-            string cmdTextDeleteAddress = "delete from _address where id = @AddressId";
+            string cmdTextDelete = "delete from customer where id = @Id";
+            //string cmdTextDeleteAddress = "delete from _address where id = @AddressId";
+            //string cmdTextDeleteReservations = "delete from reservation where customer_id = @CustomerId";
             SqlCommand cmdDelete = new(cmdTextDelete, con);
-            cmdDelete.Parameters.AddWithValue("@Id", id);
 
             con.Open();
             try
             {
                 // Skal nok ændres hvis vi laver cascade på person og _address, er lidt kringlet
-                var addressId = cmdDelete.ExecuteScalar();
-                //int addressId = (int) cmdDelete.ExecuteScalar();
-                if (addressId != null)
-                {
-                    isDeleted = true;
-                    cmdDelete.CommandText = cmdTextDeleteAddress;
-                    cmdDelete.Parameters.AddWithValue("@AddressId", addressId);
-                    isDeleted = isDeleted && cmdDelete.ExecuteNonQuery() == 1;
-                }
+                cmdDelete.Parameters.AddWithValue("@Id", id);
+                isDeleted = cmdDelete.ExecuteNonQuery() >= 1;
             }
             catch (SqlException)
             {
                 //TODO handle exception
                 throw;
             }
+
             con.Close();
             return isDeleted;
         }
@@ -110,7 +105,7 @@ namespace DataAccess
             List<Customer> customers = null;
 
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGelAll = "select * from Customer p, _Address a where p.address_id = a.id";
+            string cmdTextGelAll = "select * from Customer p, _Address a where p.id = a.customer_id";
             SqlCommand cmdGetAll = new(cmdTextGelAll, con);
 
             con.Open();
@@ -131,7 +126,7 @@ namespace DataAccess
         {
             Customer customer = null;
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGetById = "select * from Customer p, _Address a where p.address_id = a.id and p.id = @Id";
+            string cmdTextGetById = "select * from Customer p, _Address a where p.id = a.customer_id and p.id = @Id";
             SqlCommand cmdGetById = new(cmdTextGetById, con);
 
             cmdGetById.Parameters.AddWithValue("@Id", id);
@@ -157,9 +152,17 @@ namespace DataAccess
 
             //int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextUpdateCustomer = "update customer set f_name = @Fname, l_name = @Lname, email = @Email, phone_no = @PhoneNo where id = @Id";
-            string cmdTextUpdateAddress = "update _address set street = @Street, house_no = @HouseNo, city_zipcode = @CityZipcode " +
-                "from Customer c, _Address a where a.id = c.address_id and c.id = @Id";
+            string cmdTextUpdateCustomer = "update customer set " +
+                "f_name = @Fname, " +
+                "l_name = @Lname, " +
+                "email = @Email, " +
+                "phone_no = @PhoneNo " +
+                "where id = @Id";
+            string cmdTextUpdateAddress = "update _address set " +
+                "street = @Street, " +
+                "house_no = @HouseNo, " +
+                "city_zipcode = @CityZipcode " +
+                "where customer_id = @CustomerId";
             SqlCommand cmdUpdateCustomer = new(cmdTextUpdateCustomer, con);
             SqlCommand cmdUpdateAddress = new(cmdTextUpdateAddress, con);
 
@@ -173,7 +176,7 @@ namespace DataAccess
             cmdUpdateAddress.Parameters.AddWithValue("@Street", entity.street);
             cmdUpdateAddress.Parameters.AddWithValue("@HouseNo", entity.houseNo);
             cmdUpdateAddress.Parameters.AddWithValue("@CityZipcode", entity.zipcode);
-            cmdUpdateAddress.Parameters.AddWithValue("@Id", entity.id);
+            cmdUpdateAddress.Parameters.AddWithValue("@CustomerId", entity.id);
 
             con.Open();
             using (var trans = con.BeginTransaction())
@@ -224,24 +227,7 @@ namespace DataAccess
         private Customer BuildObject(SqlDataReader reader)
         {
             Customer customer = null;
-            //try
-            //{
-            //    int personType = int.Parse(reader.GetString(5));
-            //switch (personType)
-            //{
-            //            case 0:
-            //                person = new Employee();
-            //                break;
-            //            case 1:
-            //                person = new Guest();
-            //                break;
-            //            case 2:
-            //                person = new Member();
-            //                break;
-            //            default:
-            //                throw new NotImplementedException(); // Todo handle exception
-            //                break;
-            //}
+
             try
             {
                 customer = new Customer();
@@ -250,9 +236,9 @@ namespace DataAccess
                 customer.lastName = reader.GetString(2);
                 customer.email = reader.GetString(3);
                 customer.phoneNo = reader.GetString(4);
-                customer.street = reader.GetString(7);
-                customer.houseNo = reader.GetString(8);
-                customer.zipcode = reader.GetString(9);
+                customer.street = reader.GetString(6);
+                customer.houseNo = reader.GetString(7);
+                customer.zipcode = reader.GetString(8);
             }
             catch (Exception)
             {
