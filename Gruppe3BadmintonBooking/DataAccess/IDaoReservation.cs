@@ -10,5 +10,7 @@ namespace DataAccess
     public interface IDaoReservation : IDataAccess<Reservation>
     {
         public bool DeleteAllByCustomerId(int customerId);
+
+        public List<object[]> GetAvailableTimes(DateTime date);
     }
 }
