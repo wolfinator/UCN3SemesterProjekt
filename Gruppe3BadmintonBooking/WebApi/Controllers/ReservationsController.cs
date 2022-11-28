@@ -11,9 +11,9 @@ namespace WebApi.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly ILogger<ReservationsController> _logger;
-        private readonly IDataAccess<Reservation> _reservationDb;
+        private readonly IDaoReservation _reservationDb;
 
-        public ReservationsController(ILogger<ReservationsController> logger, IDataAccess<Reservation> reservationDb)
+        public ReservationsController(ILogger<ReservationsController> logger, IDaoReservation reservationDb)
         {
             _logger = logger;
             _reservationDb = reservationDb;

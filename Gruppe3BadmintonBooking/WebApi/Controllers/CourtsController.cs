@@ -36,6 +36,7 @@ namespace WebApi.Controllers
             return _courtDb.GetById(id);
         }
 
+        /*
         // POST api/<CourtsController>
         [HttpPost]
         public void Post([FromBody] Court court)
@@ -80,5 +81,6 @@ namespace WebApi.Controllers
 
             }
         }
+        */
     }
 }
