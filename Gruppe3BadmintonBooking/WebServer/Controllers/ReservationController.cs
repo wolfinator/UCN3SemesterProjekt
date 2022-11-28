@@ -7,16 +7,14 @@ namespace WebServer.Controllers;
 public class ReservationController : Controller
 {
     static List<Reservation> _reservations = new List<Reservation>() {
-            new Reservation() {Id=1, fromTime = TimeSpan.FromHours(1),
-                isEquipment=true },
-            new Reservation() {Id=2, fromTime = TimeSpan.FromHours(2),
-                isEquipment=false },
-            new Reservation() {Id=3, fromTime = TimeSpan.FromHours(1),
-                isEquipment=true }
+            new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
+                endTime = DateTime.Parse("2022-02-03 14:00:00"), shuttleReserved = true,
+                numberOfRackets = 3},
+            new Reservation() {Id=2, startTime = DateTime.Parse("2022-02-03 15:00:00"),
+                endTime = DateTime.Parse("2022-02-03 16:00:00"), shuttleReserved = false,
+                numberOfRackets = 2}
+};
 
-
-
-        };
     public ActionResult Index() => View(_reservations);
 
     public ActionResult Details(int id)
@@ -58,8 +56,8 @@ public class ReservationController : Controller
         try
         {
             var reservation = _reservations.First(reservation => reservation.Id == editedReservation.Id);
-            reservation.fromTime = editedReservation.fromTime;
-            reservation.isEquipment = editedReservation.isEquipment;
+            reservation.startTime = editedReservation.startTime;
+            reservation.shuttleReserved = editedReservation.shuttleReserved;
             return RedirectToAction(nameof(Index));
         }
         catch

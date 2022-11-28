@@ -14,10 +14,10 @@
         <tr>
 
             <th>
-                @Html.DisplayNameFor(model => model.fromTime)
+                @Html.DisplayNameFor(model => model.startTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.isEquipment)
+                @Html.DisplayNameFor(model => model.shuttleReserved)
             </th>
            
 
@@ -29,10 +29,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.fromTime)
+                    @Html.DisplayFor(modelItem => item.startTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.isEquipment)
+                    @Html.DisplayFor(modelItem => item.shuttleReserved)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { item.Id }) |

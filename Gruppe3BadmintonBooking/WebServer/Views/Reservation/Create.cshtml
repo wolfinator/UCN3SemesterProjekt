@@ -14,19 +14,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="dateTime" class="control-label">Dato</label>
-                <input type="date" asp-for="dateTime" class="form-control" />
-                <span asp-validation-for="dateTime" class="text-danger"></span>
+                <label asp-for="startTime" class="control-label">Dato</label>
+                <input type="date" asp-for="startTime" class="form-control" />
+                <span asp-validation-for="startTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="isEquipment" class="control-label">Fjerbolde</label>
-                <input asp-for="isEquipment" type="checkbox" />
-                <span asp-validation-for="isEquipment" class="text-danger"></span>
+                <label asp-for="shuttleReserved" class="control-label">Fjerbolde</label>
+                <input asp-for="shuttleReserved" type="checkbox" />
+                <span asp-validation-for="shuttleReserved" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="isEquipment" class="control-label">Antal ketsjere</label>
-                <input asp-for="isEquipment"/>
-                <span asp-validation-for="isEquipment" class="text-danger"></span>
+                <label asp-for="numberOfRackets" class="control-label">Antal ketsjere</label>
+                <input asp-for="numberOfRackets"/>
+                <span asp-validation-for="numberOfRackets" class="text-danger"></span>
             </div>
 
             <div class="choose-court">
