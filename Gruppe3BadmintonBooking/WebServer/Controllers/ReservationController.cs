@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
 namespace WebServer.Controllers;
+
+[Authorize]
 
 public class ReservationController : Controller
 {
@@ -29,7 +32,26 @@ public class ReservationController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(Reservation reservation)
+    [ActionName("SelectDate")]
+    public ActionResult Create1(Reservation reservation)
+    {
+        //try
+        //{
+        //    reservation.Id = _reservations.Max(reservation => reservation.Id) + 1;
+        //    _reservations.Add(reservation);
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+        //catch
+        {
+            return View();
+        }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [ActionName("SelectHour")]
+    public ActionResult Create2(Reservation reservation)
     {
         try
         {

@@ -10,14 +10,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="SelectDate">
+        <form asp-action="SelectHour">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="startTime" class="control-label">Dato</label>
                 <input type="date" asp-for="startTime" class="form-control" />
                 <span asp-validation-for="startTime" class="text-danger"></span>
-            </div>
+            </div>*@
+            "vælg tidspunkt"
 @*            <div class="form-group">
                 <label asp-for="shuttleReserved" class="control-label">Fjerbolde</label>
                 <input asp-for="shuttleReserved" type="checkbox" />
