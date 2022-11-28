@@ -53,7 +53,7 @@ namespace WebApi.Controllers
         public ActionResult<Customer> PostPerson(Customer person)
         {
             bool created = false;
-            person = new Guest()
+            person = new Customer()
             {
                 firstName = person.firstName,
                 lastName = person.lastName,
@@ -79,7 +79,7 @@ namespace WebApi.Controllers
         public IActionResult PutPerson(int id, Customer updatedPerson)
         {
             bool updated = false;
-            updatedPerson = new Guest()
+            updatedPerson = new Customer()
             {
                 id = updatedPerson.id,
                 firstName = updatedPerson.firstName,
