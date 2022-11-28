@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        @using (Html.BeginForm())
+        @using (@Html.BeginForm())
         {
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -25,7 +25,10 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <a href="http://localhost:36670/Reservation/Create">
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </a>
+
             </div>
         }
     </div>
