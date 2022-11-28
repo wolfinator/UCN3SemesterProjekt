@@ -59,7 +59,7 @@ namespace DataAccess
             con.Open();
 
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = " SELECT * FROM Court where court.id = @id";
+            cmd.CommandText = " SELECT * FROM Court where court.court_no = @id";
             cmd.Parameters.AddWithValue("id", id);
             SqlDataReader reader = cmd.ExecuteReader();
 
