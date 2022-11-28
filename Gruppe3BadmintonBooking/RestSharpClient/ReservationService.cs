@@ -16,12 +16,13 @@ namespace RestSharpClient
         public bool Create(Reservation entity)
         {
             _restClient.Post<Reservation>(new RestRequest());
-          
+            return true;
         }
 
         public bool DeleteById(int id)
         {
             _restClient.Delete<Reservation>(new RestRequest());
+            return true;
         }
 
         public IEnumerable<Reservation> GetAll()
@@ -38,6 +39,7 @@ namespace RestSharpClient
         public bool Update(Reservation entity)
         {
             _restClient.Put<Reservation>(new RestRequest());
+            return true;
         }
     }
 }
