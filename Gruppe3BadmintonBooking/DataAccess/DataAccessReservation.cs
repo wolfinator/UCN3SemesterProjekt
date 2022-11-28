@@ -11,7 +11,7 @@ using Model;
 
 namespace DataAccess
 {
-    public class DataAccessReservation : IDataAccess<Reservation>
+    public class DataAccessReservation : IDaoReservation
     {
         private SqlConnectionStringBuilder conStr;
         public DataAccessReservation()
@@ -197,6 +197,29 @@ namespace DataAccess
             reservation.customer = new Customer() {id = reader.GetInt32(7) };
             
             return reservation;
+        }
+
+        public bool DeleteAllByCustomerId(int customerId)
+        {
+            bool deleted = false;
+            using (SqlConnection con = new(conStr.ConnectionString))
+            {
+                string cmdTextDeleteReservation = "delete from Reservation where customer_id = @CustomerId";
+                SqlCommand cmdDeleteReservation = new(cmdTextDeleteReservation, con);
+                cmdDeleteReservation.Parameters.AddWithValue("@CustomerId", customerId);
+
+                con.Open();
+                try
+                {
+                    deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
+                }
+                catch (SqlException ex)
+                {
+                    
+                    throw; //TODO SKRIV throw ting
+                }
+            }
+            return deleted;
         }
     }
 }
