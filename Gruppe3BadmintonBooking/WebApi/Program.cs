@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IDaoCustomer, DataAccessCustomer>();
 builder.Services.AddSingleton<IDaoReservation, DataAccessReservation>();
 builder.Services.AddSingleton<IDaoInvoice, DataAccessInvoice>();
-builder.Services.AddSingleton<IDataAccess<Court>, DataAccessCourt>();
+builder.Services.AddSingleton<IDaoCourt, DataAccessCourt>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

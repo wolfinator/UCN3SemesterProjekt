@@ -10,11 +10,11 @@ namespace WebApi.Controllers
     [ApiController]
     public class CourtsController : ControllerBase
     {
-        private readonly IDataAccess<Court> _courtDb;
+        private readonly IDaoCourt _courtDb;
         private readonly ILogger<CourtsController> _logger;
 
 
-        public CourtsController(ILogger<CourtsController> logger, IDataAccess<Court> courtDb)
+        public CourtsController(ILogger<CourtsController> logger, IDaoCourt courtDb)
         {
             _logger = logger;
             _courtDb = courtDb;
