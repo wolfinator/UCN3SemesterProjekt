@@ -9,7 +9,7 @@ using Model;
 
 namespace DataAccess
 {
-    public class DataAccessCourt : IDataAccess<Court>
+    public class DataAccessCourt : IDaoCourt
     {
         private SqlConnectionStringBuilder conStr;
         public DataAccessCourt()
