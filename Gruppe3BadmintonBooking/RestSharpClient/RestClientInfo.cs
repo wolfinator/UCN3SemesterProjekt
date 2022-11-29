@@ -8,6 +8,6 @@ namespace RestSharpClient
 {
     internal class RestClientInfo
     {
-        public static string IpAddress = "https://79.171.148.187";
+        public static string IpAddress = "http://79.171.148.187";
     }
 }
