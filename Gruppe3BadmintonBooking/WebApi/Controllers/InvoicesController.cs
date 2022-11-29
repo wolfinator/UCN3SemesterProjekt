@@ -11,9 +11,9 @@ namespace WebApi.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly ILogger<InvoicesController> _logger;
-        private readonly IDataAccess<Invoice> _invoiceDb;
+        private readonly IDaoInvoice _invoiceDb;
 
-        public InvoicesController(ILogger<InvoicesController> logger, IDataAccess<Invoice> invoiceDb)
+        public InvoicesController(ILogger<InvoicesController> logger, IDaoInvoice invoiceDb)
         {
             _logger = logger;
             _invoiceDb = invoiceDb;

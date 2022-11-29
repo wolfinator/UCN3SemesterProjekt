@@ -1,27 +1,29 @@
-﻿using Model;
-using RestSharp;
-using RestSharpClient.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+using Model;
+using RestSharpClient.Interfaces;
 
 namespace RestSharpClient
 {
-    public class InvoiceService : IServiceCrud<Invoice>
+    public class CustomerService : ICustomerService
     {
         private RestSharp.RestClient _restClient;
-
-        public InvoiceService()
+        
+        public CustomerService()
         {
-            _restClient = new($"{RestClientInfo.IpAddress}/api/invoices");
+            _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/Customers");
         }
-        public bool Create(Invoice invoice)
+
+        public bool Create(Customer customer)
         {
             var request = new RestRequest();
-            request.AddJsonBody(invoice);
+            request.AddJsonBody(customer);
             var response = _restClient.Post(request);
+
             return response.IsSuccessStatusCode;
         }
 
@@ -29,25 +31,25 @@ namespace RestSharpClient
         {
             var request = new RestRequest($"{id}");
             var response = _restClient.Delete(request);
-            
             return response.IsSuccessStatusCode;
         }
 
-        public IEnumerable<Invoice> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            return _restClient.Get<IEnumerable<Invoice>>(new RestRequest());
+            return _restClient.Get<IEnumerable<Customer>>(new RestRequest());
         }
 
-        public Invoice GetById(int id)
+        public Customer GetById(int id)
         {
-            return _restClient.Get<Invoice>(new RestRequest($"{id}"));
+            return _restClient.Get<Customer>(new RestRequest($"{id}"));
         }
 
-        public bool Update(Invoice updatedInvoice)
+        public bool Update(Customer customer)
         {
             var request = new RestRequest();
-            request.AddJsonBody(updatedInvoice);
-            var response = _restClient.Post(request);
+            request.AddJsonBody(customer);
+            var response = _restClient.Put(request);
+
             return response.IsSuccessStatusCode;
         }
     }

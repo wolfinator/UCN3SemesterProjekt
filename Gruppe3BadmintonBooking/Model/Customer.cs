@@ -17,7 +17,9 @@ namespace Model
         public String houseNo { get; set; }
         public String zipcode { get; set; }
         public String address { get { return $"{street} {houseNo}, {zipcode}"; } }
-        public List<Reservation> reservations { get; set; }
+        
+        // Commented out until we figure out how to get nested objects to work
+        // public List<Reservation> reservations { get; set; }
 
     }
 }

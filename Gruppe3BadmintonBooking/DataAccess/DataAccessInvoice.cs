@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class DataAccessInvoice : IDataAccess<Invoice>
+    public class DataAccessInvoice : IDaoInvoice
     {
         private SqlConnectionStringBuilder conStr;
 
@@ -51,94 +51,38 @@ namespace DataAccess
 
         public IEnumerable<Invoice> GetAll()
         {
-            throw new NotImplementedException();
-
-
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
 
-            List<Invoice> list = new List<Invoice>();
+            List<Invoice> list = null;
 
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
-                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.reservation_id = Reservation.id " +
-                              "AND Reservation.court_id = Court.id AND Reservation.customer_id = Customer.id"; // AND Reservation.employee_id = Person.id";
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.court_no, Customer.f_name, Reservation.id, Customer.id, Invoice.id " +
+                              "FROM Invoice, Reservation, Court, Customer WHERE Invoice.reservation_id = Reservation.id " +
+                              "AND Reservation.court_court_no = Court.court_no AND Reservation.customer_id = Customer.id"; // AND Reservation.employee_id = Person.id";
             SqlDataReader reader = cmd.ExecuteReader();
 
-
-
-            while (reader.Read())
-            {
-                Invoice invoice = new()
-                {
-                    totalPrice = reader.GetDecimal(0),
-
-
-                    reservation = new Reservation()
-                    {
-                        startTime = reader.GetDateTime(1),
-                        endTime = reader.GetDateTime(2),
-                        shuttleReserved = reader.GetBoolean(3),
-
-
-                        court = new Court()
-                        {
-                            id = reader.GetInt32(4),
-                        },
-
-                        customer = new Customer()
-                        {
-                            firstName = reader.GetString(5),
-                        }
-                    }
-                };
-
-
-                list.Add(invoice);
-            }
-
-
+            list = BuildObjects(reader);
             con.Close();
 
             return list;
         }
         public Invoice GetById(int id)
         {
+            Invoice invoice = null;
+
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.id, Customer.f_name" +
-                              " FROM Invoice, Reservation, Court, Customer WHERE Invoice.id = @id";
-            cmd.Parameters.AddWithValue("id", id);
+            cmd.CommandText = "SELECT Invoice.total_price, Reservation.start_time, Reservation.end_time, Reservation.shuttle_reserved, Court.court_no, Customer.f_name, Reservation.id, Customer.id, Invoice.id " +
+                              "FROM Invoice, Reservation, Court, Customer WHERE Invoice.reservation_id = Reservation.id " +
+                              "AND Reservation.court_court_no = Court.court_no AND Reservation.customer_id = Customer.id and invoice.id = @Id"; // AND Reservation.employee_id = Person.id";
+            cmd.Parameters.AddWithValue("@Id", id);
             SqlDataReader reader = cmd.ExecuteReader();
 
-            if (reader.Read())
-            {
-                Invoice invoice = new()
-                {
-                    totalPrice = reader.GetDecimal(0),
-
-
-                    reservation = new Reservation()
-                    {
-                        startTime = reader.GetDateTime(1),
-                        endTime= reader.GetDateTime(2),
-                        shuttleReserved = reader.GetBoolean(3),
-
-                        court = new Court()
-                        {
-                            id = reader.GetInt32(4),
-                        },
-
-                        customer = new Customer()
-                        {
-                            firstName = reader.GetString(5),
-                        }
-                    }
-                };
-                return invoice;
-            }
-            return null;
+            if (reader.Read()) invoice = BuildObject(reader); 
+            
+            return invoice;
         }
 
         public bool Update(Invoice entity)
@@ -152,6 +96,64 @@ namespace DataAccess
 
             return rowsAffected == 1;
 
+        }
+
+        private List<Invoice>? BuildObjects(SqlDataReader reader)
+        {
+            List<Invoice> invoices = new();
+            try
+            {
+                while (reader.Read())
+                {
+                    Invoice invoice = BuildObject(reader);
+                    invoices.Add(invoice);
+                }
+            }
+            catch (SqlException)
+            {
+                //TODO Handle exception
+                throw;
+            }
+            return invoices;
+        }
+
+        private Invoice BuildObject(SqlDataReader reader)
+        {
+            Invoice invoice = null;
+
+            try
+            {
+                invoice = new()
+                {
+                    id = reader.GetInt32(8),
+                    totalPrice = reader.GetDecimal(0),
+
+
+                    reservation = new Reservation()
+                    {
+                        Id = reader.GetInt32(6),
+                        startTime = reader.GetDateTime(1),
+                        endTime = reader.GetDateTime(2),
+                        shuttleReserved = reader.GetBoolean(3),
+
+                        court = new Court()
+                        {
+                            id = reader.GetInt32(4),
+                        },
+
+                        customer = new Customer()
+                        {
+                            id = reader.GetInt32(7),
+                            firstName = reader.GetString(5),
+                        }
+                    }
+                };
+            }
+            catch (Exception)
+            {
+                // TODO Handle exception
+            }
+            return invoice;
         }
     }
 }
