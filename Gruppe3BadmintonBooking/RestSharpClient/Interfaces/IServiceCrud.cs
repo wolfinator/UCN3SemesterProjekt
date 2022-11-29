@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestSharpClient
+namespace RestSharpClient.Interfaces
 {
-    public interface IServiceDatabase<T>
+    public interface IServiceCrud<T>
     {
         IEnumerable<T> GetAll();
         T GetById(int id);

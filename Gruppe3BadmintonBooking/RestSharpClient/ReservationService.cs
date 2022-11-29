@@ -1,45 +1,53 @@
 ﻿using Model;
 using RestSharp;
+using RestSharpClient.Interfaces;
 
 namespace RestSharpClient
 {
-    public class ReservationService : IServiceDatabase<Reservation>
+    public class ReservationService : IReservationService
     {
 
         private RestSharp.RestClient _restClient;
 
         public ReservationService()
         {
-            _restClient = new RestSharp.RestClient("https://localhost:44325/api/reservations");
+            _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/Reservations");
         }
 
-        public bool Create(Reservation entity)
+        public bool Create(Reservation reservation)
         {
-            _restClient.Post<Reservation>(new RestRequest());
-            return true;
+            var request = new RestRequest();
+            var response = _restClient.Post(new RestRequest().AddJsonBody(reservation));
+            return response.IsSuccessStatusCode;
         }
 
         public bool DeleteById(int id)
         {
-            _restClient.Delete<Reservation>(new RestRequest());
-            return true;
+            var request = new RestRequest($"{id}");
+            var response = _restClient.Delete(request);
+            return response.IsSuccessStatusCode;
         }
 
         public IEnumerable<Reservation> GetAll()
         {
             return _restClient.Get<IEnumerable<Reservation>>(new RestRequest());
+        }
 
+        public List<object[]> GetAvailableTimes(string date)
+        {
+            return _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));
         }
 
         public Reservation GetById(int id)
         {
-            return _restClient.Get<Reservation>(new RestRequest());
+            return _restClient.Get<Reservation>(new RestRequest($"{id}"));
         }
 
-        public bool Update(Reservation entity)
+        public bool Update(Reservation reservation)
         {
-            _restClient.Put<Reservation>(new RestRequest());
-            return true;
+            var request = new RestRequest($"{reservation.Id}");
+            var response = _restClient.Put(request);
+            return response.IsSuccessStatusCode;
         }
     }
 }
