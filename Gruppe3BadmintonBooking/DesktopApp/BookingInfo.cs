@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Model;
+using RestSharpClient;
+using RestSharpClient.Interfaces;
 
 namespace DesktopApp
 {
@@ -15,12 +18,38 @@ namespace DesktopApp
     {
         List<string> customerInformation = new();
 
+        private IReservationService _reservationService;
+        private ICustomerService _customerService;
+
+        private Reservation currentReservation;
+        private int BasePrice = 150;
+
         public BookingInfo(DateTime dateCalender, string hal, string bane)
         {
             InitializeComponent();
-            txtSted.Text = "Hal " + hal + ", bane " + bane;
+
+            _reservationService = new ReservationService();
+            _customerService = new CustomerService();
+
+            txtSted.Text = $"Hal {hal}, Bane {bane}";
             txtDato.Text = DateOnly.FromDateTime(dateCalender).ToString();
             txtKlok.Text = TimeOnly.FromDateTime(dateCalender).ToString();
+        }
+
+        public BookingInfo(Reservation reservation)
+        {
+            InitializeComponent();
+
+            _reservationService = new ReservationService();
+            _customerService = new CustomerService();
+
+            txtSted.Text = $"Bane {reservation.courtNo}";
+            txtDato.Text = $"{DateOnly.FromDateTime(reservation.startTime)}";
+            txtKlok.Text = $"{reservation.startTime.TimeOfDay} - {reservation.endTime.TimeOfDay}";
+            UpdatePrice();
+            comboBoxKetsjer.SelectedIndex = 0;
+
+            currentReservation = reservation;
         }
 
         private void btnBekraeft_Click(object sender, EventArgs e)
@@ -95,12 +124,96 @@ namespace DesktopApp
             bookingBekræftelse.ShowDialog();
         }
 
+        private void btnBekraeft_ClickV2(object sender, EventArgs e)
+        {
+            Customer customer = new() { street="fuck", houseNo= "fuck", zipcode = "9220"};
+            Invoice invoice = new();
+            if (!String.IsNullOrEmpty(txtFornavn.Text))
+            {
+                customer.firstName = txtFornavn.Text;
+            }
+            else
+            {
+                string message = "Indtast et fornavn!";
+                string title = "Mangler fornavn";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(txtEfternavn.Text))
+            {
+                customer.lastName = txtEfternavn.Text;
+            }
+            else
+            {
+                string message = "Indtast et efternavn!";
+                string title = "Mangler efternavn";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            if (txtMobil.TextLength == 8)
+            {
+                customer.phoneNo = txtMobil.Text;
+            }
+            else
+            {
+                string message = "Indtast et gyldigt telefonnummer!";
+                string title = "Ugyldig telefonnummer";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            if (txtEmail.Text.Contains("@") && txtEmail.Text.Contains("."))
+            {
+                customer.email = txtEmail.Text;
+            }
+            else
+            {
+                string message = "Indtast en gyldig emailadresse!";
+                string title = "Ugyldig Email!";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Warning);
+                return;
+            }
+            currentReservation.numberOfRackets = int.Parse(comboBoxKetsjer.SelectedItem.ToString());
+            currentReservation.shuttleReserved = checkBoxBold.Checked;
+
+            currentReservation.customer = customer;
+            invoice.totalPrice = BasePrice + (currentReservation.shuttleReserved ? 50 : 0);
+            invoice.reservation = currentReservation;
+
+            if (_reservationService.Create(currentReservation))
+            {
+                this.Hide();
+                BookingBekræftelse bookingBekræftelse = new(invoice);
+                bookingBekræftelse.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Fejl ved oprettelse af reservation, prøv igen senere", "Fejl", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnTilbage_Click(object sender, EventArgs e)
         {
             this.Hide();
             OpretBooking opretBooking = new OpretBooking();
             opretBooking.ShowDialog();
 
+        }
+
+        private void UpdatePrice()
+        {
+            string priceText = (BasePrice + (checkBoxBold.Checked ? 50 : 0)).ToString("C2", CultureInfo.CurrentCulture);
+
+            txtPris.Text = priceText;
+        }
+
+        private void checkBoxBold_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdatePrice();
         }
     }
 }

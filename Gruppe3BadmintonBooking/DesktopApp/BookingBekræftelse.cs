@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Model;
+using RestSharpClient;
+using RestSharpClient.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +17,7 @@ namespace DesktopApp
     public partial class BookingBekræftelse : Form
     {
         private List<string> customerInformation;
-
+        private IInvoiceService _invoiceService;
         public BookingBekræftelse(List<string> customerInformation)
         {
             InitializeComponent();
@@ -28,6 +32,27 @@ namespace DesktopApp
             txtPris.Text = customerInformation[7];
             txtKetsjer.Text = customerInformation[8];
             txtBold.Text = customerInformation[9];
+        }
+
+        public BookingBekræftelse(Invoice invoice)
+        {
+            InitializeComponent();
+
+            _invoiceService = new InvoiceService();
+
+            Reservation reservation = invoice.reservation;
+            Customer customer = reservation.customer;
+
+            txtFornavn.Text = customer.firstName;
+            txtEfternavn.Text = customer.lastName;
+            txtMobil.Text = customer.phoneNo;
+            txtEmail.Text = customer.email;
+            txtDato.Text = DateOnly.FromDateTime(reservation.startTime.Date).ToString();
+            txtKlok.Text = $"{reservation.startTime.TimeOfDay} - {reservation.endTime.TimeOfDay}";
+            txtSted.Text = $"Bane {reservation.courtNo}";
+            txtPris.Text = invoice.totalPrice.ToString("C2", CultureInfo.CurrentCulture);
+            txtKetsjer.Text = reservation.numberOfRackets.ToString();
+            txtBold.Text = reservation.shuttleReserved ? "Ja" : "Nej";
         }
 
         private void btnAfslut_Click(object sender, EventArgs e)

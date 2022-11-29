@@ -109,6 +109,7 @@
             this.checkBoxBold.Size = new System.Drawing.Size(15, 14);
             this.checkBoxBold.TabIndex = 15;
             this.checkBoxBold.UseVisualStyleBackColor = true;
+            this.checkBoxBold.CheckedChanged += new System.EventHandler(this.checkBoxBold_CheckedChanged);
             // 
             // lblKr
             // 
@@ -142,17 +143,18 @@
             // 
             // comboBoxKetsjer
             // 
+            this.comboBoxKetsjer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxKetsjer.Font = new System.Drawing.Font("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.comboBoxKetsjer.FormattingEnabled = true;
             this.comboBoxKetsjer.Items.AddRange(new object[] {
-            "0 ketsjer",
-            "1 ketsjer",
-            "2 ketsjer",
-            "3 ketsjer",
-            "4 ketsjer"});
-            this.comboBoxKetsjer.Location = new System.Drawing.Point(124, 324);
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"});
+            this.comboBoxKetsjer.Location = new System.Drawing.Point(124, 327);
             this.comboBoxKetsjer.Name = "comboBoxKetsjer";
-            this.comboBoxKetsjer.Size = new System.Drawing.Size(167, 29);
+            this.comboBoxKetsjer.Size = new System.Drawing.Size(69, 29);
             this.comboBoxKetsjer.TabIndex = 11;
             // 
             // txtEmail
@@ -335,7 +337,7 @@
             this.btnBekraeft.TabIndex = 0;
             this.btnBekraeft.Text = "Bekræft";
             this.btnBekraeft.UseVisualStyleBackColor = true;
-            this.btnBekraeft.Click += new System.EventHandler(this.btnBekraeft_Click);
+            this.btnBekraeft.Click += new System.EventHandler(this.btnBekraeft_ClickV2);
             // 
             // label3
             // 

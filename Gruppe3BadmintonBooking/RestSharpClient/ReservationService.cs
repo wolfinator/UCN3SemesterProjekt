@@ -17,7 +17,8 @@ namespace RestSharpClient
         public bool Create(Reservation reservation)
         {
             var request = new RestRequest();
-            var response = _restClient.Post(new RestRequest().AddJsonBody(reservation));
+            request.AddBody(reservation);
+            var response = _restClient.Post(request);
             return response.IsSuccessStatusCode;
         }
 

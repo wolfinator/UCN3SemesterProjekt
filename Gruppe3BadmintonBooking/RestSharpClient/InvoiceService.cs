@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RestSharpClient
 {
-    public class InvoiceService : IServiceCrud<Invoice>
+    public class InvoiceService : IInvoiceService
     {
         private RestSharp.RestClient _restClient;
 
