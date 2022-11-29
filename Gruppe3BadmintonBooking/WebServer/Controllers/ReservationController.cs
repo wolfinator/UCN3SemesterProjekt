@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Model;
 using Models;
 using Newtonsoft.Json;
@@ -12,6 +13,8 @@ namespace WebServer.Controllers;
 
 public class ReservationController : Controller
 {
+    private readonly DateModel _dateModel;
+
     static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
                 endTime = DateTime.Parse("2022-02-03 14:00:00"), shuttleReserved = true,
@@ -20,6 +23,11 @@ public class ReservationController : Controller
                 endTime = DateTime.Parse("2022-02-03 16:00:00"), shuttleReserved = false,
                 numberOfRackets = 2}
 };
+
+    public ReservationController()
+    {
+            _dateModel = new DateModel();
+    }
 
     public ActionResult Index() => View(_reservations);
 
@@ -49,7 +57,7 @@ public class ReservationController : Controller
         //}
         //catch
         {
-            return View();
+            return View(_dateModel);
         }
     }
 
