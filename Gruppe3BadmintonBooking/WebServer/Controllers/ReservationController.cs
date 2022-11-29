@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Models;
+using Newtonsoft.Json;
+using WebServer.Models;
 
 namespace WebServer.Controllers;
 
@@ -33,8 +36,10 @@ public class ReservationController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [ActionName("SelectDate")]
-    public ActionResult Create1(Reservation reservation)
+    public ActionResult SelectDate(Reservation reservation)
     {
+        //Reservation res = new Reservation();
+        //res.startTime = 
         //try
         //{
         //    reservation.Id = _reservations.Max(reservation => reservation.Id) + 1;
@@ -105,5 +110,14 @@ public class ReservationController : Controller
         {
             return View();
         }
+    }
+
+    private void StoreReservationInTempData(Reservation reservation)
+    {
+        TempData["Reservation"] = JsonConvert.SerializeObject(reservation);
+    }
+    private Reservation GetReservationFromTempData()
+    {
+        return JsonConvert.DeserializeObject<Reservation>((string)TempData["Reservation"]);
     }
 }
