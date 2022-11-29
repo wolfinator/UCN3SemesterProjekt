@@ -93,5 +93,21 @@ namespace WebApi.Controllers
                 throw;
             }
         }
+
+        [HttpGet("AvailableTimes/{date}")]
+        public List<object[]> GetAvailableTimes(string date)
+        {
+            List<object[]> list = null;
+            try
+            {
+                list = _reservationDb.GetAvailableTimes(DateTime.Parse(date));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, $"Failed to get available times:\n{ex.Message}");
+                throw;
+            }
+            return list;
+        }
     }
 }

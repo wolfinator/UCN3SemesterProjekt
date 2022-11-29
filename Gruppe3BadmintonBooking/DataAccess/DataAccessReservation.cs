@@ -221,5 +221,24 @@ namespace DataAccess
             }
             return deleted;
         }
+
+        public List<object[]> GetAvailableTimes(DateTime date)
+        {
+            SqlConnection con = new(Connection.conStr.ConnectionString);
+            List<object[]> list = new();
+
+            string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
+            SqlCommand cmdAvailableTimes = new(cmdText, con);
+            cmdAvailableTimes.Parameters.AddWithValue("@current_date", date);
+
+            con.Open();
+            SqlDataReader reader = cmdAvailableTimes.ExecuteReader();
+            while (reader.Read())
+            {
+                object[] availableTime = {reader.GetInt32(0), reader.GetTimeSpan(1)};
+                list.Add(availableTime);
+            }
+            return list;
+        }
     }
 }
