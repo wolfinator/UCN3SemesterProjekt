@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestSharpClient.Interfaces
 {
-    internal interface ICustomerService
+    public interface ICustomerService
     {
     }
 }
