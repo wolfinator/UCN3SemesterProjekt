@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Model;
 using Models;
 using Newtonsoft.Json;
+using RestSharpClient.Interfaces;
 using WebServer.Models;
 
 namespace WebServer.Controllers;
@@ -14,8 +15,9 @@ namespace WebServer.Controllers;
 public class ReservationController : Controller
 {
 
+    private readonly IReservationService _reservationsData;
 
-    static List<Reservation> _reservations = new List<Reservation>() {
+    /*static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
                 endTime = DateTime.Parse("2022-02-03 14:00:00"), shuttleReserved = true,
                 numberOfRackets = 3},
@@ -23,14 +25,20 @@ public class ReservationController : Controller
                 endTime = DateTime.Parse("2022-02-03 16:00:00"), shuttleReserved = false,
                 numberOfRackets = 2}
 };
+    */
+
+    public ReservationController(IReservationService reservationsData)
+    {
+        _reservationsData = reservationsData;
+    }
 
 
-
-    public ActionResult Index() => View(_reservations);
+    public ActionResult Index() => View(_reservationsData);
 
     public ActionResult Details(int id)
     {
-        return View(_reservations.First(reservation => reservation.Id == id));
+        //return View(_reservationsData.First(reservation => reservation.Id == id));
+        return View(_reservationsData.GetById);
     }
 
     public ActionResult Create()
@@ -57,14 +65,14 @@ public class ReservationController : Controller
     //[ValidateAntiForgeryToken]
     public ActionResult SelectHour(DateTime startTime)
     {
-        return View();
+        return View(_reservationsData.GetAvailableTimes);
     }
 
     [HttpPost]
     //[ValidateAntiForgeryToken]
     public ActionResult SelectEquipment(DateTime startTime)
     {
-        return View();
+        return View(_reservationsData);
     }
 
     [HttpPost]
@@ -73,10 +81,10 @@ public class ReservationController : Controller
     {
         return View();
     } 
-
+/*
     public ActionResult Edit(int id)
     {
-        return View(_reservations.First(reservation => reservation.Id == id));
+        return View(_reservationsData.First(reservation => reservation.Id == id));
     }
 
 
@@ -86,7 +94,7 @@ public class ReservationController : Controller
     {
         try
         {
-            var reservation = _reservations.First(reservation => reservation.Id == editedReservation.Id);
+            var reservation = _reservationsData.First(reservation => reservation.Id == editedReservation.Id);
             reservation.startTime = editedReservation.startTime;
             reservation.shuttleReserved = editedReservation.shuttleReserved;
             return RedirectToAction(nameof(Index));
@@ -115,7 +123,7 @@ public class ReservationController : Controller
             return View();
         }
     }
-
+*/
     private void StoreReservationInTempData(Reservation reservation)
     {
         TempData["Reservation"] = JsonConvert.SerializeObject(reservation);

@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using RestSharpClient;
+using RestSharpClient.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+builder.Services.AddSingleton<IReservationService, ReservationService>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
