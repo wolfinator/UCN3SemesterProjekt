@@ -28,9 +28,9 @@ namespace DataAccess
         //    }
         //    return persontype;
         //}
-        public bool Create(Customer entity)
+        public int Create(Customer entity)
         {
-            bool created = false;
+            int customerId = -1;
             // int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
@@ -58,9 +58,9 @@ namespace DataAccess
                 {
                     cmdCustomer.Transaction = trans;
                     cmdAddress.Transaction = trans;
-                    int customerId = (int)cmdCustomer.ExecuteScalar();
+                    customerId = (int)cmdCustomer.ExecuteScalar();
                     cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
-                    created = cmdAddress.ExecuteNonQuery() == 1;
+                    cmdAddress.ExecuteNonQuery();
                 }
                 catch (SqlException)
                 {
@@ -71,7 +71,7 @@ namespace DataAccess
                 trans.Commit();
             }
             con.Close();
-            return created;
+            return customerId;
         }
 
         public bool DeleteById(int id)

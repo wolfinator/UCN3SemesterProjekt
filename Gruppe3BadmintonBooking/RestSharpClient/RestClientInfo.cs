@@ -10,6 +10,6 @@ namespace RestSharpClient
     {
         //https://localhost:7077
         //http://79.171.148.187
-        public static string IpAddress = "http://79.171.148.187";
+        public static string IpAddress = "https://localhost:7077";
     }
 }

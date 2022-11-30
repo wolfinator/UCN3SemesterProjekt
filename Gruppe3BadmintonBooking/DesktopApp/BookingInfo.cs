@@ -180,13 +180,13 @@ namespace DesktopApp
             currentReservation.numberOfRackets = int.Parse(comboBoxKetsjer.SelectedItem.ToString());
             currentReservation.shuttleReserved = checkBoxBold.Checked;
 
-            _customerService.Create(customer);
+            customer.id = _customerService.Create(customer);
             currentReservation.customer = customer;
-            invoice.totalPrice = BasePrice + (currentReservation.shuttleReserved ? 50 : 0);
+            invoice.totalPrice = GetPrice();
             invoice.reservation = currentReservation;
 
             currentReservation.creationDate = DateTime.Now;
-            if (_reservationService.Create(currentReservation))
+            if (_reservationService.Create(currentReservation) != -1)
             {
                 this.Hide();
                 BookingBekræftelse bookingBekræftelse = new(invoice);
@@ -208,7 +208,7 @@ namespace DesktopApp
 
         private void UpdatePrice()
         {
-            string priceText = (BasePrice + (checkBoxBold.Checked ? 50 : 0)).ToString("C2", CultureInfo.CurrentCulture);
+            string priceText = GetPrice().ToString("C2", CultureInfo.CurrentCulture);
 
             txtPris.Text = priceText;
         }
@@ -216,6 +216,11 @@ namespace DesktopApp
         private void checkBoxBold_CheckedChanged(object sender, EventArgs e)
         {
             UpdatePrice();
+        }
+
+        private decimal GetPrice()
+        {
+            return (BasePrice + (checkBoxBold.Checked ? 50 : 0));
         }
     }
 }

@@ -151,7 +151,8 @@ namespace DesktopApp
         private void monthCalendarOverview_DateSelectedRestService(object sender, DateRangeEventArgs e)
         {
             DateTime selected = monthCalendarOverview.SelectionStart;
-            var availableTimes = Task.Run(()=>_reservationService.GetAvailableTimes(selected.Date.ToString()));
+            string selectedToString = selected.Date.ToString("yyyy-MM-dd");
+            var availableTimes = Task.Run(()=>_reservationService.GetAvailableTimes(selectedToString));
 
             ResetDataGrid();
 

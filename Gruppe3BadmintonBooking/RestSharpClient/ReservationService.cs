@@ -1,6 +1,7 @@
 ﻿using Model;
 using RestSharp;
 using RestSharpClient.Interfaces;
+using System.Text.Json;
 
 namespace RestSharpClient
 {
@@ -14,12 +15,14 @@ namespace RestSharpClient
             _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/Reservations");
         }
 
-        public bool Create(Reservation reservation)
+        public int Create(Reservation reservation)
         {
             var request = new RestRequest();
             request.AddBody(reservation);
             var response = _restClient.Post(request);
-            return response.IsSuccessStatusCode;
+            var createdReservation = JsonSerializer.Deserialize<Reservation>(response.Content);
+            if (createdReservation != null) return createdReservation.Id;
+            return -1;
         }
 
         public bool DeleteById(int id)

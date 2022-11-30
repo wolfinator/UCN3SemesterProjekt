@@ -17,12 +17,12 @@ namespace RestSharpClient
         {
             _restClient = new($"{RestClientInfo.IpAddress}/api/invoices");
         }
-        public bool Create(Invoice invoice)
+        public int Create(Invoice invoice)
         {
             var request = new RestRequest();
             request.AddJsonBody(invoice);
             var response = _restClient.Post(request);
-            return response.IsSuccessStatusCode;
+            return 1;
         }
 
         public bool DeleteById(int id)
