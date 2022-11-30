@@ -1,0 +1,16 @@
+﻿@model Model.Reservation
+
+<h1>Booking gennemført</h1>
+
+Din booking starter:
+<h3>
+    @Html.DisplayFor((model) => model.startTime)
+</h3>
+
+Din booking slutter:
+<h3>
+    @Html.DisplayFor((model) => model.endTime)
+</h3>
+
+Du skal være på bane:
+<h3>@Html.DisplayFor((model) => model.courtNo)</h3>

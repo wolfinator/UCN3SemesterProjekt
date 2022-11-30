@@ -13,7 +13,7 @@ namespace WebServer.Controllers;
 
 public class ReservationController : Controller
 {
-    private readonly DateModel _dateModel;
+
 
     static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
@@ -24,10 +24,7 @@ public class ReservationController : Controller
                 numberOfRackets = 2}
 };
 
-    public ReservationController()
-    {
-            _dateModel = new DateModel();
-    }
+
 
     public ActionResult Index() => View(_reservations);
 
@@ -41,43 +38,46 @@ public class ReservationController : Controller
         return View();
     }
 
-    [HttpPost]
+    /*[HttpPost]
     [ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]
+    [ActionName("SelectDate")]*/
+    public ActionResult SelectDate()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    /*[ValidateAntiForgeryToken]
+    [ActionName("SelectDate")]*/
     public ActionResult SelectDate(Reservation reservation)
     {
-        //Reservation res = new Reservation();
-        //res.startTime = 
-        //try
-        //{
-        //    reservation.Id = _reservations.Max(reservation => reservation.Id) + 1;
-        //    _reservations.Add(reservation);
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-        //catch
-        {
-            return View(_dateModel);
-        }
+        return View();
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    [ActionName("SelectHour")]
-    public ActionResult Create2(Reservation reservation)
+    /*[ValidateAntiForgeryToken]
+    [ActionName("SelectDate")]*/
+    public ActionResult SelectHour(DateTime startTime)
     {
-        try
-        {
-            reservation.Id = _reservations.Max(reservation => reservation.Id) + 1;
-            _reservations.Add(reservation);
-
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
+        return View();
     }
+
+    [HttpPost]
+    /*[ValidateAntiForgeryToken]
+    [ActionName("SelectDate")]*/
+    public ActionResult SelectEquipment(DateTime startTime)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    /*[ValidateAntiForgeryToken]
+    [ActionName("SelectDate")]*/
+    public ActionResult ShowReservation(bool seleshuttleReserved, int numberOfRackets)
+    {
+        return View();
+    }
+
     public ActionResult Edit(int id)
     {
         return View(_reservations.First(reservation => reservation.Id == id));

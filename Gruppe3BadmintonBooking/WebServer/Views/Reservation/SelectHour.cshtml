@@ -1,26 +1,32 @@
 ﻿@model Model.Reservation
 
 @{
-    ViewData["Title"] = "Vælg dato";
+    ViewData["Title"] = "Vælg tidspunkt";
 }
 
-<h1>Vælg dato</h1>
+<h1>Vælg tidspunkt</h1>
 
 <h4>Booking</h4>
+
+Ledige tider på denne dato:
+<h3>
+    @Html.DisplayFor((model) => model.startTime)
+</h3>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form action="/Reservation/SelectHour" method="post">
+        <form action="/Reservation/SelectEquipment" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="startTime" class="control-label">Dato</label>
+                <label asp-for="startTime" class="control-label">Tidspunkt</label>
                 <input type="date" asp-for="startTime" class="form-control" />
                 <span asp-validation-for="startTime" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Se ledige tider" class="btn btn-primary" />
+                <input type="submit" value="Vælg udstyr" class="btn btn-primary" />
             </div>
         </form>
     </div>
