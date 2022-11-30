@@ -28,7 +28,7 @@ namespace DataAccess
         //    }
         //    return persontype;
         //}
-        public int Create(Customer entity)
+        public int Create(Customer customer)
         {
             int customerId = -1;
             // int persontype = GetPersonType(entity);
@@ -41,15 +41,15 @@ namespace DataAccess
             SqlCommand cmdCustomer = new(cmdTextCustomer, con);
             SqlCommand cmdAddress = new(cmdTextAddress, con);
 
-            cmdCustomer.Parameters.AddWithValue("@Fname", entity.firstName);
-            cmdCustomer.Parameters.AddWithValue("@Lname", entity.lastName);
-            cmdCustomer.Parameters.AddWithValue("@Email", entity.email);
-            cmdCustomer.Parameters.AddWithValue("@PhoneNo", entity.phoneNo);
+            cmdCustomer.Parameters.AddWithValue("@Fname", customer.firstName);
+            cmdCustomer.Parameters.AddWithValue("@Lname", customer.lastName);
+            cmdCustomer.Parameters.AddWithValue("@Email", customer.email);
+            cmdCustomer.Parameters.AddWithValue("@PhoneNo", customer.phoneNo);
             //cmdPerson.Parameters.AddWithValue("@PersonType", persontype);
 
-            cmdAddress.Parameters.AddWithValue("@Street", entity.street);
-            cmdAddress.Parameters.AddWithValue("@HouseNo", entity.houseNo);
-            cmdAddress.Parameters.AddWithValue("@CityZipcode", entity.zipcode);
+            cmdAddress.Parameters.AddWithValue("@Street", customer.street);
+            cmdAddress.Parameters.AddWithValue("@HouseNo", customer.houseNo);
+            cmdAddress.Parameters.AddWithValue("@CityZipcode", customer.zipcode);
 
             con.Open();
             using (var trans = con.BeginTransaction())
@@ -59,8 +59,11 @@ namespace DataAccess
                     cmdCustomer.Transaction = trans;
                     cmdAddress.Transaction = trans;
                     customerId = (int)cmdCustomer.ExecuteScalar();
-                    cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
-                    cmdAddress.ExecuteNonQuery();
+                    if(customer.street != "" && customer.houseNo != "" && customer.zipcode != "")
+                    {
+                        cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
+                        cmdAddress.ExecuteNonQuery();
+                    }           
                 }
                 catch (SqlException)
                 {

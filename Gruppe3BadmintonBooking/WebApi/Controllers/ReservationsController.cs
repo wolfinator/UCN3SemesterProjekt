@@ -53,16 +53,17 @@ namespace WebApi.Controllers
 
         // POST api/<ReservationController>
         [HttpPost]
-        public void Post([FromBody] Reservation reservation)
+        public Reservation Post([FromBody] Reservation reservation)
         {
             try
             {
-                _reservationDb.Create(reservation);
+                reservation.Id = _reservationDb.Create(reservation);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, $"Failed to create reservation in database:\n{ex.Message}");
             }
+            return reservation;
         }
 
         // PUT api/<ReservationController>/5

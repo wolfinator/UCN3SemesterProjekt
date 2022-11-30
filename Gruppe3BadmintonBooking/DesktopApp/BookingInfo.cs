@@ -126,7 +126,7 @@ namespace DesktopApp
 
         private void btnBekraeft_ClickV2(object sender, EventArgs e)
         {
-            Customer customer = new() { street="fuck", houseNo= "fuck", zipcode = "9220"};
+            Customer customer = new() { street="", houseNo= "", zipcode = ""};
             Invoice invoice = new();
             if (!String.IsNullOrEmpty(txtFornavn.Text))
             {
@@ -208,7 +208,7 @@ namespace DesktopApp
 
         private void UpdatePrice()
         {
-            string priceText = GetPrice().ToString("C2", CultureInfo.CurrentCulture);
+            string priceText = GetPrice().ToString("C2", CultureInfo.CreateSpecificCulture("da-DK"));
 
             txtPris.Text = priceText;
         }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace RestSharpClient
@@ -22,7 +23,9 @@ namespace RestSharpClient
             var request = new RestRequest();
             request.AddJsonBody(invoice);
             var response = _restClient.Post(request);
-            return 1;
+            var createdInvoice = JsonSerializer.Deserialize<Invoice>(response.Content);
+            if (createdInvoice != null) return createdInvoice.id;
+            return -1;
         }
 
         public bool DeleteById(int id)

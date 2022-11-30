@@ -83,7 +83,7 @@ namespace DesktopApp
 
         private void btnBookBane_Click_2(object sender, EventArgs e)
         {
-            if (selectedCourt != null && selectedDate != null && selectedTime != null)
+            if (selectedCourt != 0)
             {
                 this.Hide();
 
@@ -163,6 +163,7 @@ namespace DesktopApp
                 dataGridViewCourts.Rows.Add(available);
             }
             selectedDate = selected.Date;
+            dataGridViewCourts.Rows[0].Cells[0].Selected = false;
         }
 
         private void dataGridViewCourts_CellClick(object sender, DataGridViewCellEventArgs e)

@@ -25,7 +25,8 @@ namespace RestSharpClient
             request.AddJsonBody(customer);
             var response = _restClient.Post(request);
             var createdCustomer = JsonSerializer.Deserialize<Customer>(response.Content);
-            return createdCustomer.id;
+            if(createdCustomer != null) return createdCustomer.id;
+            return -1;
         }
 
         public bool DeleteById(int id)
