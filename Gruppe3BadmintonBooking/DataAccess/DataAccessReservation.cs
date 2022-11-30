@@ -14,9 +14,11 @@ namespace DataAccess
     public class DataAccessReservation : IDaoReservation
     {
         private SqlConnectionStringBuilder conStr;
+        private IDataAccess<Customer> _customerDao;
         public DataAccessReservation()
         {
             conStr = Connection.conStr;
+            _customerDao = new DataAccessCustomer();
         }
         public int Create(Reservation reservation)
         {
@@ -194,7 +196,8 @@ namespace DataAccess
             reservation.shuttleReserved = reader.GetBoolean(4);
             reservation.numberOfRackets = reader.GetInt32(5);
             reservation.court = new Court() { id = reader.GetInt32(6) };
-            reservation.customer = new Customer() {id = reader.GetInt32(7) };
+            reservation.courtNo = reader.GetInt32(6);
+            reservation.customer = _customerDao.GetById(reader.GetInt32(7));
             
             return reservation;
         }

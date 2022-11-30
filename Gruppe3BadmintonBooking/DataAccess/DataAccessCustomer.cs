@@ -108,7 +108,7 @@ namespace DataAccess
             List<Customer> customers = null;
 
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGelAll = "select * from Customer p, _Address a where p.id = a.customer_id";
+            string cmdTextGelAll = "select * from Customer c left join _address a on a.customer_id = c.id";
             SqlCommand cmdGetAll = new(cmdTextGelAll, con);
 
             con.Open();
@@ -129,7 +129,7 @@ namespace DataAccess
         {
             Customer customer = null;
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGetById = "select * from Customer p, _Address a where p.id = a.customer_id and p.id = @Id";
+            string cmdTextGetById = "select * from Customer c left join _address a on a.customer_id = c.id where c.id = @Id";
             SqlCommand cmdGetById = new(cmdTextGetById, con);
 
             cmdGetById.Parameters.AddWithValue("@Id", id);
