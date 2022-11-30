@@ -38,7 +38,7 @@ public class ReservationController : Controller
     public ActionResult Details(int id)
     {
         //return View(_reservationsData.First(reservation => reservation.Id == id));
-        return View(_reservationsData.GetById);
+        return View(_reservationsData.GetById(id));
     }
 
     public ActionResult Create()
@@ -50,7 +50,7 @@ public class ReservationController : Controller
     //[ValidateAntiForgeryToken]
     public ActionResult SelectDate()
     {
-        return View();
+        return View(DateTime.Now);
     }
 
     
@@ -63,9 +63,9 @@ public class ReservationController : Controller
 
     [HttpPost]
     //[ValidateAntiForgeryToken]
-    public ActionResult SelectHour(DateTime startTime)
+    public ActionResult SelectHour(DateTime selectedDate)
     {
-        return View(_reservationsData.GetAvailableTimes);
+        return View(_reservationsData.GetAvailableTimes(selectedDate.ToString("yyyy-MM-dd")));
     }
 
     [HttpPost]

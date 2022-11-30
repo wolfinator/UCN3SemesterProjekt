@@ -1,4 +1,4 @@
-﻿@model Model.Reservation
+﻿@model List<object[]>
 
 @{
     ViewData["Title"] = "Vælg tidspunkt";
@@ -10,31 +10,18 @@
 
 Ledige tider på denne dato:
 <h3>
-    @Html.DisplayFor((model) => model.startTime)
+    <form asp-action="">
+        <select name="selectedTime">
+            @foreach (var availableTime in Model)
+            {
+                <option value="@availableTime">Bane @availableTime[0].ToString(), Klokken @availableTime[1]</option>
+            }
+        </select>
+
+        <button type="submit">Vælg udstyr</button>
+    </form>
 </h3>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form action="/Reservation/SelectEquipment" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="startTime" class="control-label">Tidspunkt</label>
-                <input type="date" asp-for="startTime" class="form-control" />
-                <span asp-validation-for="startTime" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Vælg udstyr" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,4 +1,4 @@
-﻿@model Model.Reservation
+﻿@model DateTime
 
 @{
     ViewData["Title"] = "Vælg dato";
@@ -10,13 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form action="/Reservation/SelectHour" method="post">
+        <form asp-action="SelectHour" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="startTime" class="control-label">Dato</label>
-                <input type="date" asp-for="startTime" class="form-control" />
-                <span asp-validation-for="startTime" class="text-danger"></span>
+                <label class="control-label">Dato</label>
+                <input name="selectedDate" type="date" class="form-control" />
             </div>
 
             <div class="form-group">
