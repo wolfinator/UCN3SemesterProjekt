@@ -38,45 +38,41 @@ public class ReservationController : Controller
         return View();
     }
 
-    /*[HttpPost]
-    [ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]*/
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
     public ActionResult SelectDate()
     {
         return View();
     }
 
-    [HttpPost]
-    /*[ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]*/
+    
+/*    [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult SelectDate(Reservation reservation)
     {
         return View();
-    }
+    }*/
 
     [HttpPost]
-    /*[ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]*/
+    //[ValidateAntiForgeryToken]
     public ActionResult SelectHour(DateTime startTime)
     {
         return View();
     }
 
     [HttpPost]
-    /*[ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]*/
+    //[ValidateAntiForgeryToken]
     public ActionResult SelectEquipment(DateTime startTime)
     {
         return View();
     }
 
     [HttpPost]
-    /*[ValidateAntiForgeryToken]
-    [ActionName("SelectDate")]*/
+    //[ValidateAntiForgeryToken]
     public ActionResult ShowReservation(bool seleshuttleReserved, int numberOfRackets)
     {
         return View();
-    }
+    } 
 
     public ActionResult Edit(int id)
     {

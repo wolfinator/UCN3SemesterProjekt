@@ -16,7 +16,7 @@ namespace Model;
         public bool shuttleReserved { get; set; }
         public Customer customer { get; set; }
         public Court court { get; set; }
-        public int numberOfRackets { get; set; }
+        public int ?numberOfRackets { get; set; }
     }
 
 
