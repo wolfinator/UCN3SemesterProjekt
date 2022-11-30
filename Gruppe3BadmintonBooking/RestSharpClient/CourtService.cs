@@ -14,7 +14,7 @@ namespace RestSharpClient
             _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/courts");
         }
 
-        public bool Create(Court entity)
+        public int Create(Court entity)
         {
             throw new NotImplementedException();
         }

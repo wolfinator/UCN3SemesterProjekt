@@ -18,19 +18,19 @@ namespace DataAccess
             conStr = Connection.conStr;
         }
 
-        public bool Create(Invoice entity)
+        public int Create(Invoice entity)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();
             SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "INSERT INTO Invoice VALUES (@totalPrice, @reservationId)";
+            cmd.CommandText = "INSERT INTO Invoice output INSERTED.ID VALUES (@totalPrice, @reservationId) ";
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
             cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
 
 
-            int rowsAffected = cmd.ExecuteNonQuery();
+            int createdId = (int) cmd.ExecuteScalar();
 
-            return rowsAffected == 1;
+            return createdId;
         }
 
         public bool DeleteById(int id)

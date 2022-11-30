@@ -12,6 +12,6 @@ namespace RestSharpClient.Interfaces
         T GetById(int id);
         bool Update(T entity);
         bool DeleteById(int id);
-        bool Create(T entity);
+        int Create(T entity);
     }
 }

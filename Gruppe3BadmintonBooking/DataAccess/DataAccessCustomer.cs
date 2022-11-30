@@ -28,9 +28,9 @@ namespace DataAccess
         //    }
         //    return persontype;
         //}
-        public bool Create(Customer entity)
+        public int Create(Customer customer)
         {
-            bool created = false;
+            int customerId = -1;
             // int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
@@ -41,15 +41,15 @@ namespace DataAccess
             SqlCommand cmdCustomer = new(cmdTextCustomer, con);
             SqlCommand cmdAddress = new(cmdTextAddress, con);
 
-            cmdCustomer.Parameters.AddWithValue("@Fname", entity.firstName);
-            cmdCustomer.Parameters.AddWithValue("@Lname", entity.lastName);
-            cmdCustomer.Parameters.AddWithValue("@Email", entity.email);
-            cmdCustomer.Parameters.AddWithValue("@PhoneNo", entity.phoneNo);
+            cmdCustomer.Parameters.AddWithValue("@Fname", customer.firstName);
+            cmdCustomer.Parameters.AddWithValue("@Lname", customer.lastName);
+            cmdCustomer.Parameters.AddWithValue("@Email", customer.email);
+            cmdCustomer.Parameters.AddWithValue("@PhoneNo", customer.phoneNo);
             //cmdPerson.Parameters.AddWithValue("@PersonType", persontype);
 
-            cmdAddress.Parameters.AddWithValue("@Street", entity.street);
-            cmdAddress.Parameters.AddWithValue("@HouseNo", entity.houseNo);
-            cmdAddress.Parameters.AddWithValue("@CityZipcode", entity.zipcode);
+            cmdAddress.Parameters.AddWithValue("@Street", customer.street);
+            cmdAddress.Parameters.AddWithValue("@HouseNo", customer.houseNo);
+            cmdAddress.Parameters.AddWithValue("@CityZipcode", customer.zipcode);
 
             con.Open();
             using (var trans = con.BeginTransaction())
@@ -58,9 +58,12 @@ namespace DataAccess
                 {
                     cmdCustomer.Transaction = trans;
                     cmdAddress.Transaction = trans;
-                    int customerId = (int)cmdCustomer.ExecuteScalar();
-                    cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
-                    created = cmdAddress.ExecuteNonQuery() == 1;
+                    customerId = (int)cmdCustomer.ExecuteScalar();
+                    if(customer.street != "" && customer.houseNo != "" && customer.zipcode != "")
+                    {
+                        cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
+                        cmdAddress.ExecuteNonQuery();
+                    }           
                 }
                 catch (SqlException)
                 {
@@ -71,7 +74,7 @@ namespace DataAccess
                 trans.Commit();
             }
             con.Close();
-            return created;
+            return customerId;
         }
 
         public bool DeleteById(int id)
@@ -105,7 +108,7 @@ namespace DataAccess
             List<Customer> customers = null;
 
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGelAll = "select * from Customer p, _Address a where p.id = a.customer_id";
+            string cmdTextGelAll = "select * from Customer c left join _address a on a.customer_id = c.id";
             SqlCommand cmdGetAll = new(cmdTextGelAll, con);
 
             con.Open();
@@ -126,7 +129,7 @@ namespace DataAccess
         {
             Customer customer = null;
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextGetById = "select * from Customer p, _Address a where p.id = a.customer_id and p.id = @Id";
+            string cmdTextGetById = "select * from Customer c left join _address a on a.customer_id = c.id where c.id = @Id";
             SqlCommand cmdGetById = new(cmdTextGetById, con);
 
             cmdGetById.Parameters.AddWithValue("@Id", id);

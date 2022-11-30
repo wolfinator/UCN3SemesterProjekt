@@ -17,7 +17,7 @@ namespace DataAccess
             conStr = Connection.conStr;
         }
 
-        public bool Create(Court court)
+        public int Create(Court court)
         {
             SqlConnection con = new(conStr.ConnectionString);
             con.Open();

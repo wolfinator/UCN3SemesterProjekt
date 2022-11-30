@@ -53,16 +53,17 @@ namespace WebApi.Controllers
 
         // POST api/<ReservationController>
         [HttpPost]
-        public void Post([FromBody] Reservation reservation)
+        public Reservation Post([FromBody] Reservation reservation)
         {
             try
             {
-                _reservationDb.Create(reservation);
+                reservation.Id = _reservationDb.Create(reservation);
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, $"Failed to create reservation in database:\n{ex.Message}");
             }
+            return reservation;
         }
 
         // PUT api/<ReservationController>/5
@@ -92,6 +93,22 @@ namespace WebApi.Controllers
                 _logger.Log(LogLevel.Error, $"Failed to create reservation in database:\n{ex.Message}");
                 throw;
             }
+        }
+
+        [HttpGet("AvailableTimes/{date}")]
+        public List<object[]> GetAvailableTimes(string date)
+        {
+            List<object[]> list = null;
+            try
+            {
+                list = _reservationDb.GetAvailableTimes(DateTime.Parse(date));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, $"Failed to get available times:\n{ex.Message}");
+                throw;
+            }
+            return list;
         }
     }
 }

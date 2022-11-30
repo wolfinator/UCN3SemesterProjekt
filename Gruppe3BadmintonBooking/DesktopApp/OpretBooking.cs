@@ -13,6 +13,7 @@ using DataAccess;
 using Model;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RestSharpClient;
+using RestSharpClient.Interfaces;
 
 namespace DesktopApp
 {
@@ -28,9 +29,19 @@ namespace DesktopApp
         private CourtService courtService;
         public IEnumerable<Court> courts;
 
+        private IReservationService _reservationService;
+        private Reservation currentReservation;
+        private List<object[]> availableTimesData;
+        private int selectedCourt;
+        private TimeSpan selectedTime;
+        private DateTime selectedDate;
+
         public OpretBooking()
         {
             InitializeComponent();
+            _reservationService = new ReservationService();
+            currentReservation = new();
+
             courtService = new CourtService();
             courts = courtService.GetAll();
         }
@@ -70,6 +81,31 @@ namespace DesktopApp
 
         }
 
+        private void btnBookBane_Click_2(object sender, EventArgs e)
+        {
+            if (selectedCourt != 0)
+            {
+                this.Hide();
+
+                // need to change so we only have one of the values
+                currentReservation.courtNo = selectedCourt;
+                currentReservation.court = new() { id = selectedCourt };
+
+                currentReservation.startTime = selectedDate + selectedTime;
+                currentReservation.endTime = selectedDate + selectedTime.Add(TimeSpan.FromHours(1));
+
+                BookingInfo bookingInfo = new BookingInfo(currentReservation);
+                bookingInfo.ShowDialog();
+            }
+            else
+            {
+                string message = "Mangler tidspunkt og/eller bane/hal";
+                string title = "Information";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+            }
+        }
+
         private void btnTilbage_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -93,8 +129,8 @@ namespace DesktopApp
 
         private void monthCalendarOverview_DateSelected(object sender, DateRangeEventArgs e)
         {
-
             dataGridViewCourts.Rows.Clear();
+            
             dataGridViewCourts.ColumnCount = 1;
             //dataGridViewCourts.Columns[0].Name = "Hal nummer:";
             dataGridViewCourts.Columns[0].Name = "Ledige baner:";
@@ -112,19 +148,63 @@ namespace DesktopApp
             dataGridViewCourts.Rows[0].Cells[0].Selected = false;
         }
 
+        private void monthCalendarOverview_DateSelectedRestService(object sender, DateRangeEventArgs e)
+        {
+            DateTime selected = monthCalendarOverview.SelectionStart;
+            string selectedToString = selected.Date.ToString("yyyy-MM-dd");
+            var availableTimes = Task.Run(()=>_reservationService.GetAvailableTimes(selectedToString));
+
+            ResetDataGrid();
+
+            availableTimesData = availableTimes.Result;
+
+            foreach (var available in availableTimesData)
+            {
+                dataGridViewCourts.Rows.Add(available);
+            }
+            selectedDate = selected.Date;
+            dataGridViewCourts.Rows[0].Cells[0].Selected = false;
+        }
+
         private void dataGridViewCourts_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             foreach (DataGridViewRow row in dataGridViewCourts.SelectedRows)
             {
-                hal = row.Cells[0].Value.ToString();
-                bane = row.Cells[1].Value.ToString();
+                hal = "1";
+                bane = row.Cells[0].Value.ToString();
             }
+        }
+
+        private void dataGridViewCourts_CellClickV2(object sender, DataGridViewCellEventArgs e)
+        {
+            var selectedRow = dataGridViewCourts.SelectedRows;
+            selectedCourt = int.Parse(selectedRow[0].Cells[0].Value.ToString());
+            selectedTime = TimeSpan.Parse(selectedRow[0].Cells[1].Value.ToString());
         }
 
         private void comboKlok_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             fromTime = comboKlok.SelectedText;
+        }
+
+        private void comboKlok_SelectedIndexChangedV2(object sender, EventArgs e)
+        {
+            var selectedTimeFilter = DateTime.Parse((string) comboKlok.SelectedItem).TimeOfDay;
+
+            ResetDataGrid();
+            foreach (var data in availableTimesData)
+            {
+                if (TimeSpan.Parse(data[1].ToString()) == selectedTimeFilter) dataGridViewCourts.Rows.Add(data);
+            }
+        }
+
+        private void ResetDataGrid()
+        {
+            dataGridViewCourts.Rows.Clear();
+
+            dataGridViewCourts.ColumnCount = 2;
+            dataGridViewCourts.Columns[0].Name = "Bane";
+            dataGridViewCourts.Columns[1].Name = "Tidspunkt";
         }
     }
 }

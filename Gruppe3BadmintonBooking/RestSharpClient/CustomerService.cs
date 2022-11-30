@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using Model;
 using RestSharpClient.Interfaces;
+using System.Text.Json;
 
 namespace RestSharpClient
 {
@@ -18,13 +19,14 @@ namespace RestSharpClient
             _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/Customers");
         }
 
-        public bool Create(Customer customer)
+        public int Create(Customer customer)
         {
             var request = new RestRequest();
             request.AddJsonBody(customer);
             var response = _restClient.Post(request);
-
-            return response.IsSuccessStatusCode;
+            var createdCustomer = JsonSerializer.Deserialize<Customer>(response.Content);
+            if(createdCustomer != null) return createdCustomer.id;
+            return -1;
         }
 
         public bool DeleteById(int id)

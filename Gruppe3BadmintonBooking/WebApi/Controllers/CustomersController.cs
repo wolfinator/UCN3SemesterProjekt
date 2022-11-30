@@ -52,16 +52,16 @@ namespace WebApi.Controllers
         [HttpPost]
         public ActionResult<Customer> PostCustomer(Customer customer)
         {
-            bool created = false;
+            int customerId = -1;
             try
             {
-                created = _customerDb.Create(customer);
+                customerId = _customerDb.Create(customer);
+                customer.id = customerId;
             }
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, $"Failed to create customer in database:\n{ex.Message}");
             }
-            if (created) return CreatedAtAction("PostCustomer", customer);
             return customer;
         }
 

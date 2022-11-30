@@ -14,14 +14,16 @@ namespace DataAccess
     public class DataAccessReservation : IDaoReservation
     {
         private SqlConnectionStringBuilder conStr;
+        private IDataAccess<Customer> _customerDao;
         public DataAccessReservation()
         {
             conStr = Connection.conStr;
+            _customerDao = new DataAccessCustomer();
         }
-        public bool Create(Reservation reservation)
+        public int Create(Reservation reservation)
         {
-            bool created = false;
-            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) " +
+            int reservationId = -1;
+            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) output INSERTED.ID " +
                                             "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtId, @CustomerId)";
             using (SqlConnection con = new(conStr.ConnectionString))
             { 
@@ -38,14 +40,14 @@ namespace DataAccess
                 con.Open();
                 try
                 {
-                    created = cmdReservation.ExecuteNonQuery() == 1;
+                    reservationId = (int) cmdReservation.ExecuteScalar();
                 }
                 catch (SqlException)
                 {
                     throw; //TODO SKRIV throw ting
                 }
             }
-            return created;
+            return reservationId;
         }
 
         public bool DeleteById(int id)
@@ -194,7 +196,8 @@ namespace DataAccess
             reservation.shuttleReserved = reader.GetBoolean(4);
             reservation.numberOfRackets = reader.GetInt32(5);
             reservation.court = new Court() { id = reader.GetInt32(6) };
-            reservation.customer = new Customer() {id = reader.GetInt32(7) };
+            reservation.courtNo = reader.GetInt32(6);
+            reservation.customer = _customerDao.GetById(reader.GetInt32(7));
             
             return reservation;
         }
@@ -220,6 +223,25 @@ namespace DataAccess
                 }
             }
             return deleted;
+        }
+
+        public List<object[]> GetAvailableTimes(DateTime date)
+        {
+            SqlConnection con = new(Connection.conStr.ConnectionString);
+            List<object[]> list = new();
+
+            string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
+            SqlCommand cmdAvailableTimes = new(cmdText, con);
+            cmdAvailableTimes.Parameters.AddWithValue("@current_date", date);
+
+            con.Open();
+            SqlDataReader reader = cmdAvailableTimes.ExecuteReader();
+            while (reader.Read())
+            {
+                object[] availableTime = {reader.GetInt32(0), reader.GetTimeSpan(1)};
+                list.Add(availableTime);
+            }
+            return list;
         }
     }
 }

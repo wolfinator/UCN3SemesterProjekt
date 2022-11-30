@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RestSharpClient;
+using RestSharpClient.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +14,12 @@ namespace DesktopApp
 {
     public partial class BookingOversigt : Form
     {
+        private IReservationService _reservationService;
         public BookingOversigt()
         {
             InitializeComponent();
+
+            _reservationService = new ReservationService();
         }
 
         private void btnTilbage_Click(object sender, EventArgs e)
@@ -63,20 +68,47 @@ namespace DesktopApp
 
         private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
         {
-            dataGridViewOverview.Rows.Clear();
-            dataGridViewOverview.ColumnCount = 5;
-            dataGridViewOverview.Columns[0].Name = "Navn:";
-            dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
-            dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
-            dataGridViewOverview.Columns[3].Name = "Hal:";
-            dataGridViewOverview.Columns[4].Name = "Bane:";
-            string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "1", "3" };
+            ClearDataGrid();
+
+            string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "3" };
             dataGridViewOverview.Rows.Add(rowOverview);
+        }
+
+        private void monthCalendar1_DateSelectedV2(object sender, DateRangeEventArgs e)
+        {
+            var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
+            var selectedDate = monthCalendar1.SelectionStart;
+            
+            ClearDataGrid();
+            
+            reservations.Result.ToList()
+                .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
+                .ForEach((reservation) =>
+            {
+                string[] row = new string[]
+                {
+                    $"{reservation.customer.firstName} {reservation.customer.lastName}",
+                    reservation.customer.phoneNo,
+                    $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
+                    reservation.courtNo.ToString()
+                };
+                dataGridViewOverview.Rows.Add(row);
+            });
         }
 
         private void dataGridViewNu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void ClearDataGrid()
+        {
+            dataGridViewOverview.Rows.Clear();
+            dataGridViewOverview.ColumnCount = 4;
+            dataGridViewOverview.Columns[0].Name = "Navn:";
+            dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
+            dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
+            dataGridViewOverview.Columns[3].Name = "Bane:";
         }
     }
 }

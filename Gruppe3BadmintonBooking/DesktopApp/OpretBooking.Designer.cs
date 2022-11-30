@@ -66,7 +66,7 @@
             this.monthCalendarOverview.MaxSelectionCount = 1;
             this.monthCalendarOverview.Name = "monthCalendarOverview";
             this.monthCalendarOverview.TabIndex = 2;
-            this.monthCalendarOverview.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendarOverview_DateSelected);
+            this.monthCalendarOverview.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendarOverview_DateSelectedRestService);
             // 
             // btnBookBane
             // 
@@ -77,7 +77,7 @@
             this.btnBookBane.TabIndex = 4;
             this.btnBookBane.Text = "Book bane";
             this.btnBookBane.UseVisualStyleBackColor = true;
-            this.btnBookBane.Click += new System.EventHandler(this.btnBookBane_Click_1);
+            this.btnBookBane.Click += new System.EventHandler(this.btnBookBane_Click_2);
             // 
             // btnTilbage
             // 
@@ -118,7 +118,7 @@
             this.comboKlok.Name = "comboKlok";
             this.comboKlok.Size = new System.Drawing.Size(171, 23);
             this.comboKlok.TabIndex = 8;
-            this.comboKlok.SelectedIndexChanged += new System.EventHandler(this.comboKlok_SelectedIndexChanged);
+            this.comboKlok.SelectedIndexChanged += new System.EventHandler(this.comboKlok_SelectedIndexChangedV2);
             // 
             // btnGetCourts
             // 
@@ -146,7 +146,7 @@
             this.dataGridViewCourts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCourts.Size = new System.Drawing.Size(474, 162);
             this.dataGridViewCourts.TabIndex = 10;
-            this.dataGridViewCourts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCourts_CellClick);
+            this.dataGridViewCourts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCourts_CellClickV2);
             // 
             // OpretBooking
             // 
