@@ -180,10 +180,12 @@ namespace DesktopApp
             currentReservation.numberOfRackets = int.Parse(comboBoxKetsjer.SelectedItem.ToString());
             currentReservation.shuttleReserved = checkBoxBold.Checked;
 
+            _customerService.Create(customer);
             currentReservation.customer = customer;
             invoice.totalPrice = BasePrice + (currentReservation.shuttleReserved ? 50 : 0);
             invoice.reservation = currentReservation;
 
+            currentReservation.creationDate = DateTime.Now;
             if (_reservationService.Create(currentReservation))
             {
                 this.Hide();
