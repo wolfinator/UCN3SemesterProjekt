@@ -33,6 +33,8 @@
             this.btnTilbage = new System.Windows.Forms.Button();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.lblKalender = new System.Windows.Forms.Label();
+            this.btnSlet = new System.Windows.Forms.Button();
+            this.btnRediger = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.dataGridViewNu = new System.Windows.Forms.DataGridView();
             this.dataGridViewHistorik = new System.Windows.Forms.DataGridView();
@@ -41,8 +43,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxMobil = new System.Windows.Forms.TextBox();
             this.lblSoeg = new System.Windows.Forms.Label();
-            this.btnRediger = new System.Windows.Forms.Button();
-            this.btnSlet = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -126,6 +126,24 @@
             this.lblKalender.TabIndex = 0;
             this.lblKalender.Text = "Kalender";
             // 
+            // btnSlet
+            // 
+            this.btnSlet.Location = new System.Drawing.Point(276, 415);
+            this.btnSlet.Name = "btnSlet";
+            this.btnSlet.Size = new System.Drawing.Size(75, 23);
+            this.btnSlet.TabIndex = 11;
+            this.btnSlet.Text = "&Slet";
+            this.btnSlet.UseVisualStyleBackColor = true;
+            // 
+            // btnRediger
+            // 
+            this.btnRediger.Location = new System.Drawing.Point(86, 415);
+            this.btnRediger.Name = "btnRediger";
+            this.btnRediger.Size = new System.Drawing.Size(75, 23);
+            this.btnRediger.TabIndex = 10;
+            this.btnRediger.Text = "&Rediger";
+            this.btnRediger.UseVisualStyleBackColor = true;
+            // 
             // btnSearch
             // 
             this.btnSearch.Location = new System.Drawing.Point(276, 50);
@@ -134,7 +152,7 @@
             this.btnSearch.TabIndex = 9;
             this.btnSearch.Text = "Søg";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_ClickV2);
             // 
             // dataGridViewNu
             // 
@@ -217,24 +235,6 @@
             this.lblSoeg.Size = new System.Drawing.Size(130, 27);
             this.lblSoeg.TabIndex = 2;
             this.lblSoeg.Text = "Søg booking";
-            // 
-            // btnRediger
-            // 
-            this.btnRediger.Location = new System.Drawing.Point(86, 415);
-            this.btnRediger.Name = "btnRediger";
-            this.btnRediger.Size = new System.Drawing.Size(75, 23);
-            this.btnRediger.TabIndex = 10;
-            this.btnRediger.Text = "&Rediger";
-            this.btnRediger.UseVisualStyleBackColor = true;
-            // 
-            // btnSlet
-            // 
-            this.btnSlet.Location = new System.Drawing.Point(276, 415);
-            this.btnSlet.Name = "btnSlet";
-            this.btnSlet.Size = new System.Drawing.Size(75, 23);
-            this.btnSlet.TabIndex = 11;
-            this.btnSlet.Text = "&Slet";
-            this.btnSlet.UseVisualStyleBackColor = true;
             // 
             // BookingOversigt
             // 

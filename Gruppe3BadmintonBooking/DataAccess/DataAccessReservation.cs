@@ -243,5 +243,33 @@ namespace DataAccess
             }
             return list;
         }
+
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
+        {
+            IEnumerable<Reservation> reservations = null;
+            SqlConnection con = new(Connection.conStr.ConnectionString);
+
+            string cmdText = "select r.id, r.creation_date, r.start_time, r.end_time, " +
+                "r.shuttle_reserved, r.number_of_rackets, r.court_court_no, r.customer_id " +
+                "from Reservation r, Customer c " +
+                "where c.phone_no = @PhoneNo " +
+                "and r.customer_id = c.id";
+            SqlCommand cmdGetAllByPhoneNo = new(cmdText, con);
+
+            cmdGetAllByPhoneNo.Parameters.AddWithValue("@PhoneNo", phoneNo);
+            con.Open();
+            try
+            {
+                SqlDataReader reader = cmdGetAllByPhoneNo.ExecuteReader();
+                reservations = BuildObjects(reader);
+            }
+            catch (Exception)
+            {
+                //Todo handle exception
+                throw;
+            }
+            con.Close();
+            return reservations;
+        }
     }
 }

@@ -12,5 +12,7 @@ namespace DataAccess
         public bool DeleteAllByCustomerId(int customerId);
 
         public List<object[]> GetAvailableTimes(DateTime date);
+
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo);
     }
 }

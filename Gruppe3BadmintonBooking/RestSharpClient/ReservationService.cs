@@ -37,6 +37,11 @@ namespace RestSharpClient
             return _restClient.Get<IEnumerable<Reservation>>(new RestRequest());
         }
 
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
+        {
+            return _restClient.Get<IEnumerable<Reservation>>(new RestRequest($"FilterByPhoneNo/{phoneNo}"));
+        }
+
         public List<object[]> GetAvailableTimes(string date)
         {
             return _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));

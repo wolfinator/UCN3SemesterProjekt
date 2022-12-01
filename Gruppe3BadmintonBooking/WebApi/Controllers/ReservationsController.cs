@@ -110,5 +110,18 @@ namespace WebApi.Controllers
             }
             return list;
         }
+
+        [HttpGet("FilterByPhoneNo/{phoneNo}")]
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
+        {
+            if(phoneNo.Length == 8)
+            {
+                return _reservationDb.GetAllByPhoneNo(phoneNo);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
