@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.button1 = new System.Windows.Forms.Button();
             this.dataGridViewOverview = new System.Windows.Forms.DataGridView();
             this.btnTilbage = new System.Windows.Forms.Button();
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
@@ -42,6 +41,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxMobil = new System.Windows.Forms.TextBox();
             this.lblSoeg = new System.Windows.Forms.Label();
+            this.btnRediger = new System.Windows.Forms.Button();
+            this.btnSlet = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -59,7 +60,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this.dataGridViewOverview);
             this.splitContainer1.Panel1.Controls.Add(this.btnTilbage);
             this.splitContainer1.Panel1.Controls.Add(this.monthCalendar1);
@@ -67,6 +67,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.btnSlet);
+            this.splitContainer1.Panel2.Controls.Add(this.btnRediger);
             this.splitContainer1.Panel2.Controls.Add(this.btnSearch);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewNu);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewHistorik);
@@ -78,15 +80,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(800, 450);
             this.splitContainer1.SplitterDistance = 381;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(300, 189);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // dataGridViewOverview
             // 
@@ -152,7 +145,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewNu.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewNu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNu.Location = new System.Drawing.Point(22, 113);
+            this.dataGridViewNu.Location = new System.Drawing.Point(22, 98);
             this.dataGridViewNu.Name = "dataGridViewNu";
             this.dataGridViewNu.ReadOnly = true;
             this.dataGridViewNu.RowTemplate.Height = 25;
@@ -170,7 +163,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewHistorik.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewHistorik.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewHistorik.Location = new System.Drawing.Point(22, 284);
+            this.dataGridViewHistorik.Location = new System.Drawing.Point(22, 269);
             this.dataGridViewHistorik.Name = "dataGridViewHistorik";
             this.dataGridViewHistorik.ReadOnly = true;
             this.dataGridViewHistorik.RowTemplate.Height = 25;
@@ -182,7 +175,7 @@
             // 
             this.lblHistorik.AutoSize = true;
             this.lblHistorik.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblHistorik.Location = new System.Drawing.Point(173, 262);
+            this.lblHistorik.Location = new System.Drawing.Point(173, 247);
             this.lblHistorik.Name = "lblHistorik";
             this.lblHistorik.Size = new System.Drawing.Size(60, 19);
             this.lblHistorik.TabIndex = 6;
@@ -192,7 +185,7 @@
             // 
             this.lblNuvaerende.AutoSize = true;
             this.lblNuvaerende.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblNuvaerende.Location = new System.Drawing.Point(164, 91);
+            this.lblNuvaerende.Location = new System.Drawing.Point(164, 76);
             this.lblNuvaerende.Name = "lblNuvaerende";
             this.lblNuvaerende.Size = new System.Drawing.Size(83, 19);
             this.lblNuvaerende.TabIndex = 5;
@@ -224,6 +217,24 @@
             this.lblSoeg.Size = new System.Drawing.Size(130, 27);
             this.lblSoeg.TabIndex = 2;
             this.lblSoeg.Text = "Søg booking";
+            // 
+            // btnRediger
+            // 
+            this.btnRediger.Location = new System.Drawing.Point(86, 415);
+            this.btnRediger.Name = "btnRediger";
+            this.btnRediger.Size = new System.Drawing.Size(75, 23);
+            this.btnRediger.TabIndex = 10;
+            this.btnRediger.Text = "&Rediger";
+            this.btnRediger.UseVisualStyleBackColor = true;
+            // 
+            // btnSlet
+            // 
+            this.btnSlet.Location = new System.Drawing.Point(276, 415);
+            this.btnSlet.Name = "btnSlet";
+            this.btnSlet.Size = new System.Drawing.Size(75, 23);
+            this.btnSlet.TabIndex = 11;
+            this.btnSlet.Text = "&Slet";
+            this.btnSlet.UseVisualStyleBackColor = true;
             // 
             // BookingOversigt
             // 
@@ -260,7 +271,8 @@
         private DataGridView dataGridViewNu;
         private DataGridView dataGridViewHistorik;
         private Button btnSearch;
-        private Button button1;
         private DataGridView dataGridViewOverview;
+        private Button btnSlet;
+        private Button btnRediger;
     }
 }
