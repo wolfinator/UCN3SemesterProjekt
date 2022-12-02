@@ -39,7 +39,9 @@ namespace RestSharpClient
 
         public List<object[]> GetAvailableTimes(string date)
         {
-            return _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));
+            var list = _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));
+            list.ForEach(values => values[1] = DateTime.Parse(date) + ((JsonElement)values[1]).Deserialize<TimeSpan>());
+            return list;
         }
 
         public Reservation GetById(int id)

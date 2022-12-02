@@ -8,15 +8,14 @@
 
 <h4>Booking</h4>
 
-Ledige tider på valgte dato:
-
-<form asp-action="SelectEquipment" method="post">
-    <select name="selectedTime">
-        @foreach (var availableTime in Model)
-        {
-            <option value="@availableTime">Bane @availableTime[0].ToString(), Klokken @availableTime[1]</option>
-        }
-    </select>
+Ledige tider på denne dato:
+    <form asp-action="SelectEquipment" method="post">
+        <select name="selectedCourtAndTime">
+            @foreach (var availableTime in Model)
+            {
+                <option value="@availableTime[0]_@availableTime[1]">Bane @availableTime[0].ToString(), Klokken @DateTime.Parse(availableTime[1].ToString()).TimeOfDay</option>
+            }
+        </select>
 
     <div class="form-group">
         <input type="button" value="Gå tilbage" onclick="history.back(-1); return false;" class="btn btn-primary">
