@@ -46,8 +46,7 @@ public class ReservationController : Controller
         return View();
     }
 
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
+
     public ActionResult SelectDate()
     {
         return View(DateTime.Now);
@@ -62,21 +61,21 @@ public class ReservationController : Controller
     }*/
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
     public ActionResult SelectHour(DateTime selectedDate)
     {
         return View(_reservationsData.GetAvailableTimes(selectedDate.ToString("yyyy-MM-dd")));
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
-    public ActionResult SelectEquipment(DateTime startTime)
+    public ActionResult SelectEquipment(DateTime selectedTime)
     {
-        return View(_reservationsData);
+        var reservation = new Reservation();
+        //reservation.startTime = _reservationsData.GetAvailableTime(selectedTime.ToString("yyyy-MM-dd"));
+        StoreReservationInTempData(reservation);
+        return View();
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
     public ActionResult ShowReservation(bool seleshuttleReserved, int numberOfRackets)
     {
         return View();
