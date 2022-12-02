@@ -88,10 +88,10 @@ public class ReservationController : Controller
     }
 
     [HttpPost]
-    public ActionResult ShowReservation(bool seleshuttleReserved, int numberOfRackets)
+    public ActionResult ShowReservation(bool shuttleReserved, int numberOfRackets)
     {
         Reservation reservation = GetReservationFromTempData();
-        reservation.shuttleReserved = seleshuttleReserved;
+        reservation.shuttleReserved = shuttleReserved;
         reservation.numberOfRackets = numberOfRackets;
         StoreReservationInTempData(reservation);
         return View(reservation);
