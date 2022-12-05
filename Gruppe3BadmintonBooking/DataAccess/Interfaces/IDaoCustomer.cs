@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccess.Interfaces
 {
-    public interface IDaoCourt : IDataAccess<Court>
+    public interface IDaoCustomer : IDaoCrud<Customer>
     {
+
     }
 }

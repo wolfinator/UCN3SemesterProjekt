@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.Interfaces;
 using Microsoft.Data.Sql;
 using Microsoft.Data.SqlClient;
 using Model;
@@ -14,10 +15,10 @@ namespace DataAccess
     public class DataAccessReservation : IDaoReservation
     {
         private SqlConnectionStringBuilder conStr;
-        private IDataAccess<Customer> _customerDao;
+        private IDaoCrud<Customer> _customerDao;
         public DataAccessReservation()
         {
-            conStr = Connection.conStr;
+            conStr = DbConnection.conStr;
             _customerDao = new DataAccessCustomer();
         }
         public int Create(Reservation reservation)
@@ -227,7 +228,7 @@ namespace DataAccess
 
         public List<object[]> GetAvailableTimes(DateTime date)
         {
-            SqlConnection con = new(Connection.conStr.ConnectionString);
+            SqlConnection con = new(DbConnection.conStr.ConnectionString);
             List<object[]> list = new();
 
             string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
@@ -247,7 +248,7 @@ namespace DataAccess
         public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
         {
             IEnumerable<Reservation> reservations = null;
-            SqlConnection con = new(Connection.conStr.ConnectionString);
+            SqlConnection con = new(DbConnection.conStr.ConnectionString);
 
             string cmdText = "select r.id, r.creation_date, r.start_time, r.end_time, " +
                 "r.shuttle_reserved, r.number_of_rackets, r.court_court_no, r.customer_id " +

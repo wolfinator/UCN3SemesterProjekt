@@ -1,3 +1,4 @@
+using DataAccess.Interfaces;
 using Microsoft.Data.SqlClient;
 using Model;
 using System;
@@ -15,7 +16,7 @@ namespace DataAccess
 
         public DataAccessInvoice()
         {
-            conStr = Connection.conStr;
+            conStr = DbConnection.conStr;
         }
 
         public int Create(Invoice entity)

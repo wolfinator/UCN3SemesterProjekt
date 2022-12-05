@@ -15,7 +15,7 @@ namespace Tests
         public SqlConnection con { get; private set; }
         public DatabaseFixture()
         {
-            con = new SqlConnection(Connection.conStr.ConnectionString);
+            con = new SqlConnection(DbConnection.conStr.ConnectionString);
             con.Open();
             SqlCommand cmdDeleteAllTestCustomers = new SqlCommand("delete customer from customer c, _address a where a.city_zipcode = 'test' and a.customer_id = c.id", con);
             SqlCommand cmdRemoveTestCityZip = new("delete from CityZip where zipcode = 'test'", con);   

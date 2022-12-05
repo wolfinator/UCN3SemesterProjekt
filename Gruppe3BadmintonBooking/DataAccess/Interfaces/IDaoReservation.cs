@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccess.Interfaces
 {
-    public interface IDaoReservation : IDataAccess<Reservation>
+    public interface IDaoReservation : IDaoCrud<Reservation>
     {
         public bool DeleteAllByCustomerId(int customerId);
 

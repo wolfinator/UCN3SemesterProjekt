@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.Interfaces;
 using Microsoft.Data.SqlClient;
 using Model;
 
@@ -14,7 +15,7 @@ namespace DataAccess
         private SqlConnectionStringBuilder conStr;
         public DataAccessCourt()
         {
-            conStr = Connection.conStr;
+            conStr = DbConnection.conStr;
         }
 
         public int Create(Court court)

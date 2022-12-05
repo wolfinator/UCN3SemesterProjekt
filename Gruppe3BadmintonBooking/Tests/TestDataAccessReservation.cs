@@ -25,7 +25,7 @@ namespace Tests
         public ReservationDbFixture()
         {
             // Setting up the connection
-            con = new SqlConnection(Connection.conStr.ConnectionString);
+            con = new SqlConnection(DbConnection.conStr.ConnectionString);
             con.Open();
 
             // Setting up clean up queries to delete test data

@@ -5,15 +5,15 @@ using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess
+namespace DataAccess.Interfaces
 {
-    public interface IDataAccess<T>
+    public interface IDaoCrud<T>
     {
         IEnumerable<T> GetAll();
         T GetById(int id);
         bool Update(T entity);
         bool DeleteById(int id);
         int Create(T entity);
-      
+
     }
 }
