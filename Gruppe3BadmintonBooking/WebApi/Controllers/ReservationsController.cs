@@ -53,7 +53,7 @@ namespace WebApi.Controllers
 
         // POST api/<ReservationController>
         [HttpPost]
-        public Reservation Post([FromBody] Reservation reservation)
+        public IActionResult Post([FromBody] Reservation reservation)
         {
             try
             {
@@ -62,8 +62,12 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.Log(LogLevel.Error, $"Failed to create reservation in database:\n{ex.Message}");
+                if (ex.Message.Contains("Cannot insert duplicate"))
+                {
+                    return StatusCode(409);
+                }
             }
-            return reservation;
+            return CreatedAtAction("Post", reservation);
         }
 
         // PUT api/<ReservationController>/5

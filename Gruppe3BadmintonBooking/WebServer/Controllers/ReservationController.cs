@@ -110,8 +110,20 @@ public class ReservationController : Controller
 
         reservation.customer.id = _customerService.Create(reservation.customer);
         reservation.creationDate = DateTime.Now;
-
-        _reservationsService.Create(reservation);
+        try
+        {
+            _reservationsService.Create(reservation);
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                TempData["IsAlreadyBooked"] = "Den valgte tid er allerede blevet booket.";
+                return RedirectToAction("Index", "Home", reservation);
+            }
+            throw;
+        }
+       
 
         return View(reservation);
     } 
