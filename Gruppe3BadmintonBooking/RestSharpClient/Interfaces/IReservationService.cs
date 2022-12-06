@@ -9,6 +9,6 @@ namespace RestSharpClient.Interfaces
 {
     public interface IReservationService : IServiceCrud<Reservation>
     {
-        List<AvailableTime> GetAvailableTimes(string date);
+        List<object[]> GetAvailableTimes(string date);
     }
 }

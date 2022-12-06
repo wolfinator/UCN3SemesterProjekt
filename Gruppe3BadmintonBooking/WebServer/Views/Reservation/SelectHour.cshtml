@@ -1,5 +1,5 @@
 ﻿@using RestSharpClient
-@model List<AvailableTime>
+@model List<object[]>
 
 
 @{
@@ -13,10 +13,10 @@
 Ledige tider på valgte dato:
 
 <form asp-action="SelectEquipment" method="post">
-    <select name="selectedTime">
+    <select name="selectedCourtAndTime">
         @foreach (var availableTime in Model)
         {
-            <option value="@availableTime">Bane @availableTime.courtNo, Klokken @availableTime.startTime</option>
+            <option value="@availableTime[0]_@availableTime[1]">Bane @availableTime[0], Klokken @(((DateTime)availableTime[1]).ToShortTimeString())</option>
         }
     </select>
 
