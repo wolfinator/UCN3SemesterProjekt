@@ -136,10 +136,7 @@ namespace DataAccess
                         endTime = reader.GetDateTime(2),
                         shuttleReserved = reader.GetBoolean(3),
 
-                        court = new Court()
-                        {
-                            id = reader.GetInt32(4),
-                        },
+                        courtNo = reader.GetInt32(4),
 
                         customer = new Customer()
                         {

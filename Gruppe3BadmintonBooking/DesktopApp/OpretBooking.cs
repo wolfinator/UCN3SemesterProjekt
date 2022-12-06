@@ -89,7 +89,7 @@ namespace DesktopApp
 
                 // need to change so we only have one of the values
                 currentReservation.courtNo = selectedCourt;
-                currentReservation.court = new() { id = selectedCourt };
+                //currentReservation.court = new() { id = selectedCourt };
 
                 currentReservation.startTime = selectedDate + selectedTime;
                 currentReservation.endTime = selectedDate + selectedTime.Add(TimeSpan.FromHours(1));

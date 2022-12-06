@@ -195,7 +195,7 @@ namespace DataAccess
             reservation.endTime = reader.GetDateTime(3);
             reservation.shuttleReserved = reader.GetBoolean(4);
             reservation.numberOfRackets = reader.GetInt32(5);
-            reservation.court = new Court() { id = reader.GetInt32(6) };
+            //reservation.court = new Court() { id = reader.GetInt32(6) };
             reservation.courtNo = reader.GetInt32(6);
             reservation.customer = _customerDao.GetById(reader.GetInt32(7));
             

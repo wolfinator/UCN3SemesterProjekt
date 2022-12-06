@@ -15,7 +15,8 @@ namespace WebServer.Controllers;
 public class ReservationController : Controller
 {
 
-    private readonly IReservationService _reservationsData;
+    private readonly IReservationService _reservationsService;
+    private readonly ICustomerService _customerService;
 
     /*static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
@@ -27,18 +28,19 @@ public class ReservationController : Controller
 };
     */
 
-    public ReservationController(IReservationService reservationsData)
+    public ReservationController(IReservationService reservationsService, ICustomerService customerService)
     {
-        _reservationsData = reservationsData;
+        _reservationsService = reservationsService;
+        _customerService = customerService;
     }
 
 
-    public ActionResult Index() => View(_reservationsData);
+    public ActionResult Index() => View(_reservationsService);
 
     public ActionResult Details(int id)
     {
         //return View(_reservationsData.First(reservation => reservation.Id == id));
-        return View(_reservationsData.GetById(id));
+        return View(_reservationsService.GetById(id));
     }
 
     public ActionResult Create()
@@ -63,7 +65,7 @@ public class ReservationController : Controller
     [HttpPost]
     public ActionResult SelectHour(DateTime selectedDate)
     {
-        return View(_reservationsData.GetAvailableTimes(selectedDate.ToString("yyyy-MM-dd")));
+        return View(_reservationsService.GetAvailableTimes(selectedDate.ToString("yyyy-MM-dd")));
     }
 
     [HttpPost]
@@ -88,12 +90,29 @@ public class ReservationController : Controller
     }
 
     [HttpPost]
-    public ActionResult ShowReservation(bool shuttleReserved, int numberOfRackets)
+    public ActionResult ShowReservation(Reservation viewReservation)
     {
         Reservation reservation = GetReservationFromTempData();
-        reservation.shuttleReserved = shuttleReserved;
-        reservation.numberOfRackets = numberOfRackets;
+        reservation.shuttleReserved = viewReservation.shuttleReserved;
+        reservation.numberOfRackets = viewReservation.numberOfRackets;
         StoreReservationInTempData(reservation);
+
+        reservation.customer = new Customer()
+        {
+            firstName = viewReservation.customer.firstName,
+            lastName = viewReservation.customer.lastName,
+            phoneNo = viewReservation.customer.phoneNo,
+            email = viewReservation.customer.email,
+            street = "",
+            houseNo = "",
+            zipcode = ""
+        };
+
+        reservation.customer.id = _customerService.Create(reservation.customer);
+        reservation.creationDate = DateTime.Now;
+
+        _reservationsService.Create(reservation);
+
         return View(reservation);
     } 
 /*
