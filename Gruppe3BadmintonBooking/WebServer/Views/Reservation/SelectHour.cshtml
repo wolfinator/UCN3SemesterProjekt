@@ -1,4 +1,6 @@
-﻿@model List<object[]>
+﻿@using RestSharpClient
+@model List<AvailableTime>
+
 
 @{
     ViewData["Title"] = "Vælg tidspunkt";
@@ -14,7 +16,7 @@ Ledige tider på valgte dato:
     <select name="selectedTime">
         @foreach (var availableTime in Model)
         {
-            <option value="@availableTime">Bane @availableTime[0].ToString(), Klokken @availableTime[1]</option>
+            <option value="@availableTime">Bane @availableTime.courtNo, Klokken @availableTime.startTime</option>
         }
     </select>
 

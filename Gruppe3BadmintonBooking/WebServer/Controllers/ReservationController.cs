@@ -7,6 +7,7 @@ using Models;
 using Newtonsoft.Json;
 using RestSharpClient.Interfaces;
 using WebServer.Models;
+using RestSharpClient;
 
 namespace WebServer.Controllers;
 
@@ -67,10 +68,9 @@ public class ReservationController : Controller
     }
 
     [HttpPost]
-    public ActionResult SelectEquipment(DateTime selectedTime)
+    public ActionResult SelectEquipment(AvailableTime selectedTime)
     {
         var reservation = new Reservation();
-        //reservation.startTime = _reservationsData.GetAvailableTime(selectedTime.ToString("yyyy-MM-dd"));
         StoreReservationInTempData(reservation);
         return View();
     }
