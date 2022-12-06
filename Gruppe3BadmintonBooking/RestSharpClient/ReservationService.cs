@@ -37,23 +37,11 @@ namespace RestSharpClient
             return _restClient.Get<IEnumerable<Reservation>>(new RestRequest());
         }
 
-        public List<AvailableTime> GetAvailableTimes(string date)
+        public List<object[]> GetAvailableTimes(string date)
         {
-            var availableTime = _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));
-
-            List<AvailableTime> listAvailableTime = new List<AvailableTime>();
-
-            var currentDate = DateTime.Parse(date);
-
-            foreach(var timeSlot in availableTime)
-            {
-               AvailableTime time = new AvailableTime();
-                time.courtNo = ((JsonElement)timeSlot[0]).Deserialize<int>();
-                time.startTime = currentDate + ((JsonElement)timeSlot[1]).Deserialize<TimeSpan>();
-                listAvailableTime.Add(time);
-            }
-
-            return listAvailableTime;
+            var list = _restClient.Get<List<object[]>>(new RestRequest($"AvailableTimes/{date}"));
+            list.ForEach(values => values[1] = DateTime.Parse(date) + ((JsonElement)values[1]).Deserialize<TimeSpan>());
+            return list;
         }
 
         public Reservation GetById(int id)

@@ -7,7 +7,6 @@ using Models;
 using Newtonsoft.Json;
 using RestSharpClient.Interfaces;
 using WebServer.Models;
-using RestSharpClient;
 
 namespace WebServer.Controllers;
 
@@ -68,17 +67,34 @@ public class ReservationController : Controller
     }
 
     [HttpPost]
-    public ActionResult SelectEquipment(AvailableTime selectedTime)
+    //[ValidateAntiForgeryToken]
+    public ActionResult SelectEquipment(string selectedCourtAndTime)
     {
-        var reservation = new Reservation();
+        Reservation reservation = new();
+        var courtAndTime = selectedCourtAndTime.Split('_', StringSplitOptions.RemoveEmptyEntries);
+
+        //var actual = JsonConvert.DeserializeObject<object[]>(selectedCourtAndTime);
+
+        var actualStartTime = DateTime.Parse(courtAndTime[1]);
+        var actualCourtNo = int.Parse(courtAndTime[0]);
+
+        reservation.courtNo = actualCourtNo;
+        reservation.startTime = actualStartTime;
+        reservation.endTime = actualStartTime.AddHours(1);
+
         StoreReservationInTempData(reservation);
+        
         return View();
     }
 
     [HttpPost]
-    public ActionResult ShowReservation(bool seleshuttleReserved, int numberOfRackets)
+    public ActionResult ShowReservation(bool shuttleReserved, int numberOfRackets)
     {
-        return View();
+        Reservation reservation = GetReservationFromTempData();
+        reservation.shuttleReserved = shuttleReserved;
+        reservation.numberOfRackets = numberOfRackets;
+        StoreReservationInTempData(reservation);
+        return View(reservation);
     } 
 /*
     public ActionResult Edit(int id)
