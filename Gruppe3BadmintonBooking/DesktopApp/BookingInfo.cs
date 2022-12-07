@@ -183,10 +183,11 @@ namespace DesktopApp
             customer.id = _customerService.Create(customer);
             currentReservation.customer = customer;
             invoice.totalPrice = GetPrice();
-            invoice.reservation = currentReservation;
 
             currentReservation.creationDate = DateTime.Now;
-            if (_reservationService.Create(currentReservation) != -1)
+            currentReservation.id = _reservationService.Create(currentReservation);
+            invoice.reservation = currentReservation;
+            if (currentReservation.id != -1)
             {
                 this.Hide();
                 BookingBekræftelse bookingBekræftelse = new(invoice);

@@ -54,6 +54,34 @@ namespace DesktopApp
             dataGridViewHistorik.Rows.Add(rowHistorik);
         }
 
+        private void btnSearch_ClickV2(object sender, EventArgs e)
+        {
+            var phoneNo = textBoxMobil.Text;
+            var currentBookings = Task.Run(()=>_reservationService.GetAllByPhoneNo(phoneNo));
+            ClearDataGridNuHistorik();
+
+            currentBookings.Result.ToList()
+                .ForEach(reservation =>
+                {
+                    var today = DateTime.Now;
+                    var row = new string[]
+                    {
+                        reservation.startTime.Date.ToString(),
+                        $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
+                        reservation.courtNo.ToString()
+                    };
+                    if(reservation.endTime < today)
+                    {
+                        dataGridViewHistorik.Rows.Add(row);
+                    }
+                    else
+                    {
+                        dataGridViewNu.Rows.Add(row);
+                    }
+                    
+                });
+        }
+
         //private void monthCalendarOverview_DateChanged(object sender, DateRangeEventArgs e)
         //{
         //    dataGridViewOverview.ColumnCount = 5;
@@ -68,7 +96,7 @@ namespace DesktopApp
 
         private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
         {
-            ClearDataGrid();
+            ClearDataGridOverview();
 
             string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "3" };
             dataGridViewOverview.Rows.Add(rowOverview);
@@ -79,12 +107,13 @@ namespace DesktopApp
             var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
             var selectedDate = monthCalendar1.SelectionStart;
             
-            ClearDataGrid();
+            ClearDataGridOverview();
             
             reservations.Result.ToList()
                 .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
                 .ForEach((reservation) =>
-            {
+                {
+
                 string[] row = new string[]
                 {
                     $"{reservation.customer.firstName} {reservation.customer.lastName}",
@@ -101,7 +130,7 @@ namespace DesktopApp
 
         }
 
-        private void ClearDataGrid()
+        private void ClearDataGridOverview()
         {
             dataGridViewOverview.Rows.Clear();
             dataGridViewOverview.ColumnCount = 4;
@@ -109,6 +138,21 @@ namespace DesktopApp
             dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
             dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
             dataGridViewOverview.Columns[3].Name = "Bane:";
+        }
+
+        private void ClearDataGridNuHistorik()
+        {
+            dataGridViewNu.Rows.Clear();
+            dataGridViewNu.ColumnCount = 3;
+            dataGridViewNu.Columns[0].Name = "Dato:";
+            dataGridViewNu.Columns[1].Name = "Tidspunkt:";
+            dataGridViewNu.Columns[2].Name = "Bane:";
+
+            dataGridViewHistorik.Rows.Clear();
+            dataGridViewHistorik.ColumnCount = 3;
+            dataGridViewHistorik.Columns[0].Name = "Dato:";
+            dataGridViewHistorik.Columns[1].Name = "Tidspunkt:";
+            dataGridViewHistorik.Columns[2].Name = "Bane:";
         }
     }
 }

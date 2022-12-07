@@ -21,7 +21,7 @@ namespace RestSharpClient
             request.AddBody(reservation);
             var response = _restClient.Post(request);
             var createdReservation = JsonSerializer.Deserialize<Reservation>(response.Content);
-            if (createdReservation != null) return createdReservation.Id;
+            if (createdReservation != null) return createdReservation.id;
             return -1;
         }
 
@@ -35,6 +35,11 @@ namespace RestSharpClient
         public IEnumerable<Reservation> GetAll()
         {
             return _restClient.Get<IEnumerable<Reservation>>(new RestRequest());
+        }
+
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
+        {
+            return _restClient.Get<IEnumerable<Reservation>>(new RestRequest($"FilterByPhoneNo/{phoneNo}"));
         }
 
         public List<object[]> GetAvailableTimes(string date)
@@ -51,7 +56,7 @@ namespace RestSharpClient
 
         public bool Update(Reservation reservation)
         {
-            var request = new RestRequest($"{reservation.Id}");
+            var request = new RestRequest($"{reservation.id}");
             var response = _restClient.Put(request);
             return response.IsSuccessStatusCode;
         }

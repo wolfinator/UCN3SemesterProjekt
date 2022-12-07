@@ -25,7 +25,7 @@ namespace Tests
         public ReservationDbFixture()
         {
             // Setting up the connection
-            con = new SqlConnection(Connection.conStr.ConnectionString);
+            con = new SqlConnection(DbConnection.conStr.ConnectionString);
             con.Open();
 
             // Setting up clean up queries to delete test data
@@ -191,9 +191,9 @@ namespace Tests
 
             //Assert
             Assert.NotNull(reservations);
-            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[0]);
-            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[1]);
-            Assert.Contains(reservations, reservation => reservation.Id == reservationIds[2]);
+            Assert.Contains(reservations, reservation => reservation.id == reservationIds[0]);
+            Assert.Contains(reservations, reservation => reservation.id == reservationIds[1]);
+            Assert.Contains(reservations, reservation => reservation.id == reservationIds[2]);
 
             //Cleanup
             for (int i = 0; i < reservationIds.Length; i++)
@@ -227,7 +227,7 @@ namespace Tests
 
             //Assert
             Assert.NotNull(reservation);
-            Assert.Equal(reservation.Id, reservationId);
+            Assert.Equal(reservation.id, reservationId);
 
             //Cleanup
             cleanupReservation.Parameters.AddWithValue("@Id", reservationId);
@@ -255,7 +255,7 @@ namespace Tests
 
             Reservation reservationUpdate = new()
             {
-                Id = reservationId,
+                id = reservationId,
                 creationDate = dateTime.Date.AddYears(-12).AddHours(1),
                 startTime = dateTime.Date.AddYears(-12).AddHours(10),
                 endTime = dateTime.Date.AddYears(-12).AddHours(11),

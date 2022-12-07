@@ -1,4 +1,5 @@
 using DataAccess;
+using DataAccess.Interfaces;
 using Model;
 
 var builder = WebApplication.CreateBuilder(args);

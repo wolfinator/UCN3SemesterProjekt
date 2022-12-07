@@ -1,4 +1,4 @@
-﻿using DataAccess;
+﻿using DataAccess.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
@@ -57,7 +57,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                reservation.Id = _reservationDb.Create(reservation);
+                reservation.id = _reservationDb.Create(reservation);
             }
             catch (Exception ex)
             {
@@ -113,6 +113,19 @@ namespace WebApi.Controllers
                 throw;
             }
             return list;
+        }
+
+        [HttpGet("FilterByPhoneNo/{phoneNo}")]
+        public IEnumerable<Reservation> GetAllByPhoneNo(string phoneNo)
+        {
+            if(phoneNo.Length == 8)
+            {
+                return _reservationDb.GetAllByPhoneNo(phoneNo);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

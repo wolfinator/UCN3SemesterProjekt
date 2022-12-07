@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DataAccess.Interfaces;
+using Microsoft.Data.SqlClient;
 using Model;
 using System.Diagnostics;
 
@@ -9,7 +10,7 @@ namespace DataAccess
         private SqlConnectionStringBuilder conStr;
         public DataAccessCustomer()
         {
-            conStr = Connection.conStr;
+            conStr = DbConnection.conStr;
         }
         //public int GetPersonType(Customer person)
         //{

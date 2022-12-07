@@ -47,12 +47,14 @@ namespace DesktopApp
             txtEfternavn.Text = customer.lastName;
             txtMobil.Text = customer.phoneNo;
             txtEmail.Text = customer.email;
-            txtDato.Text = DateOnly.FromDateTime(reservation.startTime.Date).ToString();
-            txtKlok.Text = $"{reservation.startTime.TimeOfDay} - {reservation.endTime.TimeOfDay}";
+            txtDato.Text = reservation.startTime.Date.ToShortDateString();
+            txtKlok.Text = $"{reservation.startTime.ToShortTimeString()} - {reservation.endTime.ToShortTimeString()}";
             txtSted.Text = $"Bane {reservation.courtNo}";
-            txtPris.Text = invoice.totalPrice.ToString("C2", CultureInfo.CurrentCulture);
+            txtPris.Text = invoice.totalPrice.ToString("C2", CultureInfo.CreateSpecificCulture("da-DK"));
             txtKetsjer.Text = reservation.numberOfRackets.ToString();
             txtBold.Text = reservation.shuttleReserved ? "Ja" : "Nej";
+
+            _invoiceService.Create(invoice);
         }
 
         private void btnAfslut_Click(object sender, EventArgs e)
