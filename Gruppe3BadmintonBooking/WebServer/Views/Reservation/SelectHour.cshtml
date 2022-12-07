@@ -10,7 +10,7 @@
 
 <h4>Booking</h4>
 
-Ledige tider på valgte dato:
+Ledige tider på valgte dato: <b>@TempData["ChosenDate"]</b>
 
 <form asp-action="SelectEquipment" method="post">
     <select name="selectedCourtAndTime">
@@ -26,7 +26,9 @@ Ledige tider på valgte dato:
     </div>
 </form>
 
-
+<div>
+    <a asp-controller="Home" asp-action="Index">Gå tilbage til startside</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

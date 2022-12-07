@@ -15,7 +15,7 @@
 
             <div class="form-group">
                 <label class="control-label">Dato</label>
-                <input name="selectedDate" type="date" class="form-control" />
+                <input name="selectedDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
             </div>
 
             <div class="form-group">
@@ -26,7 +26,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller ="Home" asp-action="Index">Gå tilbage til startside</a>
 </div>
 
 @section Scripts {

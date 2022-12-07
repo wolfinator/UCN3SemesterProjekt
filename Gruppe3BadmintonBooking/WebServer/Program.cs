@@ -8,6 +8,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

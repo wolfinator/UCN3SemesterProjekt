@@ -17,6 +17,7 @@ public class ReservationController : Controller
 
     private readonly IReservationService _reservationsService;
     private readonly ICustomerService _customerService;
+    private readonly IInvoiceService _invoiceService;
 
     private readonly int ReservationBasePrice = 150;
     private readonly int ReservationShuttlePrice = 50;
@@ -31,10 +32,11 @@ public class ReservationController : Controller
 };
     */
 
-    public ReservationController(IReservationService reservationsService, ICustomerService customerService)
+    public ReservationController(IReservationService reservationsService, ICustomerService customerService, IInvoiceService invoiceService)
     {
         _reservationsService = reservationsService;
         _customerService = customerService;
+        _invoiceService = invoiceService;
     }
 
 
@@ -68,6 +70,7 @@ public class ReservationController : Controller
     [HttpPost]
     public ActionResult SelectHour(DateTime selectedDate)
     {
+        TempData["ChosenDate"] = $"{selectedDate.ToString("dddd")} den {int.Parse(selectedDate.ToString("dd"))}. {selectedDate.ToString("MMMM yyyy")}"; 
         return View(_reservationsService.GetAvailableTimes(selectedDate.ToString("yyyy-MM-dd")));
     }
 
@@ -115,7 +118,9 @@ public class ReservationController : Controller
         reservation.creationDate = DateTime.Now;
         try
         {
-            _reservationsService.Create(reservation);
+            reservation.id = _reservationsService.Create(reservation);
+            var invoice = new Invoice() {reservation = reservation, totalPrice = GetPrice(reservation) };
+            _invoiceService.Create(invoice);
         }
         catch (HttpRequestException ex)
         {

@@ -26,23 +26,29 @@ namespace Controllers
                 SignIn(loginInfo);
                 if (string.IsNullOrEmpty(returnUrl))
                 {
-                    return RedirectToAction();
+                    return RedirectToAction(returnUrl);
                 }
             }
             return View();
         }
-            private void SignIn(LoginModel user)
-            {
-                var claims = new List<Claim>
+        private void SignIn(LoginModel user)
         {
+            var claims = new List<Claim>
+            {
             new Claim(ClaimTypes.Email, user.Email),
-        };
+            };
 
-                var claimsIdentity = new ClaimsIdentity(
-                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                HttpContext.SignInAsync(
-                  CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-            }
+            HttpContext.SignInAsync(
+              CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+        }
+
+        public IActionResult LogOut()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
     }
+}
