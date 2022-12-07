@@ -51,30 +51,42 @@ namespace DataAccess
             cmdAddress.Parameters.AddWithValue("@Street", customer.street);
             cmdAddress.Parameters.AddWithValue("@HouseNo", customer.houseNo);
             cmdAddress.Parameters.AddWithValue("@CityZipcode", customer.zipcode);
-
-            con.Open();
-            using (var trans = con.BeginTransaction())
+            try
             {
-                try
+                con.Open();
+                using (var trans = con.BeginTransaction())
                 {
-                    cmdCustomer.Transaction = trans;
-                    cmdAddress.Transaction = trans;
-                    customerId = (int)cmdCustomer.ExecuteScalar();
-                    if(customer.street != "" && customer.houseNo != "" && customer.zipcode != "")
+                    try
                     {
-                        cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
-                        cmdAddress.ExecuteNonQuery();
-                    }           
-                }
-                catch (SqlException)
-                {
-                    trans.Rollback();
-                    throw;
-                }
+                        cmdCustomer.Transaction = trans;
+                        cmdAddress.Transaction = trans;
+                        customerId = (int)cmdCustomer.ExecuteScalar();
+                        if (customer.street != "" && customer.houseNo != "" && customer.zipcode != "")
+                        {
+                            cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
+                            cmdAddress.ExecuteNonQuery();
+                        }
+                    }
+                    catch (SqlException)
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
 
-                trans.Commit();
+                    trans.Commit();
+                }
             }
-            con.Close();
+            catch (Exception)
+            {
+                // TODO exception handling
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
             return customerId;
         }
 
@@ -88,9 +100,10 @@ namespace DataAccess
             //string cmdTextDeleteReservations = "delete from reservation where customer_id = @CustomerId";
             SqlCommand cmdDelete = new(cmdTextDelete, con);
 
-            con.Open();
+
             try
             {
+                con.Open();
                 // Skal nok ændres hvis vi laver cascade på person og _address, er lidt kringlet
                 cmdDelete.Parameters.AddWithValue("@Id", id);
                 isDeleted = cmdDelete.ExecuteNonQuery() >= 1;
@@ -100,8 +113,11 @@ namespace DataAccess
                 //TODO handle exception
                 throw;
             }
+            finally
+            {
+                con.Close();
+            }
 
-            con.Close();
             return isDeleted;
         }
         public IEnumerable<Customer> GetAll()
@@ -112,18 +128,23 @@ namespace DataAccess
             string cmdTextGelAll = "select * from Customer c left join _address a on a.customer_id = c.id";
             SqlCommand cmdGetAll = new(cmdTextGelAll, con);
 
-            con.Open();
             try
             {
+                con.Open();
                 SqlDataReader reader = cmdGetAll.ExecuteReader();
                 customers = BuildObjects(reader);
+                reader.Close();
             }
             catch (SqlException)
             {
                 //TODO handle exception
                 throw;
             }
-            con.Close();
+            finally
+            {
+                con.Close();
+            }
+
             return customers;
         }
         public Customer GetById(int id)
@@ -135,16 +156,21 @@ namespace DataAccess
 
             cmdGetById.Parameters.AddWithValue("@Id", id);
 
-            con.Open();
             try
             {
+                con.Open();
                 SqlDataReader reader = cmdGetById.ExecuteReader();
                 if (reader.Read()) customer = BuildObject(reader);
+                reader.Close();
             }
             catch (SqlException)
             {
                 //TODO handle exception
                 throw;
+            }
+            finally
+            {
+                con.Close();
             }
 
             return customer;
@@ -182,29 +208,40 @@ namespace DataAccess
             cmdUpdateAddress.Parameters.AddWithValue("@CityZipcode", entity.zipcode);
             cmdUpdateAddress.Parameters.AddWithValue("@CustomerId", entity.id);
 
-            con.Open();
-            using (var trans = con.BeginTransaction())
+            try
             {
-                try
+                con.Open();
+                using (var trans = con.BeginTransaction())
                 {
-                    cmdUpdateCustomer.Transaction = trans;
-                    cmdUpdateAddress.Transaction = trans;
+                    try
+                    {
+                        cmdUpdateCustomer.Transaction = trans;
+                        cmdUpdateAddress.Transaction = trans;
 
-                    int updatedCustomer = cmdUpdateCustomer.ExecuteNonQuery();
-                    int updatedAddress = cmdUpdateAddress.ExecuteNonQuery();
+                        int updatedCustomer = cmdUpdateCustomer.ExecuteNonQuery();
+                        int updatedAddress = cmdUpdateAddress.ExecuteNonQuery();
 
-                    // Checks if both the person and address tables are updated
-                    isUpdated = updatedAddress + updatedAddress == 2;
+                        // Checks if both the person and address tables are updated
+                        isUpdated = updatedAddress + updatedAddress == 2;
+                    }
+                    catch (SqlException)
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+
+                    trans.Commit();
                 }
-                catch (SqlException)
-                {
-                    trans.Rollback();
-                    throw;
-                }
-
-                trans.Commit();
             }
-            con.Close();
+            catch (Exception)
+            {
+                //TODO exception handling
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
 
             return isUpdated;
         }
@@ -232,27 +269,28 @@ namespace DataAccess
         {
             Customer customer = null;
 
-            try
+            customer = new Customer();
+            customer.id = reader.GetInt32(0);
+            customer.firstName = reader.GetString(1);
+            customer.lastName = reader.GetString(2);
+            customer.email = reader.GetString(3);
+            customer.phoneNo = reader.GetString(4);
+            if (!reader.IsDBNull(6))
             {
-                customer = new Customer();
-                customer.id = reader.GetInt32(0);
-                customer.firstName = reader.GetString(1);
-                customer.lastName = reader.GetString(2);
-                customer.email = reader.GetString(3);
-                customer.phoneNo = reader.GetString(4);
                 customer.street = reader.GetString(6);
                 customer.houseNo = reader.GetString(7);
                 customer.zipcode = reader.GetString(8);
             }
-            catch (Exception)
+            else
             {
-
+                customer.street = "";
+                customer.houseNo = "";
+                customer.zipcode = "";
             }
             
-
             //TODO if member add all reservations to object
             return customer;
         }
     }
 }
-    
+

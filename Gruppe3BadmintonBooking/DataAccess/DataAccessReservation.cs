@@ -39,10 +39,10 @@ namespace DataAccess
                 cmdReservation.Parameters.AddWithValue("@CourtId", reservation.courtNo);
                 cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
                 //cmdReservation.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
-
-                con.Open();
+                
                 try
                 {
+                    con.Open();
                     reservationId = (int) cmdReservation.ExecuteScalar();
                 }
                 catch (SqlException)
@@ -87,8 +87,9 @@ namespace DataAccess
                     con.Open();
                     SqlDataReader reader = cmdGetAll.ExecuteReader();
                     list = BuildObjects(reader);
+                    reader.Close();
                 }
-                catch (SqlException)
+                catch (Exception)
                 {
                     // Todo Handle Exception
                     throw;
@@ -156,9 +157,9 @@ namespace DataAccess
 
                 cmdUpdate.Parameters.AddWithValue("@Id", reservation.id);
 
-                con.Open();
                 try
                 {
+                    con.Open();
                     updated = cmdUpdate.ExecuteNonQuery() == 1;
                 }
                 catch (SqlException)
@@ -230,20 +231,23 @@ namespace DataAccess
 
         public List<object[]> GetAvailableTimes(DateTime date)
         {
-            SqlConnection con = new(DbConnection.conStr.ConnectionString);
             List<object[]> list = new();
 
-            string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
-            SqlCommand cmdAvailableTimes = new(cmdText, con);
-            cmdAvailableTimes.Parameters.AddWithValue("@current_date", date);
-
-            con.Open();
-            SqlDataReader reader = cmdAvailableTimes.ExecuteReader();
-            while (reader.Read())
+            using (SqlConnection con = new(DbConnection.conStr.ConnectionString))
             {
-                object[] availableTime = {reader.GetInt32(0), reader.GetTimeSpan(1)};
-                list.Add(availableTime);
+                string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
+                SqlCommand cmdAvailableTimes = new(cmdText, con);
+                cmdAvailableTimes.Parameters.AddWithValue("@current_date", date);
+
+                con.Open();
+                SqlDataReader reader = cmdAvailableTimes.ExecuteReader();
+                while (reader.Read())
+                {
+                    object[] availableTime = { reader.GetInt32(0), reader.GetTimeSpan(1) };
+                    list.Add(availableTime);
+                }
             }
+            
             return list;
         }
 
@@ -260,9 +264,10 @@ namespace DataAccess
             SqlCommand cmdGetAllByPhoneNo = new(cmdText, con);
 
             cmdGetAllByPhoneNo.Parameters.AddWithValue("@PhoneNo", phoneNo);
-            con.Open();
+            
             try
             {
+                con.Open();
                 SqlDataReader reader = cmdGetAllByPhoneNo.ExecuteReader();
                 reservations = BuildObjects(reader);
             }
@@ -271,7 +276,10 @@ namespace DataAccess
                 //Todo handle exception
                 throw;
             }
-            con.Close();
+            finally
+            {
+                con.Close();
+            }          
             return reservations;
         }
     }

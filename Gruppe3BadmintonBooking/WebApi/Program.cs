@@ -7,10 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IDaoCustomer, DataAccessCustomer>();
-builder.Services.AddSingleton<IDaoReservation, DataAccessReservation>();
-builder.Services.AddSingleton<IDaoInvoice, DataAccessInvoice>();
-builder.Services.AddSingleton<IDaoCourt, DataAccessCourt>();
+builder.Services.AddScoped<IDaoCustomer, DataAccessCustomer>();
+builder.Services.AddScoped<IDaoReservation, DataAccessReservation>();
+builder.Services.AddScoped<IDaoInvoice, DataAccessInvoice>();
+builder.Services.AddScoped<IDaoCourt, DataAccessCourt>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
