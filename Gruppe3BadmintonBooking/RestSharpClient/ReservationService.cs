@@ -21,7 +21,7 @@ namespace RestSharpClient
             request.AddBody(reservation);
             var response = _restClient.Post(request);
             var createdReservation = JsonSerializer.Deserialize<Reservation>(response.Content);
-            if (createdReservation != null) return createdReservation.Id;
+            if (createdReservation != null) return createdReservation.id;
             return -1;
         }
 
@@ -54,7 +54,7 @@ namespace RestSharpClient
 
         public bool Update(Reservation reservation)
         {
-            var request = new RestRequest($"{reservation.Id}");
+            var request = new RestRequest($"{reservation.id}");
             var response = _restClient.Put(request);
             return response.IsSuccessStatusCode;
         }

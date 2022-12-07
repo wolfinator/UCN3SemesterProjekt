@@ -26,7 +26,7 @@ namespace DataAccess
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = "INSERT INTO Invoice output INSERTED.ID VALUES (@totalPrice, @reservationId) ";
             cmd.Parameters.AddWithValue("totalPrice", entity.totalPrice);
-            cmd.Parameters.AddWithValue("reservationId", entity.reservation.Id);
+            cmd.Parameters.AddWithValue("reservationId", entity.reservation.id);
 
 
             int createdId = (int) cmd.ExecuteScalar();
@@ -132,7 +132,7 @@ namespace DataAccess
 
                     reservation = new Reservation()
                     {
-                        Id = reader.GetInt32(6),
+                        id = reader.GetInt32(6),
                         startTime = reader.GetDateTime(1),
                         endTime = reader.GetDateTime(2),
                         shuttleReserved = reader.GetBoolean(3),

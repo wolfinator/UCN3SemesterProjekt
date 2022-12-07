@@ -43,7 +43,7 @@ namespace DesktopApp
             currentReservation = new();
 
             courtService = new CourtService();
-            courts = courtService.GetAll();
+            //courts = courtService.GetAll();
         }
         
 

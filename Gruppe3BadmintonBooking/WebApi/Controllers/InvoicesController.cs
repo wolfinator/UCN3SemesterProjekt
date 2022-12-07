@@ -50,13 +50,22 @@ namespace WebApi.Controllers
             return invoice;
         }
 
-        /*
+
         // POST api/<InvoicesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public Invoice Post([FromBody] Invoice invoice)
         {
+            try
+            {
+                invoice.id = _invoiceDb.Create(invoice);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, $"Failed to post invoice in database:\n{ex.Message}");
+            }
+            return invoice;
         }
-
+        /*
         // PUT api/<InvoicesController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

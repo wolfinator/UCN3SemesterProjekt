@@ -16,10 +16,12 @@ namespace DataAccess
     {
         private SqlConnectionStringBuilder conStr;
         private IDaoCrud<Customer> _customerDao;
+        private IDaoCrud<Invoice> _invoiceDao;
         public DataAccessReservation()
         {
             conStr = DbConnection.conStr;
             _customerDao = new DataAccessCustomer();
+            _invoiceDao = new DataAccessInvoice();
         }
         public int Create(Reservation reservation)
         {
@@ -152,7 +154,7 @@ namespace DataAccess
                 
                 //cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
 
-                cmdUpdate.Parameters.AddWithValue("@Id", reservation.Id);
+                cmdUpdate.Parameters.AddWithValue("@Id", reservation.id);
 
                 con.Open();
                 try
@@ -190,7 +192,7 @@ namespace DataAccess
         private Reservation BuildObject(SqlDataReader reader)
         {
             Reservation reservation = new();
-            reservation.Id = reader.GetInt32(0);
+            reservation.id = reader.GetInt32(0);
             reservation.creationDate = reader.GetDateTime(1);
             reservation.startTime = reader.GetDateTime(2);
             reservation.endTime = reader.GetDateTime(3);

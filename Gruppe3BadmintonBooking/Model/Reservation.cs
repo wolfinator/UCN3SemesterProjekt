@@ -9,7 +9,7 @@ namespace Model
     public class Reservation
     {
 
-        public int Id { get; set; }
+        public int id { get; set; }
         public DateTime creationDate { get; set; }
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; } 
