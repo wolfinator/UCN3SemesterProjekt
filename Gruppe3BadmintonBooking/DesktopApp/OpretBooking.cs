@@ -160,6 +160,7 @@ namespace DesktopApp
 
             foreach (var available in availableTimesData)
             {
+                available[1] = ((DateTime)available[1]).ToShortTimeString();
                 dataGridViewCourts.Rows.Add(available);
             }
             selectedDate = selected.Date;
