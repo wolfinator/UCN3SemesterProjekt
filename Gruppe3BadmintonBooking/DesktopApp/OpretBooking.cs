@@ -150,6 +150,8 @@ namespace DesktopApp
 
         private void monthCalendarOverview_DateSelectedRestService(object sender, DateRangeEventArgs e)
         {
+            monthCalendarOverview.Enabled = false;
+
             DateTime selected = monthCalendarOverview.SelectionStart;
             string selectedToString = selected.Date.ToString("yyyy-MM-dd");
             var availableTimes = Task.Run(()=>_reservationService.GetAvailableTimes(selectedToString));
@@ -165,6 +167,8 @@ namespace DesktopApp
             }
             selectedDate = selected.Date;
             dataGridViewCourts.Rows[0].Cells[0].Selected = false;
+
+            monthCalendarOverview.Enabled = true;
         }
 
         private void dataGridViewCourts_CellClick(object sender, DataGridViewCellEventArgs e)

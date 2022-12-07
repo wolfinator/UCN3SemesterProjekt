@@ -104,25 +104,32 @@ namespace DesktopApp
 
         private void monthCalendar1_DateSelectedV2(object sender, DateRangeEventArgs e)
         {
-            var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
-            var selectedDate = monthCalendar1.SelectionStart;
-            
-            ClearDataGridOverview();
-            
-            reservations.Result.ToList()
-                .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
-                .ForEach((reservation) =>
-                {
+            monthCalendar1.Enabled = false;
+            Task.Run(() =>
+            {
+                var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
+                var selectedDate = monthCalendar1.SelectionStart;
 
-                string[] row = new string[]
-                {
+                ClearDataGridOverview();
+
+                reservations.Result.ToList()
+                    .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
+                    .ForEach((reservation) =>
+                    {
+
+                        string[] row = new string[]
+                    {
                     $"{reservation.customer.firstName} {reservation.customer.lastName}",
                     reservation.customer.phoneNo,
                     $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
                     reservation.courtNo.ToString()
-                };
-                dataGridViewOverview.Rows.Add(row);
+                    };
+                        Invoke(()=>dataGridViewOverview.Rows.Add(row));
+                    });
             });
+            
+
+            monthCalendar1.Enabled = true;
         }
 
         private void dataGridViewNu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -132,27 +139,41 @@ namespace DesktopApp
 
         private void ClearDataGridOverview()
         {
-            dataGridViewOverview.Rows.Clear();
-            dataGridViewOverview.ColumnCount = 4;
-            dataGridViewOverview.Columns[0].Name = "Navn:";
-            dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
-            dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
-            dataGridViewOverview.Columns[3].Name = "Bane:";
+            if (InvokeRequired)
+            {
+                Invoke(ClearDataGridOverview);
+            }
+            else
+            {
+                dataGridViewOverview.Rows.Clear();
+                dataGridViewOverview.ColumnCount = 4;
+                dataGridViewOverview.Columns[0].Name = "Navn:";
+                dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
+                dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
+                dataGridViewOverview.Columns[3].Name = "Bane:";
+            }      
         }
 
         private void ClearDataGridNuHistorik()
         {
-            dataGridViewNu.Rows.Clear();
-            dataGridViewNu.ColumnCount = 3;
-            dataGridViewNu.Columns[0].Name = "Dato:";
-            dataGridViewNu.Columns[1].Name = "Tidspunkt:";
-            dataGridViewNu.Columns[2].Name = "Bane:";
+            if (InvokeRequired)
+            {
+                Invoke(ClearDataGridNuHistorik);
+            }
+            else
+            {
+                dataGridViewNu.Rows.Clear();
+                dataGridViewNu.ColumnCount = 3;
+                dataGridViewNu.Columns[0].Name = "Dato:";
+                dataGridViewNu.Columns[1].Name = "Tidspunkt:";
+                dataGridViewNu.Columns[2].Name = "Bane:";
 
-            dataGridViewHistorik.Rows.Clear();
-            dataGridViewHistorik.ColumnCount = 3;
-            dataGridViewHistorik.Columns[0].Name = "Dato:";
-            dataGridViewHistorik.Columns[1].Name = "Tidspunkt:";
-            dataGridViewHistorik.Columns[2].Name = "Bane:";
+                dataGridViewHistorik.Rows.Clear();
+                dataGridViewHistorik.ColumnCount = 3;
+                dataGridViewHistorik.Columns[0].Name = "Dato:";
+                dataGridViewHistorik.Columns[1].Name = "Tidspunkt:";
+                dataGridViewHistorik.Columns[2].Name = "Bane:";
+            }
         }
     }
 }
