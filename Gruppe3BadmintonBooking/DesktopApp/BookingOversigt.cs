@@ -27,6 +27,7 @@ namespace DesktopApp
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
+            this.Close();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -66,6 +67,7 @@ namespace DesktopApp
                     var today = DateTime.Now;
                     var row = new string[]
                     {
+                        reservation.id.ToString(),
                         reservation.startTime.Date.ToString(),
                         $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
                         reservation.courtNo.ToString()
@@ -126,10 +128,8 @@ namespace DesktopApp
                     };
                         Invoke(()=>dataGridViewOverview.Rows.Add(row));
                     });
-            });
-            
-
-            monthCalendar1.Enabled = true;
+                Invoke(()=>monthCalendar1.Enabled = true);
+            });         
         }
 
         private void dataGridViewNu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -163,16 +163,34 @@ namespace DesktopApp
             else
             {
                 dataGridViewNu.Rows.Clear();
-                dataGridViewNu.ColumnCount = 3;
-                dataGridViewNu.Columns[0].Name = "Dato:";
-                dataGridViewNu.Columns[1].Name = "Tidspunkt:";
-                dataGridViewNu.Columns[2].Name = "Bane:";
+                dataGridViewNu.ColumnCount = 4;
+                dataGridViewNu.Columns[0].Name = "Id:";
+                dataGridViewNu.Columns[1].Name = "Dato:";
+                dataGridViewNu.Columns[2].Name = "Tidspunkt:";
+                dataGridViewNu.Columns[3].Name = "Bane:";
 
                 dataGridViewHistorik.Rows.Clear();
-                dataGridViewHistorik.ColumnCount = 3;
-                dataGridViewHistorik.Columns[0].Name = "Dato:";
-                dataGridViewHistorik.Columns[1].Name = "Tidspunkt:";
-                dataGridViewHistorik.Columns[2].Name = "Bane:";
+                dataGridViewHistorik.ColumnCount = 4;
+                dataGridViewHistorik.Columns[0].Name = "Id:";
+                dataGridViewHistorik.Columns[1].Name = "Dato:";
+                dataGridViewHistorik.Columns[2].Name = "Tidspunkt:";
+                dataGridViewHistorik.Columns[3].Name = "Bane:";
+            }
+        }
+
+        private void btnSlet_Click(object sender, EventArgs e)
+        {
+            string message = "Er du sikker på at du vil slette denne booking?";
+            string title = "Slet booking";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult res = MessageBox.Show(message, title, buttons, MessageBoxIcon.Information);
+
+            var selectedRow = dataGridViewNu.SelectedRows[0];
+
+            if(res == DialogResult.Yes)
+            {
+                _reservationService.DeleteById(Convert.ToInt32(selectedRow.Cells[0].Value));
+                btnSearch_ClickV2(sender, e);
             }
         }
     }

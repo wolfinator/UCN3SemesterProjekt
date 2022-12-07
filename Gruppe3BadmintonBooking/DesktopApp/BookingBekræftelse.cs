@@ -62,7 +62,7 @@ namespace DesktopApp
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
-
+            this.Close();
         }
     }
 }

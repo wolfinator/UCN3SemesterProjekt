@@ -134,6 +134,7 @@
             this.btnSlet.TabIndex = 11;
             this.btnSlet.Text = "&Slet";
             this.btnSlet.UseVisualStyleBackColor = true;
+            this.btnSlet.Click += new System.EventHandler(this.btnSlet_Click);
             // 
             // btnRediger
             // 

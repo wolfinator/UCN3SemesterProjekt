@@ -122,6 +122,7 @@ namespace DesktopApp
             this.Hide();
             BookingBekræftelse bookingBekræftelse = new(customerInformation);
             bookingBekræftelse.ShowDialog();
+            this.Close();
         }
 
         private void btnBekraeft_ClickV2(object sender, EventArgs e)
@@ -192,6 +193,7 @@ namespace DesktopApp
                 this.Hide();
                 BookingBekræftelse bookingBekræftelse = new(invoice);
                 bookingBekræftelse.ShowDialog();
+                this.Close();
             }
             else
             {
@@ -204,7 +206,7 @@ namespace DesktopApp
             this.Hide();
             OpretBooking opretBooking = new OpretBooking();
             opretBooking.ShowDialog();
-
+            this.Close();
         }
 
         private void UpdatePrice()

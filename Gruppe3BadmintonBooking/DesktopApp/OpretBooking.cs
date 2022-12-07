@@ -96,6 +96,7 @@ namespace DesktopApp
 
                 BookingInfo bookingInfo = new BookingInfo(currentReservation);
                 bookingInfo.ShowDialog();
+                this.Close();
             }
             else
             {
@@ -111,6 +112,7 @@ namespace DesktopApp
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
+            this.Close();
         }
 
         //private void btnGetCourts_Click(object sender, EventArgs e)
