@@ -18,6 +18,9 @@ public class ReservationController : Controller
     private readonly IReservationService _reservationsService;
     private readonly ICustomerService _customerService;
 
+    private readonly int ReservationBasePrice = 150;
+    private readonly int ReservationShuttlePrice = 50;
+
     /*static List<Reservation> _reservations = new List<Reservation>() {
             new Reservation() {Id=1, startTime = DateTime.Parse("2022-02-03 13:00:00"),
                 endTime = DateTime.Parse("2022-02-03 14:00:00"), shuttleReserved = true,
@@ -123,8 +126,7 @@ public class ReservationController : Controller
             }
             throw;
         }
-       
-
+        TempData["Price"] = GetPrice(reservation);
         return View(reservation);
     } 
 /*
@@ -177,5 +179,9 @@ public class ReservationController : Controller
     private Reservation GetReservationFromTempData()
     {
         return JsonConvert.DeserializeObject<Reservation>((string)TempData["Reservation"]);
+    }
+    private decimal GetPrice(Reservation reservation)
+    {
+        return ReservationBasePrice + (reservation.shuttleReserved ? 50 : 0);
     }
 }
