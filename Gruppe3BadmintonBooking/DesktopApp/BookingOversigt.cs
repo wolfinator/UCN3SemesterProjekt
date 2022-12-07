@@ -1,4 +1,5 @@
-﻿using RestSharpClient;
+﻿using Model;
+using RestSharpClient;
 using RestSharpClient.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -191,6 +192,18 @@ namespace DesktopApp
             {
                 _reservationService.DeleteById(Convert.ToInt32(selectedRow.Cells[0].Value));
                 btnSearch_ClickV2(sender, e);
+            }
+        }
+
+        private void btnRediger_Click(object sender, EventArgs e)
+        {
+            var selectedRow = dataGridViewNu.SelectedRows[0];
+            var reservation = _reservationService.GetById(Convert.ToInt32(selectedRow.Cells[0].Value));
+            
+            var res = new BookingEdit(reservation).ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                _reservationService.Update(reservation);
             }
         }
     }

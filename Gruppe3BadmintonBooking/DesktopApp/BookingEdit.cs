@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,21 @@ namespace DesktopApp
 {
     public partial class BookingEdit : Form
     {
-        public BookingEdit()
+        public BookingEdit(Reservation reservation)
         {
             InitializeComponent();
+
+            var customer = reservation.customer;
+
+            txtNavn.Text = customer.firstName;
+            txtMobil.Text = customer.phoneNo;
+            txtEmail.Text = customer.email;
+            txtBane.Text = reservation.courtNo.ToString();
+            txtBold.Text = reservation.shuttleReserved ? "Ja" : "Nej";
+            txtDato.Text = reservation.startTime.ToShortDateString();
+            txtTid.Text = $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}";
+            txtKetsjer.Text = reservation.numberOfRackets.ToString();
+            txtHal.Text = "1";
         }
 
     }

@@ -144,6 +144,7 @@
             this.btnRediger.TabIndex = 10;
             this.btnRediger.Text = "&Rediger";
             this.btnRediger.UseVisualStyleBackColor = true;
+            this.btnRediger.Click += new System.EventHandler(this.btnRediger_Click);
             // 
             // btnSearch
             // 
