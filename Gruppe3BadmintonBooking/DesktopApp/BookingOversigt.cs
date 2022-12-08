@@ -16,11 +16,13 @@ namespace DesktopApp
     public partial class BookingOversigt : Form
     {
         private IReservationService _reservationService;
+        private ICustomerService _customerService;
         public BookingOversigt()
         {
             InitializeComponent();
 
             _reservationService = new ReservationService();
+            _customerService = new CustomerService();
         }
 
         private void btnTilbage_Click(object sender, EventArgs e)
@@ -199,12 +201,20 @@ namespace DesktopApp
         {
             var selectedRow = dataGridViewNu.SelectedRows[0];
             var reservation = _reservationService.GetById(Convert.ToInt32(selectedRow.Cells[0].Value));
-            
-            var res = new BookingEdit(reservation).ShowDialog();
+
+            var BookingEditDialog = new BookingEdit(reservation);
+            var res = BookingEditDialog.ShowDialog();
             if (res == DialogResult.OK)
             {
-                _reservationService.Update(reservation);
+                _customerService.Update(BookingEditDialog.editedReservation.customer);
+                _reservationService.Update(BookingEditDialog.editedReservation);
             }
+            else if(res == DialogResult.Ignore)
+            {
+                btnSlet_Click(sender, e);
+            }
+            BookingEditDialog.Dispose();
+            btnSearch_ClickV2(sender, e);
         }
     }
 }

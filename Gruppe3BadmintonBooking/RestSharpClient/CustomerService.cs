@@ -48,7 +48,7 @@ namespace RestSharpClient
 
         public bool Update(Customer customer)
         {
-            var request = new RestRequest();
+            var request = new RestRequest($"{customer.id}");
             request.AddJsonBody(customer);
             var response = _restClient.Put(request);
 

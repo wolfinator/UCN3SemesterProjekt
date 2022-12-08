@@ -57,6 +57,7 @@ namespace RestSharpClient
         public bool Update(Reservation reservation)
         {
             var request = new RestRequest($"{reservation.id}");
+            request.AddBody(reservation);
             var response = _restClient.Put(request);
             return response.IsSuccessStatusCode;
         }
