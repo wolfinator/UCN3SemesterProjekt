@@ -27,41 +27,26 @@ namespace DesktopApp
 
         private void btnTilbage_Click(object sender, EventArgs e)
         {
+            GoBack();
+        }
+
+        private void GoBack()
+        {
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
             this.Close();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            dataGridViewNu.Rows.Clear();
-            dataGridViewNu.ColumnCount = 4;
-            dataGridViewNu.Columns[0].Name = "Dato:";
-            dataGridViewNu.Columns[1].Name = "Tidspunkt:";
-            dataGridViewNu.Columns[2].Name = "Hal:";
-            dataGridViewNu.Columns[3].Name = "Bane:";
-            string[] rowNu = new string[] { "12-12-2022", "11.00-12.00", "1", "3" };
-            dataGridViewNu.Rows.Add(rowNu);
-            //row = new string[] { "24-11-2022", "14.00-15.00", "2", "1" };
-            //dataGridViewNu.Rows.Add(row);
-            //row = new string[] { "24-12-2022", "09.00-10.00", "3", "2" };
-            //dataGridViewNu.Rows.Add(row);
-
-            dataGridViewHistorik.Rows.Clear();
-            dataGridViewHistorik.ColumnCount = 4;
-            dataGridViewHistorik.Columns[0].Name = "Dato:";
-            dataGridViewHistorik.Columns[1].Name = "Tidspunkt:";
-            dataGridViewHistorik.Columns[2].Name = "Hal:";
-            dataGridViewHistorik.Columns[3].Name = "Bane:";
-            string[] rowHistorik = new string[] { "13-11-2022", "09.00-10.00", "2", "1" };
-            dataGridViewHistorik.Rows.Add(rowHistorik);
-        }
-
         private void btnSearch_ClickV2(object sender, EventArgs e)
         {
+            UpdateSearchOverview();
+        }
+
+        private void UpdateSearchOverview()
+        {
             var phoneNo = textBoxMobil.Text;
-            var currentBookings = Task.Run(()=>_reservationService.GetAllByPhoneNo(phoneNo));
+            var currentBookings = Task.Run(() => _reservationService.GetAllByPhoneNo(phoneNo));
             ClearDataGridNuHistorik();
 
             currentBookings.Result.ToList()
@@ -75,7 +60,7 @@ namespace DesktopApp
                         $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
                         reservation.courtNo.ToString()
                     };
-                    if(reservation.endTime < today)
+                    if (reservation.endTime < today)
                     {
                         dataGridViewHistorik.Rows.Add(row);
                     }
@@ -83,61 +68,38 @@ namespace DesktopApp
                     {
                         dataGridViewNu.Rows.Add(row);
                     }
-                    
+
                 });
-        }
-
-        //private void monthCalendarOverview_DateChanged(object sender, DateRangeEventArgs e)
-        //{
-        //    dataGridViewOverview.ColumnCount = 5;
-        //    dataGridViewOverview.Columns[0].Name = "Navn:";
-        //    dataGridViewOverview.Columns[1].Name = "Mobil nr.:";
-        //    dataGridViewOverview.Columns[2].Name = "Tidspunkt:";
-        //    dataGridViewOverview.Columns[3].Name = "Hal:";
-        //    dataGridViewOverview.Columns[4].Name = "Bane:";
-        //    string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "1", "3" };
-        //    dataGridViewOverview.Rows.Add(rowOverview);
-        //}
-
-        private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
-        {
-            ClearDataGridOverview();
-
-            string[] rowOverview = new string[] { "Anna Falgren", "88888888", "10.00-11.00", "3" };
-            dataGridViewOverview.Rows.Add(rowOverview);
         }
 
         private void monthCalendar1_DateSelectedV2(object sender, DateRangeEventArgs e)
         {
             monthCalendar1.Enabled = false;
-            Task.Run(() =>
-            {
-                var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
-                var selectedDate = monthCalendar1.SelectionStart;
+            Task.Run(UpdateReservationsOverview);        
+        }
 
-                ClearDataGridOverview();
+        private void UpdateReservationsOverview()
+        {
+            var reservations = Task.Run(_reservationService.GetAll); // Should probably be by date in the future
+            var selectedDate = monthCalendar1.SelectionStart;
 
-                reservations.Result.ToList()
-                    .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
-                    .ForEach((reservation) =>
-                    {
+            ClearDataGridOverview();
 
-                        string[] row = new string[]
-                    {
+            reservations.Result.ToList()
+                .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
+                .ForEach((reservation) =>
+                {
+
+                    string[] row = new string[]
+                {
                     $"{reservation.customer.firstName} {reservation.customer.lastName}",
                     reservation.customer.phoneNo,
                     $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
                     reservation.courtNo.ToString()
-                    };
-                        Invoke(()=>dataGridViewOverview.Rows.Add(row));
-                    });
-                Invoke(()=>monthCalendar1.Enabled = true);
-            });         
-        }
-
-        private void dataGridViewNu_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+                };
+                    Invoke(() => dataGridViewOverview.Rows.Add(row));
+                });
+            Invoke(() => monthCalendar1.Enabled = true);
         }
 
         private void ClearDataGridOverview()
@@ -183,6 +145,11 @@ namespace DesktopApp
 
         private void btnSlet_Click(object sender, EventArgs e)
         {
+            DeleteBooking();
+        }
+
+        private void DeleteBooking()
+        {
             string message = "Er du sikker på at du vil slette denne booking?";
             string title = "Slet booking";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
@@ -190,14 +157,19 @@ namespace DesktopApp
 
             var selectedRow = dataGridViewNu.SelectedRows[0];
 
-            if(res == DialogResult.Yes)
+            if (res == DialogResult.Yes)
             {
                 _reservationService.DeleteById(Convert.ToInt32(selectedRow.Cells[0].Value));
-                btnSearch_ClickV2(sender, e);
+                UpdateSearchOverview();
             }
         }
 
         private void btnRediger_Click(object sender, EventArgs e)
+        {
+            EditBooking();
+        }
+
+        private void EditBooking()
         {
             var selectedRow = dataGridViewNu.SelectedRows[0];
             var reservation = _reservationService.GetById(Convert.ToInt32(selectedRow.Cells[0].Value));
@@ -209,12 +181,12 @@ namespace DesktopApp
                 _customerService.Update(BookingEditDialog.editedReservation.customer);
                 _reservationService.Update(BookingEditDialog.editedReservation);
             }
-            else if(res == DialogResult.Ignore)
+            else if (res == DialogResult.Ignore)
             {
-                btnSlet_Click(sender, e);
+                DeleteBooking();
             }
             BookingEditDialog.Dispose();
-            btnSearch_ClickV2(sender, e);
+            UpdateSearchOverview();
         }
     }
 }
