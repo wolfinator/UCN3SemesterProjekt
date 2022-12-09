@@ -185,20 +185,32 @@ namespace DesktopApp
             currentReservation.customer = customer;
             invoice.totalPrice = GetPrice();
 
-            currentReservation.creationDate = DateTime.Now;
-            currentReservation.id = _reservationService.Create(currentReservation);
-            invoice.reservation = currentReservation;
-            if (currentReservation.id != -1)
+            try
             {
+                currentReservation.creationDate = DateTime.Now;
+                currentReservation.id = _reservationService.Create(currentReservation);
+                invoice.reservation = currentReservation;
+                if (currentReservation.id != -1)
+                {
+                    this.Hide();
+                    BookingBekræftelse bookingBekræftelse = new(invoice);
+                    bookingBekræftelse.ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Fejl ved oprettelse af reservation, prøv igen senere", "Fejl", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Den valgte tid er allerede blevet booket", "Meddelse", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Hide();
-                BookingBekræftelse bookingBekræftelse = new(invoice);
-                bookingBekræftelse.ShowDialog();
+                OpretBooking opretBooking = new();
+                opretBooking.ShowDialog();
                 this.Close();
             }
-            else
-            {
-                MessageBox.Show("Fejl ved oprettelse af reservation, prøv igen senere", "Fejl", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            
         }
 
         private void btnTilbage_Click(object sender, EventArgs e)
