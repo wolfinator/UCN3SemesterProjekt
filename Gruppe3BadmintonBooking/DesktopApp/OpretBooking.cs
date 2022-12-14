@@ -14,6 +14,7 @@ using Model;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RestSharpClient;
 using RestSharpClient.Interfaces;
+using System.Globalization;
 
 namespace DesktopApp
 {
@@ -164,7 +165,7 @@ namespace DesktopApp
 
             foreach (var available in availableTimesData)
             {
-                available[1] = ((DateTime)available[1]).ToString("HH:mm");
+                available[1] = ((DateTime)available[1]).ToString("HH:mm", CultureInfo.InvariantCulture);
                 dataGridViewCourts.Rows.Add(available);
             }
             selectedDate = selected.Date;
