@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Interfaces;
@@ -27,27 +28,78 @@ namespace DataAccess
         {
             int reservationId = -1;
             string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) output INSERTED.ID " +
-                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtId, @CustomerId)";
+                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtNo, @CustomerId)";
+            string cmdTextAvailable = "select * from reservation " +
+                "where start_time = @StartTime " +
+                "and court_court_no = @CourtNo";
             using (SqlConnection con = new(conStr.ConnectionString))
-            { 
-                SqlCommand cmdReservation = new(cmdTextCreate, con);
-                cmdReservation.Parameters.AddWithValue("@CreationTime", reservation.creationDate);
-                cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
-                cmdReservation.Parameters.AddWithValue("@EndTime", reservation.endTime);
-                cmdReservation.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved);
-                cmdReservation.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
-                cmdReservation.Parameters.AddWithValue("@CourtId", reservation.courtNo);
-                cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
-                //cmdReservation.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
-                
-                try
+            {
+                con.Open();
+                using (var trans = con.BeginTransaction(IsolationLevel.RepeatableRead))
                 {
-                    con.Open();
-                    reservationId = (int) cmdReservation.ExecuteScalar();
-                }
-                catch (SqlException)
-                {
-                    throw; //TODO SKRIV throw ting
+                    SqlCommand cmdReservation = new(cmdTextAvailable, con);
+                    bool isBooked = false;
+                    try
+                    {
+                        cmdReservation.Transaction = trans;
+                        // Læs her
+                        cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                        cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
+                        
+                        using (var reader = cmdReservation.ExecuteReader())
+                        {
+                            if (reader != null) isBooked = reader.Read();
+                        }
+                        cmdReservation.Parameters.Clear();
+
+                        if (!isBooked)
+                        {
+                            cmdReservation.CommandText = cmdTextCreate;
+                            cmdReservation.Parameters.AddWithValue("@CreationTime", reservation.creationDate);
+                            cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                            cmdReservation.Parameters.AddWithValue("@EndTime", reservation.endTime);
+                            cmdReservation.Parameters.AddWithValue("@ShuttleReserved", reservation.shuttleReserved);
+                            cmdReservation.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
+                            cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
+                            cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
+
+                            reservationId = (int) cmdReservation.ExecuteScalar();
+                            cmdReservation.Parameters.Clear();
+                        }
+                        
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            trans.Rollback();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                        
+                    }
+                    // læs Her
+                    cmdReservation.CommandText = cmdTextAvailable;
+                    cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
+                    cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
+                    using (var reader = cmdReservation.ExecuteReader())
+                    {
+                        if (reader != null) isBooked = reader.Read();
+                    }
+                    if(isBooked) trans.Commit();
+                    else
+                    {
+                        try
+                        {
+                            trans.Rollback();
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
                 }
             }
             return reservationId;

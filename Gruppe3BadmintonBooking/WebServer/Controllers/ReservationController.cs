@@ -119,6 +119,8 @@ public class ReservationController : Controller
         try
         {
             reservation.id = _reservationsService.Create(reservation);
+            if (reservation.id == -1) throw new Exception("Reservation already booked");
+
             var invoice = new Invoice() {reservation = reservation, totalPrice = GetPrice(reservation) };
             _invoiceService.Create(invoice);
         }
@@ -131,6 +133,12 @@ public class ReservationController : Controller
             }
             throw;
         }
+        catch(Exception ex)
+        {
+            TempData["IsAlreadyBooked"] = "Den valgte tid er allerede blevet booket.";
+            return RedirectToAction("Index", "Home", reservation);
+        }
+
         TempData["Price"] = GetPrice(reservation);
         return View(reservation);
     } 
@@ -187,6 +195,6 @@ public class ReservationController : Controller
     }
     private decimal GetPrice(Reservation reservation)
     {
-        return ReservationBasePrice + (reservation.shuttleReserved ? 50 : 0);
+        return ReservationBasePrice + (reservation.shuttleReserved ? ReservationShuttlePrice : 0);
     }
 }

@@ -40,7 +40,7 @@ primary key(court_no)
 create table Reservation(
 id int identity(1,1) not null,
 creation_date datetime,
-start_time datetime unique,
+start_time datetime,
 end_time datetime,
 shuttle_reserved bit,
 number_of_rackets int,
