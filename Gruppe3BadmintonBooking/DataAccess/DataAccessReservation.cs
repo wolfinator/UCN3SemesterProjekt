@@ -66,7 +66,8 @@ namespace DataAccess
                             reservationId = (int) cmdReservation.ExecuteScalar();
                             cmdReservation.Parameters.Clear();
                         }
-                        
+
+                        trans.Commit();
                     }
                     catch (Exception)
                     {
@@ -77,28 +78,7 @@ namespace DataAccess
                         catch (Exception ex)
                         {
                             throw;
-                        }
-                        
-                    }
-                    // læs Her
-                    cmdReservation.CommandText = cmdTextAvailable;
-                    cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
-                    cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
-                    using (var reader = cmdReservation.ExecuteReader())
-                    {
-                        if (reader != null) isBooked = reader.Read();
-                    }
-                    if(isBooked) trans.Commit();
-                    else
-                    {
-                        try
-                        {
-                            trans.Rollback();
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
+                        }                       
                     }
                 }
             }

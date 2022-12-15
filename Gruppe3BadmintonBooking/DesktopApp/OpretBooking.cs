@@ -186,8 +186,11 @@ namespace DesktopApp
         private void dataGridViewCourts_CellClickV2(object sender, DataGridViewCellEventArgs e)
         {
             var selectedRow = dataGridViewCourts.SelectedRows;
-            selectedCourt = int.Parse(selectedRow[0].Cells[0].Value.ToString());
-            selectedTime = TimeSpan.Parse(selectedRow[0].Cells[1].Value.ToString());
+            if(selectedRow.Count != 0)
+            {
+                selectedCourt = int.Parse(selectedRow[0].Cells[0].Value.ToString());
+                selectedTime = TimeSpan.Parse(selectedRow[0].Cells[1].Value.ToString());
+            }      
         }
 
         private void comboKlok_SelectedIndexChanged(object sender, EventArgs e)
