@@ -27,15 +27,16 @@ namespace DataAccess
         public int Create(Reservation reservation)
         {
             int reservationId = -1;
-            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) output INSERTED.ID " +
-                                            "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtNo, @CustomerId)";
+            string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) " +
+                                   "output INSERTED.ID " +
+                                   "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtNo, @CustomerId)";
             string cmdTextAvailable = "select * from reservation " +
                 "where start_time = @StartTime " +
                 "and court_court_no = @CourtNo";
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 con.Open();
-                using (var trans = con.BeginTransaction(IsolationLevel.RepeatableRead))
+                using (var trans = con.BeginTransaction(IsolationLevel.Serializable))
                 {
                     SqlCommand cmdReservation = new(cmdTextAvailable, con);
                     bool isBooked = false;
@@ -77,7 +78,7 @@ namespace DataAccess
                         }
                         catch (Exception ex)
                         {
-                            throw;
+                            Console.WriteLine($"Transaction rollback error: {ex.Message}");
                         }                       
                     }
                 }
