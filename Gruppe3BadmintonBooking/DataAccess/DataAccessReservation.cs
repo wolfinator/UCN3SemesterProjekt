@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using DataAccess.Interfaces;
-using Microsoft.Data.Sql;
 using Microsoft.Data.SqlClient;
 using Model;
 
@@ -17,40 +9,59 @@ namespace DataAccess
     {
         private SqlConnectionStringBuilder conStr;
         private IDaoCrud<Customer> _customerDao;
-        private IDaoCrud<Invoice> _invoiceDao;
+        //private IDaoCrud<Invoice> _invoiceDao; Bliver ikke brugt
         public DataAccessReservation()
         {
             conStr = DbConnection.conStr;
             _customerDao = new DataAccessCustomer();
-            _invoiceDao = new DataAccessInvoice();
+            //_invoiceDao = new DataAccessInvoice(); Bliver ikke brugt
         }
+        /* 
+         *  Metoden der opretter en reservation i databasen, det er her der er et samtidighedsproblem
+         *  Den bruger et transaktionsniveau (Serializable) til at sikre at hvis to transaktioner på
+         *  samme tid prøver at indsætte en reservation vil det fejle og brugeren kan få besked om det.
+         */
         public int Create(Reservation reservation)
         {
+            // Lav en retur variable og skrive sql-queries
             int reservationId = -1;
+
+            // Sql query til at indsætte reservation. Vi bruger "output INSERTED.ID" for at få det ID som databasen har autogenereret
             string cmdTextCreate = "insert into Reservation(creation_date, start_time, end_time, shuttle_reserved, number_of_rackets, court_court_no, customer_id) " +
                                    "output INSERTED.ID " +
                                    "values (@CreationTime, @StartTime, @EndTime, @ShuttleReserved, @NumberOfRackets, @CourtNo, @CustomerId)";
+            // Sql query til tjekke om reservationen allerede er oprettet
             string cmdTextAvailable = "select * from reservation " +
                 "where start_time = @StartTime " +
                 "and court_court_no = @CourtNo";
+
+            // Laver en forbindelse til databasen ved brug af connenction string
+            // Fordi vi bruger using vil forbindelsen altid blive lukket / disposed når vi er færdig med at bruge den
             using (SqlConnection con = new(conStr.ConnectionString))
             {
                 con.Open();
+                // Laver en transaktion
                 using (var trans = con.BeginTransaction(IsolationLevel.Serializable))
                 {
+                    // Laver en SqlCommand med den query der tjekker om den stadig er ledig
                     SqlCommand cmdReservation = new(cmdTextAvailable, con);
                     bool isBooked = false;
                     try
                     {
                         cmdReservation.Transaction = trans;
-                        // Læs her
+
+                        // Tjekke om den er ledig her
+                        // Først opsætte parametrene i querien
                         cmdReservation.Parameters.AddWithValue("@StartTime", reservation.startTime);
                         cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
                         
+                        // Her læser vi i databasen om der en reservation i forvejen
+                        // using keyword / kodeblok sørger for at den bliver lukket og disposed
                         using (var reader = cmdReservation.ExecuteReader())
                         {
                             if (reader != null) isBooked = reader.Read();
                         }
+                        // Resetter parametrene til næste sql query
                         cmdReservation.Parameters.Clear();
 
                         if (!isBooked)
@@ -64,6 +75,7 @@ namespace DataAccess
                             cmdReservation.Parameters.AddWithValue("@CourtNo", reservation.courtNo);
                             cmdReservation.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
 
+                            // Sæt reservation ID'et til det autogenereret fra databasen
                             reservationId = (int) cmdReservation.ExecuteScalar();
                             cmdReservation.Parameters.Clear();
                         }
@@ -98,7 +110,8 @@ namespace DataAccess
                 con.Open();
                 try
                 {
-                    deleted = cmdDeleteReservation.ExecuteNonQuery() == 1;
+                    // Sætter deleted til true hvis antallet af rækker fra query-udførslen er 1
+                    deleted = (cmdDeleteReservation.ExecuteNonQuery() == 1);
                 }
                 catch (SqlException ex)
                 {
@@ -119,6 +132,8 @@ namespace DataAccess
                 {
                     con.Open();
                     SqlDataReader reader = cmdGetAll.ExecuteReader();
+                    // BuildObjects metoden sørger for at bygge reservations objekter
+                    // Den bruger SQL readeren som parameteren
                     list = BuildObjects(reader);
                     reader.Close();
                 }
@@ -131,6 +146,7 @@ namespace DataAccess
             return list;
         }
 
+        // Ikke færdig bliver ikke brugt
         public IEnumerable<Reservation> GetAllByDate()
         {
             string cmdTextGetByDate = "select * from Reservation where";
@@ -155,7 +171,7 @@ namespace DataAccess
                         reservation = BuildObject(reader);
                     }
                 }
-                catch
+                catch (Exception)
                 {
                     throw;
                 }
@@ -185,15 +201,12 @@ namespace DataAccess
                 cmdUpdate.Parameters.AddWithValue("@NumberOfRackets", reservation.numberOfRackets);
                 cmdUpdate.Parameters.AddWithValue("@CustomerId", reservation.customer.id);
                 cmdUpdate.Parameters.AddWithValue("@CourtId", reservation.courtNo);
-                
-                //cmdUpdate.Parameters.AddWithValue("@EmployeeId", reservation.employee.id);
-
                 cmdUpdate.Parameters.AddWithValue("@Id", reservation.id);
 
                 try
                 {
                     con.Open();
-                    updated = cmdUpdate.ExecuteNonQuery() == 1;
+                    updated = (cmdUpdate.ExecuteNonQuery() == 1);
                 }
                 catch (SqlException)
                 {
@@ -239,6 +252,7 @@ namespace DataAccess
             return reservation;
         }
 
+        // Bliver ikke brugt PT
         public bool DeleteAllByCustomerId(int customerId)
         {
             bool deleted = false;
@@ -266,9 +280,15 @@ namespace DataAccess
         {
             List<object[]> list = new();
 
-            using (SqlConnection con = new(DbConnection.conStr.ConnectionString))
+            using (SqlConnection con = new(conStr.ConnectionString))
             {
-                string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t except(select c.court_no, t.time_slot from Court c, timeslot t, reservation r where @current_date < r.start_time and r.end_time < @current_date+1 and c.court_no = r.court_court_no and cast(r.start_time as time) = t.time_slot )";
+                string cmdText = "select c.court_no, t.time_slot from Court c, timeslot t " +
+                                 "except" +
+                                 "(select c.court_no, t.time_slot from Court c, timeslot t, reservation r " +
+                                 "where @current_date < r.start_time " +
+                                 "and r.end_time < @current_date+1 " +
+                                 "and c.court_no = r.court_court_no " +
+                                 "and cast(r.start_time as time) = t.time_slot )";
                 SqlCommand cmdAvailableTimes = new(cmdText, con);
                 cmdAvailableTimes.Parameters.AddWithValue("@current_date", date);
 

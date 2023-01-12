@@ -35,7 +35,6 @@
             this.btnTilbage = new System.Windows.Forms.Button();
             this.lblKlok = new System.Windows.Forms.Label();
             this.comboKlok = new System.Windows.Forms.ComboBox();
-            this.btnGetCourts = new System.Windows.Forms.Button();
             this.dataGridViewCourts = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCourts)).BeginInit();
             this.SuspendLayout();
@@ -120,15 +119,6 @@
             this.comboKlok.TabIndex = 8;
             this.comboKlok.SelectedIndexChanged += new System.EventHandler(this.comboKlok_SelectedIndexChangedV2);
             // 
-            // btnGetCourts
-            // 
-            this.btnGetCourts.Location = new System.Drawing.Point(314, 280);
-            this.btnGetCourts.Name = "btnGetCourts";
-            this.btnGetCourts.Size = new System.Drawing.Size(75, 23);
-            this.btnGetCourts.TabIndex = 9;
-            this.btnGetCourts.Text = "SEARCH";
-            this.btnGetCourts.UseVisualStyleBackColor = true;
-            // 
             // dataGridViewCourts
             // 
             this.dataGridViewCourts.AllowUserToAddRows = false;
@@ -154,7 +144,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.dataGridViewCourts);
-            this.Controls.Add(this.btnGetCourts);
             this.Controls.Add(this.comboKlok);
             this.Controls.Add(this.lblKlok);
             this.Controls.Add(this.btnTilbage);
@@ -182,7 +171,6 @@
         private Button btnTilbage;
         private Label lblKlok;
         private ComboBox comboKlok;
-        private Button btnGetCourts;
         private DataGridView dataGridViewCourts;
     }
 }
