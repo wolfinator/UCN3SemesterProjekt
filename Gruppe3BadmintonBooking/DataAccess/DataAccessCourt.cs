@@ -18,6 +18,7 @@ namespace DataAccess
             conStr = DbConnection.conStr;
         }
 
+        // Bliver ikke brugt
         public int Create(Court court)
         {
             SqlConnection con = new(conStr.ConnectionString);
@@ -26,11 +27,13 @@ namespace DataAccess
             throw new NotImplementedException();
         }
 
+        // Bliver ikke brugt
         public bool DeleteById(int id)
         {
             throw new NotImplementedException();
         }
 
+        // Lavet men bliver ikke brugt i WebServer eller Desktop endnu
         public IEnumerable<Court> GetAll()
         {
             SqlConnection con = new(conStr.ConnectionString);
@@ -72,8 +75,6 @@ namespace DataAccess
             return court;
         }
         
-
-
         public bool Update(Court entity)
         {
             throw new NotImplementedException();

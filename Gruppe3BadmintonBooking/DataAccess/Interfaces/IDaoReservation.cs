@@ -9,6 +9,7 @@ namespace DataAccess.Interfaces
 {
     public interface IDaoReservation : IDaoCrud<Reservation>
     {
+        // Bliver ikke brugt pt
         public bool DeleteAllByCustomerId(int customerId);
 
         public List<object[]> GetAvailableTimes(DateTime date);

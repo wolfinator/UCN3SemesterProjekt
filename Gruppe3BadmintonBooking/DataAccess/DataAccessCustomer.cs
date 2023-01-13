@@ -12,27 +12,10 @@ namespace DataAccess
         {
             conStr = DbConnection.conStr;
         }
-        //public int GetPersonType(Customer person)
-        //{
-        //    int persontype = -1;
-        //    if (person is Employee)
-        //    {
-        //        persontype = 0;
-        //    }
-        //    else if (person is Guest)
-        //    {
-        //        persontype = 1;
-        //    }
-        //    else if (person is Member)
-        //    {
-        //        persontype = 2;
-        //    }
-        //    return persontype;
-        //}
         public int Create(Customer customer)
         {
+            // Setup
             int customerId = -1;
-            // int persontype = GetPersonType(entity);
             SqlConnection con = new(conStr.ConnectionString);
 
             string cmdTextCustomer = "insert into Customer (f_name, l_name, email, phone_no) output INSERTED.ID " +
@@ -46,11 +29,10 @@ namespace DataAccess
             cmdCustomer.Parameters.AddWithValue("@Lname", customer.lastName);
             cmdCustomer.Parameters.AddWithValue("@Email", customer.email);
             cmdCustomer.Parameters.AddWithValue("@PhoneNo", customer.phoneNo);
-            //cmdPerson.Parameters.AddWithValue("@PersonType", persontype);
-
             cmdAddress.Parameters.AddWithValue("@Street", customer.street);
             cmdAddress.Parameters.AddWithValue("@HouseNo", customer.houseNo);
             cmdAddress.Parameters.AddWithValue("@CityZipcode", customer.zipcode);
+            // Åben forbindelsen, og lav en transaktion (da vi både sætter ind i person og i addresse tabellerne
             try
             {
                 con.Open();
@@ -58,9 +40,13 @@ namespace DataAccess
                 {
                     try
                     {
+                        // Justér kommandoerne til at være i transaktionen
                         cmdCustomer.Transaction = trans;
                         cmdAddress.Transaction = trans;
+                        // Indsæt customer og få et ID tilbage ("output inserted.id" i querien)
                         customerId = (int)cmdCustomer.ExecuteScalar();
+                        // Hvis adressen ikke er sat (eftersom det ikke er implementeret i webserver og desktop)
+                        // så sætter vi ikke nogen adresse ind.
                         if (customer.street != "" && customer.houseNo != "" && customer.zipcode != "")
                         {
                             cmdAddress.Parameters.AddWithValue("@CustomerId", customerId);
@@ -86,7 +72,6 @@ namespace DataAccess
                 con.Close();
             }
 
-
             return customerId;
         }
 
@@ -95,18 +80,20 @@ namespace DataAccess
             bool isDeleted = false;
 
             SqlConnection con = new(conStr.ConnectionString);
-            string cmdTextDelete = "delete from customer where id = @Id";
-            //string cmdTextDeleteAddress = "delete from _address where id = @AddressId";
-            //string cmdTextDeleteReservations = "delete from reservation where customer_id = @CustomerId";
-            SqlCommand cmdDelete = new(cmdTextDelete, con);
+            // Selvom vi indsætter BÅDE customer og adresse i Create metoden,
+            // så er databasen indstillet til on cascade delete på fremmednøglen,
+            // og har derfor kun brug for én delete
 
+            string cmdTextDelete = "delete from customer where id = @Id";
+            SqlCommand cmdDelete = new(cmdTextDelete, con);
 
             try
             {
                 con.Open();
-                // Skal nok ændres hvis vi laver cascade på person og _address, er lidt kringlet
                 cmdDelete.Parameters.AddWithValue("@Id", id);
-                isDeleted = cmdDelete.ExecuteNonQuery() >= 1;
+                // Tjek om der er blevet slettet præcis 1 customer
+                // Ideelt set skulle den nok også tjekke adresse tabellen, men det overlader vi til databasen med cascade delete
+                isDeleted = (cmdDelete.ExecuteNonQuery() >= 1);
             }
             catch (SqlException)
             {
@@ -122,6 +109,7 @@ namespace DataAccess
         }
         public IEnumerable<Customer> GetAll()
         {
+            // Initialisér retur variablen som null i stedet for en tom liste, så der er forskel på en fejl og en tom tabel i databasen
             List<Customer> customers = null;
 
             SqlConnection con = new(conStr.ConnectionString);
@@ -200,7 +188,6 @@ namespace DataAccess
             cmdUpdateCustomer.Parameters.AddWithValue("@Lname", entity.lastName);
             cmdUpdateCustomer.Parameters.AddWithValue("@Email", entity.email);
             cmdUpdateCustomer.Parameters.AddWithValue("@PhoneNo", entity.phoneNo);
-            // cmdUpdatePerson.Parameters.AddWithValue("@PersonType", persontype);
             cmdUpdateCustomer.Parameters.AddWithValue("@Id", entity.id);
 
             cmdUpdateAddress.Parameters.AddWithValue("@Street", entity.street);
@@ -221,7 +208,7 @@ namespace DataAccess
                         int updatedCustomer = cmdUpdateCustomer.ExecuteNonQuery();
                         int updatedAddress = cmdUpdateAddress.ExecuteNonQuery();
 
-                        // Checks if both the person and address tables are updated
+                        // Tjekker at begge tabeller er blevet updateret
                         isUpdated = updatedAddress + updatedAddress == 2;
                     }
                     catch (SqlException)
@@ -275,6 +262,9 @@ namespace DataAccess
             customer.lastName = reader.GetString(2);
             customer.email = reader.GetString(3);
             customer.phoneNo = reader.GetString(4);
+            // Tjek om adressen kunne hentes fra databasen eller ej,
+            // hvis den første (kolonne nr 6) er null er de næste (7 og 8) også,
+            // og hvis adressen kan hentes putter vi det selvfølgelig ind i objektet
             if (!reader.IsDBNull(6))
             {
                 customer.street = reader.GetString(6);
@@ -287,8 +277,7 @@ namespace DataAccess
                 customer.houseNo = "";
                 customer.zipcode = "";
             }
-            
-            //TODO if member add all reservations to object
+
             return customer;
         }
     }
