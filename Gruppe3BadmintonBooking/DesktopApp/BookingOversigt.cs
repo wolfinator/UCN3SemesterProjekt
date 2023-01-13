@@ -46,9 +46,11 @@ namespace DesktopApp
         private void UpdateSearchOverview()
         {
             var phoneNo = textBoxMobil.Text;
+            // Start en ASYNKRON opgave (en task) der kører mens vi kører de næste linjer kode
             var currentBookings = Task.Run(() => _reservationService.GetAllByPhoneNo(phoneNo));
             ClearDataGridNuHistorik();
 
+            // .Result venter på den TASK vi satte igang før det kører
             currentBookings.Result.ToList()
                 .ForEach(reservation =>
                 {
@@ -85,6 +87,8 @@ namespace DesktopApp
 
             ClearDataGridOverview();
 
+            // Linq til at filtere ALL reservationerne til dem der skal vises alt efter hvilken dato man har valgt.
+            // Bagefter indsættes de i tabellen
             reservations.Result.ToList()
                 .Where((reservation) => reservation.startTime.Date == selectedDate.Date).ToList()
                 .ForEach((reservation) =>
@@ -97,6 +101,7 @@ namespace DesktopApp
                     $"{reservation.startTime.ToShortTimeString()}-{reservation.endTime.ToShortTimeString()}",
                     reservation.courtNo.ToString()
                 };
+                    // Invoke da et indsæt af en række er en UI opdatering, og de må kun køre på hovedtråden.
                     Invoke(() => dataGridViewOverview.Rows.Add(row));
                 });
             Invoke(() => monthCalendar1.Enabled = true);
@@ -157,6 +162,7 @@ namespace DesktopApp
 
             var selectedRow = dataGridViewNu.SelectedRows[0];
 
+            // Kun slet hvis man trykkede JA i dialogen der poppede op
             if (res == DialogResult.Yes)
             {
                 _reservationService.DeleteById(Convert.ToInt32(selectedRow.Cells[0].Value));
@@ -181,6 +187,7 @@ namespace DesktopApp
                 _customerService.Update(BookingEditDialog.editedReservation.customer);
                 _reservationService.Update(BookingEditDialog.editedReservation);
             }
+            // DialogResult.Ignore er resultatet når man trykker SLET i BookingEdit.cs
             else if (res == DialogResult.Ignore)
             {
                 DeleteBooking();

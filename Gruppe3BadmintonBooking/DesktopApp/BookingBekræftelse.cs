@@ -16,23 +16,7 @@ namespace DesktopApp
 {
     public partial class BookingBekræftelse : Form
     {
-        private List<string> customerInformation;
         private IInvoiceService _invoiceService;
-        public BookingBekræftelse(List<string> customerInformation)
-        {
-            InitializeComponent();
-            this.customerInformation = customerInformation;
-            txtFornavn.Text = customerInformation[0];
-            txtEfternavn.Text = customerInformation[1];
-            txtMobil.Text = customerInformation[2];
-            txtEmail.Text = customerInformation[3];
-            txtDato.Text = customerInformation[4];
-            txtKlok.Text = customerInformation[5];
-            txtSted.Text = customerInformation[6];
-            txtPris.Text = customerInformation[7];
-            txtKetsjer.Text = customerInformation[8];
-            txtBold.Text = customerInformation[9];
-        }
 
         public BookingBekræftelse(Invoice invoice)
         {
@@ -40,9 +24,11 @@ namespace DesktopApp
 
             _invoiceService = new InvoiceService();
 
+            // Tildele nogle properties til nemmere/kortere variable navne for nemmere adgang
             Reservation reservation = invoice.reservation;
             Customer customer = reservation.customer;
 
+            // Sæt tekst i winformen
             txtFornavn.Text = customer.firstName;
             txtEfternavn.Text = customer.lastName;
             txtMobil.Text = customer.phoneNo;
@@ -54,6 +40,7 @@ namespace DesktopApp
             txtKetsjer.Text = reservation.numberOfRackets.ToString();
             txtBold.Text = reservation.shuttleReserved ? "Ja" : "Nej";
 
+            // Lav en invoice i databasen
             _invoiceService.Create(invoice);
         }
 
@@ -62,6 +49,7 @@ namespace DesktopApp
             this.Hide();
             Startside startside = new();
             startside.ShowDialog();
+            // Luk vinduet så der ikke pludselig er mange usynlige vinduer der æder (dog meget lidt) hukommelse
             this.Close();
         }
     }

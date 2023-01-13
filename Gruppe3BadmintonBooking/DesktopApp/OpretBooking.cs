@@ -20,19 +20,10 @@ namespace DesktopApp
 {
     public partial class OpretBooking : Form
     {
-        private SqlConnectionStringBuilder conStr;
-
-        DateTime st;
-        DateTime et;
-        string fromTime;
-        private string hal = "";
-        private string bane = "";
-        private CourtService courtService;
-        public IEnumerable<Court> courts;
-
         private IReservationService _reservationService;
         private Reservation currentReservation;
         private List<object[]> availableTimesData;
+
         private int selectedCourt;
         private TimeSpan selectedTime;
         private DateTime selectedDate;
@@ -42,21 +33,17 @@ namespace DesktopApp
             InitializeComponent();
             _reservationService = new ReservationService();
             currentReservation = new();
-
-            courtService = new CourtService();
-            //courts = courtService.GetAll();
         }
 
         private void btnBookBane_Click_2(object sender, EventArgs e)
         {
+            // Hvis der er vaglt en bane
             if (selectedCourt != 0)
             {
                 this.Hide();
 
-                // need to change so we only have one of the values
+                // Sæt data på den nuværende reservation før den sendes videre til næste winform
                 currentReservation.courtNo = selectedCourt;
-                //currentReservation.court = new() { id = selectedCourt };
-
                 currentReservation.startTime = selectedDate + selectedTime;
                 currentReservation.endTime = selectedDate + selectedTime.Add(TimeSpan.FromHours(1));
 
@@ -64,6 +51,7 @@ namespace DesktopApp
                 bookingInfo.ShowDialog();
                 this.Close();
             }
+            // Ellers oplys fejl til brugeren
             else
             {
                 string message = "Mangler tidspunkt og/eller bane/hal";
@@ -83,6 +71,7 @@ namespace DesktopApp
 
         private void monthCalendarOverview_DateSelectedRestService(object sender, DateRangeEventArgs e)
         {
+            // Slå den fra så man ikke kan starte flere på samme tid
             monthCalendarOverview.Enabled = false;
 
             DateTime selected = monthCalendarOverview.SelectionStart;
@@ -95,18 +84,22 @@ namespace DesktopApp
 
             foreach (var available in availableTimesData)
             {
+                // InvariantCulture skal med ellers tror nogle computere at de kan skrive HH:mm som HH.mm,
+                // men det kan TimeSpan.Parse ikke klare
                 available[1] = ((DateTime)available[1]).ToString("HH:mm", CultureInfo.InvariantCulture);
                 dataGridViewCourts.Rows.Add(available);
             }
             selectedDate = selected.Date;
             dataGridViewCourts.Rows[0].Cells[0].Selected = false;
 
+            // Slå til så man kan se en anden dato
             monthCalendarOverview.Enabled = true;
         }
 
         private void dataGridViewCourts_CellClickV2(object sender, DataGridViewCellEventArgs e)
         {
             var selectedRow = dataGridViewCourts.SelectedRows;
+            // Tjekker at der er værdier i den række man har valgt
             if(selectedRow.Count != 0)
             {
                 selectedCourt = int.Parse(selectedRow[0].Cells[0].Value.ToString());
@@ -114,6 +107,8 @@ namespace DesktopApp
             }      
         }
 
+        // Metoden der filterer efter tidspunkt. Henter ikke noget fra Databasen,
+        // men sortere blot i de eksisterende data der er hentet fra datoen
         private void comboKlok_SelectedIndexChangedV2(object sender, EventArgs e)
         {
             var selectedTimeFilter = DateTime.Parse((string) comboKlok.SelectedItem).TimeOfDay;

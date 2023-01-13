@@ -54,8 +54,12 @@ namespace DesktopApp
 
         private void btnBekraeft_ClickV2(object sender, EventArgs e)
         {
+            // Sæt adressen til tomme strenge i stedet for den default værdi null
+            // så rest sharp ikke klager og laver en Bad Request exception
             Customer customer = new() { street="", houseNo= "", zipcode = ""};
             Invoice invoice = new();
+
+            // Valdidering, burde nok blevet lavet lidt pænere
             if (!String.IsNullOrEmpty(txtFornavn.Text))
             {
                 customer.firstName = txtFornavn.Text;
@@ -145,11 +149,14 @@ namespace DesktopApp
             this.Hide();
             OpretBooking opretBooking = new OpretBooking();
             opretBooking.ShowDialog();
+            // Close så vinduet bliver LUKKET og ikke kun SKJULT
             this.Close();
         }
 
         private void UpdatePrice()
         {
+            // parametrene til ToString metoden "C2" og "da-DK" betyder den formatere pris variablen,
+            // til at have 2 decimaler (,00) og sætter ",- kr" på
             string priceText = GetPrice().ToString("C2", CultureInfo.CreateSpecificCulture("da-DK"));
 
             txtPris.Text = priceText;

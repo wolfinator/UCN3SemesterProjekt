@@ -21,6 +21,7 @@ namespace DesktopApp
 
             var customer = reservation.customer;
 
+            // Indsæt teskt i winformen
             txtFornavn.Text = customer.firstName;
             txtEfternavn.Text = customer.lastName;
             txtMobil.Text = customer.phoneNo;
@@ -32,6 +33,7 @@ namespace DesktopApp
             txtKetsjer.Text = reservation.numberOfRackets.ToString();
         }
 
+        // Ikke noget funktionalitet her, men i winformen vil DialogResult blive anderledes end ved de andre knapper
         private void btnSlet_Click(object sender, EventArgs e)
         {
 
@@ -39,6 +41,8 @@ namespace DesktopApp
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            // Sæt det nye informationen ind i et customer objekt
+            // PT ingen validering
             Customer editedCustomer = new()
             {
                 id = editedReservation.id,
@@ -52,6 +56,8 @@ namespace DesktopApp
             };
             editedReservation.customer = editedCustomer;
 
+            // Tjek det nye antal af ketjere er et tal og brug de nye hvis det er
+            // "out" keyword betyder den variable som skal tildeles resultatet af TryParse metoden som værdi
             int newNumberOfRackets = editedReservation.numberOfRackets;
             if (int.TryParse(txtKetsjer.Text, out newNumberOfRackets))
             {
