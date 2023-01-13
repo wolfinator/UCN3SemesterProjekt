@@ -15,18 +15,27 @@ namespace RestSharpClient
             _restClient = new RestSharp.RestClient($"{RestClientInfo.IpAddress}/api/Reservations");
         }
 
+        // Metoden der forespørger API om at lave en reservation
         public int Create(Reservation reservation)
         {
+            // Lav requesten
             var request = new RestRequest();
+            // Sæt reservation objektet med som body
             request.AddBody(reservation);
+            // Gem responsen fra API'en i et objekt
             var response = _restClient.Post(request);
+            // Hent det JSON API'en sendte fra responsen og lav det til et Reservations objekt
             var createdReservation = JsonSerializer.Deserialize<Reservation>(response.Content);
+            // Hvis den ikke er null returnér dens ID
             if (createdReservation != null) return createdReservation.id;
+            // Ellers returnér -1 for at vise der gik noget galt
             return -1;
         }
 
         public bool DeleteById(int id)
         {
+            // Sæt parameteren id in i URL'en så i stedet for den spørger /api/reservations
+            // så vil den spørge /api/reservation/id
             var request = new RestRequest($"{id}");
             var response = _restClient.Delete(request);
             return response.IsSuccessStatusCode;
