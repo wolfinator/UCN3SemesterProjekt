@@ -6,52 +6,54 @@
 }
 
 
+<h1 class="title">Gennemfør booking</h1>
 
-<h4>Booking</h4>
+<hr />
 
-<div class="col-md-4">
-<form action="ShowReservation" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <h1>Kundeoplysninger</h1>
-    <div class="form-group">
-        <label asp-for="customer.firstName" class="control-label">Fornavn</label>
-        <input asp-for="customer.firstName" class="form-control" />
-        <span asp-validation-for="customer.firstName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="customer.lastName" class="control-label">Efternavn</label>
-        <input asp-for="customer.lastName" class="form-control" />
-        <span asp-validation-for="customer.lastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="customer.phoneNo" class="control-label">Mobil nummer</label>
-        <input asp-for="customer.phoneNo" class="form-control" />
-        <span asp-validation-for="customer.phoneNo" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="customer.email" class="control-label">Email</label>
-        <input asp-for="customer.email" class="form-control" value="@(Context.User.Claims.FirstOrDefault((claim)=> claim.Type == ClaimTypes.Email)?.Value)" />
-        <span asp-validation-for="customer.email" class="text-danger"></span>
-    </div>
-    <h1>Skal du have udstyr med?</h1>
-    <div class="form-group">
-        <label asp-for="shuttleReserved" class="control-label">Fjerbolde</label>
-        <input asp-for="shuttleReserved" type="checkbox" />
-        <span asp-validation-for="shuttleReserved" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="numberOfRackets" class="control-label">Antal ketsjere</label>
-        <input asp-for="numberOfRackets" value="0" class="form-control" />
-    </div>
+<div class="float-container">
+    <form action="ShowReservation" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="float-child">
+            <h2>1. Kundeoplysninger</h2>
+            <div class="form-group">
+                <label asp-for="customer.firstName" class="control-label">Fornavn</label>
+                <input asp-for="customer.firstName" class="form-control" />
+                <span asp-validation-for="customer.firstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.lastName" class="control-label">Efternavn</label>
+                <input asp-for="customer.lastName" class="form-control" />
+                <span asp-validation-for="customer.lastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.phoneNo" class="control-label">Mobil nummer</label>
+                <input asp-for="customer.phoneNo" class="form-control" />
+                <span asp-validation-for="customer.phoneNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="customer.email" class="control-label">Email</label>
+                <input asp-for="customer.email" class="form-control" value="@(Context.User.Claims.FirstOrDefault((claim)=> claim.Type == ClaimTypes.Email)?.Value)" />
+                <span asp-validation-for="customer.email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="float-child">
+            <h2>2. Skal du have udstyr med?</h2>
+            <div class="form-group">
+                <label asp-for="shuttleReserved" class="control-label">Fjerbolde</label>
+                <input asp-for="shuttleReserved" type="checkbox" />
+                <span asp-validation-for="shuttleReserved" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="numberOfRackets" class="control-label">Antal ketsjere</label>
+                <input asp-for="numberOfRackets" value="0" class="form-control" />
+            </div>
 
-    <div class="form-group">
-        <input type="button" value="Gå tilbage" onclick="history.back(-1); return false;" class="btn btn-primary">
-        <input type="submit" value="Gennemfør booking" class="btn btn-primary" />
-    </div>
-</form>
-</div>
-<div>
-    <a asp-controller="Home" asp-action="Index">Gå tilbage til startside</a>
+            <div class="form-group">
+                <input type="button" value="Gå tilbage" onclick="history.back(-1); return false;" class="btn btn-danger">
+                <input type="submit" value="Gennemfør booking" class="btn btn-success" />
+            </div>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
