@@ -1,27 +1,29 @@
 ﻿@model Model.Reservation
 
-<h1>Booking gennemført</h1>
-<b>Hej @Model.customer.firstName</b><br />
+<h1 class="title">Booking gennemført</h1>
 
-Din booking starter:
-<h3>
-    @Html.DisplayFor((model) => model.startTime)
-</h3>
+<hr />
 
-Din booking slutter:
-<h3>
-    @Html.DisplayFor((model) => model.endTime)
-</h3>
+<div class="confirmation">
+    <h2>Hej @Model.customer.firstName</h2><br />
 
-Du skal være på bane:
-<h3>@Html.DisplayFor((model) => model.courtNo)</h3>
+    <b>Din booking starter:</b>
+    <p>
+        @Html.DisplayFor((model) => model.startTime)
+    </p>
 
-<h2>Udstyr:</h2>
-<p>Du har @(Model.shuttleReserved ? "" : "ikke") reserveret bolde</p>
-<p>Du har tilvalgt at leje @Model.numberOfRackets ketjsere</p>
+    <b>Din booking slutter:</b>
+    <p>
+        @Html.DisplayFor((model) => model.endTime)
+    </p>
 
-<p>Pris: @TempData["Price"]</p>
+    <b>Du skal være på bane:</b>
+    <p>@Html.DisplayFor((model) => model.courtNo)</p>
 
-<div>
-    <a asp-controller="Home" asp-action="Index">Gå tilbage til startside</a>
+    <h4>Udstyr:</h4>
+    <p>Du har @(Model.shuttleReserved ? "" : "ikke") reserveret bolde</p>
+    <p>Du har tilvalgt at leje <b>@Model.numberOfRackets ketjsere</b></p>
+
+    <p><b>Pris:</b> @TempData["Price"] kr.</p>
+
 </div>

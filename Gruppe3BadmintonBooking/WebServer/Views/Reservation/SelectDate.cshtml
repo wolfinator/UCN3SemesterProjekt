@@ -4,9 +4,8 @@
     ViewData["Title"] = "Vælg dato";
 }
 
-<h1>Vælg dato</h1>
+<h1 class="title">Vælg dato</h1>
 
-<h4>Booking</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,15 +17,12 @@
                 <input name="selectedDate" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Se ledige tider" class="btn btn-primary" />
+            <div class="form-group" id="button">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-danger">Gå tilbage</a>
+                <input type="submit" value="Se ledige tider" class="btn btn-success" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-controller ="Home" asp-action="Index">Gå tilbage til startside</a>
 </div>
 
 @section Scripts {
