@@ -72,6 +72,7 @@ namespace DataAccess
                 court = new Court();
                 court.id = reader.GetInt32(0);
             }
+            con.Close();
             return court;
         }
         

@@ -13,6 +13,9 @@ namespace Tests
     {
         //https://xunit.net/docs/shared-context
         public SqlConnection con { get; private set; }
+        /*
+         * Koden i denne metode bliver kørt FØR alle tests i klassen bliver kørt (1 gang)
+         */
         public DatabaseFixture()
         {
             con = new SqlConnection(DbConnection.conStr.ConnectionString);
@@ -25,6 +28,9 @@ namespace Tests
             cmdRemoveTestCityZip.ExecuteNonQuery();
             cmdAddTestCityZip.ExecuteNonQuery();
         }
+        /*
+         *  Koden i denne metode bliver kørt EFTER alle tests i klassen er færdig
+         */
         public void Dispose()
         {
             SqlCommand cmdRemoveTestCityZip = new("delete from CityZip where zipcode = 'test'", con);
@@ -35,6 +41,7 @@ namespace Tests
     }
     public class TestDataAccessCustomer : IClassFixture<DatabaseFixture>
     {
+        // Alt med fixture er ting der sker oven over
         DatabaseFixture fixture;
 
         public TestDataAccessCustomer(DatabaseFixture fixture)
@@ -42,6 +49,7 @@ namespace Tests
             this.fixture = fixture;
         }
 
+        // En customer til testen
         private Customer testCustomer = new Customer()
         {
             firstName = "test",

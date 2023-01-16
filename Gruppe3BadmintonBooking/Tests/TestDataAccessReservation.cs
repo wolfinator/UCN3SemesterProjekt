@@ -22,6 +22,9 @@ namespace Tests
         private SqlCommand cmdRemoveTestCityZip;
         private SqlCommand cmdRemoveTestAddress;
         private SqlCommand cmdRemoveTestPersons;
+        /*
+         *  Kode der bliver kørt FØR alle tests
+         */
         public ReservationDbFixture()
         {
             // Setting up the connection
@@ -55,6 +58,7 @@ namespace Tests
             customerId2 = (int)cmdAddTestCustomer2.ExecuteScalar();
             customerId3 = (int)cmdAddTestCustomer3.ExecuteScalar();
 
+            // Loop der indsætter en test adresse for alle customer IDerne
             for (int i = 0; i < 3; i++)
             {
                 cmdAddTestAddress.Parameters.Clear();
@@ -75,6 +79,9 @@ namespace Tests
                 cmdAddTestAddress.ExecuteNonQuery();
             }
         }
+        /*
+         *  Kode der bliver kørt EFTER alle tests
+         */
         public void Dispose()
         {
             // Remove all test data from the test
@@ -114,6 +121,7 @@ namespace Tests
 
             SqlConnection con = fixture.con;
 
+            // Setup Commands
             SqlCommand cleanupReservation = new("delete from reservation where id = @Id", con);
             SqlCommand cmdTestSelect = new("select * from Reservation where " +
                 "creation_date = @CreationDate and " +

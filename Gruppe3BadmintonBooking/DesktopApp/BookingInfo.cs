@@ -24,18 +24,6 @@ namespace DesktopApp
         private Reservation currentReservation;
         private int BasePrice = 150;
 
-        public BookingInfo(DateTime dateCalender, string hal, string bane)
-        {
-            InitializeComponent();
-
-            _reservationService = new ReservationService();
-            _customerService = new CustomerService();
-
-            txtSted.Text = $"Hal {hal}, Bane {bane}";
-            txtDato.Text = DateOnly.FromDateTime(dateCalender).ToString();
-            txtKlok.Text = TimeOnly.FromDateTime(dateCalender).ToString();
-        }
-
         public BookingInfo(Reservation reservation)
         {
             InitializeComponent();
@@ -130,12 +118,12 @@ namespace DesktopApp
                 }
                 else
                 {
-                    MessageBox.Show("Fejl ved oprettelse af reservation, prøv igen senere", "Fejl", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Den valgte tid er allerede blevet booket", "Meddelse", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (HttpRequestException)
+            catch (Exception)
             {
-                MessageBox.Show("Den valgte tid er allerede blevet booket", "Meddelse", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Fejl ved oprettelse af reservation, prøv igen senere", "Fejl", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Hide();
                 OpretBooking opretBooking = new();
                 opretBooking.ShowDialog();
