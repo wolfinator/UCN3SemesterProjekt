@@ -45,7 +45,7 @@ namespace DesktopApp
             // PT ingen validering
             Customer editedCustomer = new()
             {
-                id = editedReservation.id,
+                id = editedReservation.customer.id,
                 firstName = txtFornavn.Text,
                 lastName = txtEfternavn.Text,
                 phoneNo = txtMobil.Text,
